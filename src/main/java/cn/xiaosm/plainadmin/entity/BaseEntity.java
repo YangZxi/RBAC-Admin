@@ -1,0 +1,59 @@
+/**
+ * Copyright: 2019-2020，小树苗(www.xiaosm.cn)
+ * FileName: BaseEntity
+ * Author:   Young
+ * Date:     2020/6/13 12:37
+ * Description:
+ * History:
+ * <author>          <time>          <version>          <desc>
+ * Young         修改时间           版本号             描述
+ */
+package cn.xiaosm.plainadmin.entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
+/**
+ * 〈一句话功能简述〉
+ * 〈〉
+ *
+ * @author Young
+ * @create 2020/6/13
+ * @since 1.0.0
+ */
+@KeySequence
+public class BaseEntity {
+
+    // @TableId(type = IdType.AUTO)
+    // private Integer id;
+
+    @TableField(value = "update_time")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date updateTime;
+
+    @TableField(value = "create_time")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private Date createTime;
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+}

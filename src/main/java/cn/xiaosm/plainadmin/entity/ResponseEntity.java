@@ -1,0 +1,55 @@
+/**
+ * Copyright: 2019-2020，小树苗(www.xiaosm.cn)
+ * FileName: ResponseBody
+ * Author:   Young
+ * Date:     2020/6/13 15:20
+ * Description:
+ * History:
+ * <author>          <time>          <version>          <desc>
+ * Young         修改时间           版本号             描述
+ */
+package cn.xiaosm.plainadmin.entity;
+
+/**
+ * 〈一句话功能简述〉
+ * 〈〉
+ *
+ * @author Young
+ * @create 2020/6/13
+ * @since 1.0.0
+ */
+public class ResponseEntity {
+
+    private int code;
+    private String msg;
+    private Object data;
+
+    public void setStatus(ResponseStatus status) {
+        this.code = status.getCode();
+        this.msg = status.getMsg();
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+}
