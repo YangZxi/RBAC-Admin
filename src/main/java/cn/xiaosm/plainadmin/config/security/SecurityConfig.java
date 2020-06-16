@@ -11,14 +11,23 @@
 package cn.xiaosm.plainadmin.config.security;
 
 import cn.xiaosm.plainadmin.annotation.AnonymousAccess;
+import cn.xiaosm.plainadmin.config.security.handler.AccessDeniedHandlerImpl;
+import cn.xiaosm.plainadmin.config.security.handler.LoginFailHandler;
+import cn.xiaosm.plainadmin.config.security.handler.LoginSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.HandlerMethod;
@@ -39,19 +48,49 @@ import java.util.Set;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+// @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final CorsFilter corsFilter;
-    private final ApplicationContext applicationContext;
+    @Autowired
+    @Qualifier("userDetailsService")
+    UserDetailsService userDetailsService;
+    @Autowired
+    private AccessDeniedHandlerImpl accessDeniedHandler;
+    @Autowired
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+    @Autowired
+    private LoginFailHandler loginFailHandler;
+    @Autowired
+    private JWTAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
+    private ApplicationContext applicationContext;
 
-    public SecurityConfig(JwtAccessDeniedHandler jwtAccessDeniedHandler, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, CorsFilter corsFilter, ApplicationContext applicationContext) {
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.corsFilter = corsFilter;
-        this.applicationContext = applicationContext;
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 如果某个地址无需拦截，在此进行放行
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // web.ignoring().antMatchers("/login");
+        web.ignoring().antMatchers("/druid/**");
+        super.configure(web);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // 配置自定义service
+        auth.userDetailsService(userDetailsService)
+                // 配置加密方式
+                .passwordEncoder(bCryptPasswordEncoder());
+        super.configure(auth);
     }
 
     @Override
@@ -66,25 +105,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
             }
         }
-        security
-                // 禁用 CSRF
-                .csrf().disable()
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-                // 授权异常
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
 
-                // 不创建会话
-                .and()
+        // 禁用 CSRF 因为我需要 session 鸭
+        security.csrf().disable()
+                // 不创建会话，因为此项目基于 Java Web Token 进行登录
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // 添加 JWT 过滤器
+        security.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        // 登录处理
+        security.formLogin()
+                // .loginProcessingUrl("/api/login")
+                // 登录成功调用
+                .successHandler(loginSuccessHandler)
+                // 登录失败调用
+                .failureHandler(loginFailHandler)
+                // JWT认证
+                .and().exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler);
 
-                .and()
-                .authorizeRequests()
+        security.authorizeRequests()
+                .antMatchers("/api/login").anonymous()
                 // 静态资源
-                .mvcMatchers(
-                        HttpMethod.GET,
+                .mvcMatchers(HttpMethod.GET,
                         "/*.html",
                         "/**/*.html",
                         "/**/*.css",
@@ -92,14 +136,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.ico"
                 ).permitAll()
                 // 阿里巴巴 druid
-                .antMatchers("/druid/**").permitAll()
+                // .antMatchers("/druid/**").permitAll()
                 // 放行OPTIONS请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 自定义匿名访问所有url放行 ： 允许匿名和带权限以及登录用户访问
                 .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
                 // 所有请求都需要认证
-                .anyRequest().authenticated();
-                // .and().apply(securityConfigurerAdapter());
+                .anyRequest().authenticated()
+                .and()
+                .headers().frameOptions().disable();
+                // .and().apply(securityConfigurerAdapter())
+
     }
 
 }
