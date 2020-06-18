@@ -23,44 +23,4 @@ import cn.xiaosm.plainadmin.entity.ResponseStatus;
  */
 public class BaseController {
 
-    private ResponseEntity responseBody(ResponseStatus status, Object data) {
-        ResponseEntity apiResponseEntity = new ResponseEntity();
-        apiResponseEntity.setCode(status.getCode());
-        apiResponseEntity.setMsg(status.getMsg());
-        apiResponseEntity.setData(data);
-        return apiResponseEntity;
-    }
-
-    private ResponseEntity responseBody(ResponseStatus status, String msg, Object data) {
-        ResponseEntity apiResponseEntity = new ResponseEntity();
-        apiResponseEntity.setCode(status.getCode());
-        apiResponseEntity.setMsg(msg);
-        apiResponseEntity.setData(data);
-        return apiResponseEntity;
-    }
-
-    public ResponseEntity responseSuccess(Object data) {
-        return this.responseBody(ResponseStatus.SUCCESS, data);
-    }
-
-    public ResponseEntity responseSuccess(String msg, Object data) {
-        return this.responseBody(ResponseStatus.SUCCESS, msg, data);
-    }
-
-    public ResponseEntity responseError(Object data) {
-        return this.responseBody(ResponseStatus.ERROR_PARAM, data);
-    }
-
-    public ResponseEntity responseError(String msg, Object data) {
-        return this.responseBody(ResponseStatus.ERROR_PARAM, msg, data);
-    }
-
-    public ResponseEntity responseFail(Object data) {
-        return this.responseBody(ResponseStatus.FAIL, data);
-    }
-
-    public ResponseEntity responseFail(String msg, Object data) {
-        return this.responseBody(ResponseStatus.FAIL, msg, data);
-    }
-
 }

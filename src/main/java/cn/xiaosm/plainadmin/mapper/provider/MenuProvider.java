@@ -12,7 +12,7 @@ package cn.xiaosm.plainadmin.mapper.provider;
 
 import org.apache.ibatis.jdbc.SQL;
 
-import java.util.Map;
+import java.util.Objects;
 
 /**
  * 〈一句话功能简述〉
@@ -26,19 +26,21 @@ public class MenuProvider {
 
     /**
      * 通过 角色 id 查询菜单
-     * 设定父级菜单为 0
+     * 设定父级菜单为 0(查询根目录菜单)
      * @param roleId
      * @return
      */
-    public String selectByRoleId(Integer roleId) {
-        return this.selectByRoleIdAndParentId(roleId, 0);
-        // SQL sql = new SQL();
-        // sql.SELECT("r.id as `r.id`, m.*")
-        //         .FROM("role_menu rm")
-        //         .LEFT_OUTER_JOIN("role r ON rm.role_id = r.id")
-        //         .LEFT_OUTER_JOIN("menu m ON rm.menu_id = m.id")
-        //         .WHERE("r.id = #{roleId}");
-        // return sql.toString();
+    public String sqlSelectByRoleIdAndRootMenu(String roleId) {
+        return this.sqlSelectByRoleIdAndParentId(roleId, 0);
+    }
+
+    /**
+     * 通过角色 id 查询所有的菜单
+     * @param roleId
+     * @return
+     */
+    public String sqlSelectByRoleId(String roleId) {
+        return this.sqlSelectByRoleIdAndParentId(roleId, null);
     }
 
     /**
@@ -47,20 +49,23 @@ public class MenuProvider {
      * @param parentId
      * @return
      */
-    public String selectByRoleIdAndParentId(Integer roleId, Integer parentId) {
+    public String sqlSelectByRoleIdAndParentId(String roleId, Integer parentId) {
         SQL sql = new SQL();
-        sql.SELECT("r.id as `r.id`, m.*")
-            .FROM("role_menu rm")
+        sql.SELECT("m.*")
+            .FROM("menu m")
+            .LEFT_OUTER_JOIN("role_menu rm ON rm.menu_id = m.id")
             .LEFT_OUTER_JOIN("role r ON rm.role_id = r.id")
-            .LEFT_OUTER_JOIN("menu m ON rm.menu_id = m.id")
-            .WHERE("r.id = #{roleId}");
-        if (parentId == 0) {
+            .WHERE("r.id IN (#{roleId})");
+        if (Objects.isNull(parentId)) {
+            sql.WHERE("NOT ISNULL(parent_menu)");
+        } else if (parentId == 0) {
             // 由于调用此方法的函数只有一个参数，
             // 所以如果使用占位符代替会出现值和第一个参数值相同
             sql.WHERE("m.parent_menu = 0");
         } else {
             sql.WHERE("m.parent_menu = #{parentId}");
         }
+        sql.GROUP_BY("m.id");
         return sql.toString();
     }
 

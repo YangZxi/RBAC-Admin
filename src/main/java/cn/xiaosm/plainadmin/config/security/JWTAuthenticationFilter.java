@@ -43,15 +43,19 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        String token = tokenService.getToken(request);
         LoginUser loginUser = tokenService.getLoginUser(request);
-        if (Objects.nonNull(loginUser)) {
+        /*
+          查找用户是否存在 且 Token还未过期
+         */
+        if (Objects.nonNull(loginUser) && tokenService.verifyToken(token)) {
             log.info("一次授权的请求");
             /*
               创建 UsernamePasswordAuthenticationToken 对象，设置到 SecurityContextHolder 中
               如果没有此段代码，security将不不会允许即使有 token 的请求
             */
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+                    new UsernamePasswordAuthenticationToken(loginUser, token, loginUser.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             /* ******  很重要的代码  ****** */

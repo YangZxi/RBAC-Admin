@@ -10,18 +10,23 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
+import cn.xiaosm.plainadmin.config.security.service.TokenService;
+import cn.xiaosm.plainadmin.entity.LoginUser;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.service.UserService;
-import cn.xiaosm.plainadmin.utils.Response;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTCreator;
-import com.auth0.jwt.algorithms.Algorithm;
+import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 〈一句话功能简述〉
@@ -32,23 +37,45 @@ import java.util.Date;
  * @since 1.0.0
  */
 @RestController
+@RequestMapping("/api")
 public class AdminController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    AuthenticationManagerBuilder managerBuilder;
+    // @Resource
+    // AuthenticationManager manager;
+    @Autowired
+    TokenService tokenService;
 
-    public ResponseEntity login(@RequestBody User user) {
+    @RequestMapping("/login")
+    public void login(@RequestBody User user, HttpServletResponse response) {
         // userService.
-        String token = "";
-        token = JWT.create()
-                .withAudience(user.getUsername())
-                .withClaim("role", user.getRoleId())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 2 * 60 * 1000))
-                .sign(Algorithm.HMAC256("1282381264"));
-        JWTCreator.Builder builder = JWT.create().withAudience(user.getUsername());
+        // String token = "";
+        // token = JWT.create()
+        //         .withAudience(user.getUsername())
+        //         .withClaim("role", user.getRoleId())
+        //         .withExpiresAt(new Date(System.currentTimeMillis() + 2 * 60 * 1000))
+        //         .sign(Algorithm.HMAC256("1282381264"));
+        // JWTCreator.Builder builder = JWT.create().withAudience(user.getUsername());
 
-        return Response.buildSuccess(null);
+        /*该方法会去调用 UserDetailService 的方法
+          由于我创建了此类的实现类，所以会去调用我自定义的登录逻辑，从后台获取 User 信息
+          密码的校验 security 会帮我们处理，如果密码错误，会抛出异常
+         */
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
+        Authentication authentication = managerBuilder
+                .getObject().authenticate(authenticationToken);
+
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        // 根据认证创建 Token
+        String token = tokenService.createToken(loginUser);
+        // 发送token
+        ResponseUtils.sendToken(response, token);
     }
+
 
 }

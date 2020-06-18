@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 〈一句话功能简述〉
@@ -25,7 +27,7 @@ import java.util.HashMap;
  */
 public class MemoryUtils {
 
-    private static HashMap<String, Object> map = new HashMap<>();
+    private static Map<String, Object> map = new ConcurrentHashMap<>();
 
     public static void saveObject(String key, Object o) {
         map.put(key, o);
@@ -33,6 +35,10 @@ public class MemoryUtils {
 
     public static Object getObject(String key) {
         return map.get(key);
+    }
+
+    public static void removeObject(String key) {
+        map.remove(key);
     }
 
 }

@@ -34,29 +34,36 @@ public interface UserMapper extends BaseMapper<User> {
      * @param user
      * @return UserDTO
      */
-    @Select("SELECT u.*,r.id AS `r.id`, r.name AS `r.name`, r.decs AS `r.desc`, r.status AS `r.status`" +
-            " FROM `user` u LEFT JOIN `role` r ON r.id = u.role_id" +
+    @Select("SELECT u.* " +
+            " FROM `user` u " +
             " WHERE u.username = #{username} AND u.password = #{password}")
     @Results(id = "userRoleMap", value = {
-            // 不配置id 无法反射进对象
+            // 不配置id 无法注入进id字段
             @Result(id = true, property = "id", column = "id"),
-            @Result(id = true, property = "role.id", column = "r.id"),
-            @Result(column = "r.name", property = "role.name"),
-            @Result(column = "r.desc", property = "role.desc"),
-            @Result(column = "r.status", property = "role.status"),
-            @Result(property = "menus", column = "r.id",
-                    many = @Many(select = "cn.xiaosm.plainadmin.mapper.MenuMapper.findAllByRoleId")),
+            // @Result(id = true, property = "role.id", column = "r.id"),
+            // @Result(property = "role.name", column = "r.name"),
+            // @Result(property = "role.nameZh", column = "r.name_zh"),
+            // @Result(property = "role.desc", column = "r.desc"),
+            // @Result(property = "role.status", column = "r.status"),
+            @Result(property = "roles", column = "id",
+                    many = @Many(select = "cn.xiaosm.plainadmin.mapper.RoleMapper.selectByUserIdForName")),
             @Result(property = "userLoginTracks", column = "id",
-                    many = @Many(select = "cn.xiaosm.plainadmin.mapper.UserMapper.findUserTrackByUserId"))
+                    many = @Many(select = "cn.xiaosm.plainadmin.mapper.UserMapper.selectUserTrackByUserId"))
     })
-    UserDTO findByUsernameAndPassword(User user);
+    UserDTO selectByUsernameAndPassword(User user);
+
+    @Select("SELECT u.* " +
+            " FROM `user` u " +
+            " WHERE u.username = #{username}")
+    @ResultMap(value = "userRoleMap")
+    UserDTO selectByUsername(String username);
 
     /**
-     * 查询用户最近 2 条登录记录
+     * 查询用户最近 1 条登录记录
      * @param userId 用户id
      * @return
      */
     @Select("SELECT * FROM user_login_track WHERE user_id = #{userId} ORDER BY login_time DESC LIMIT 1")
     // @SelectProvider(value = UserProvider.class, method = "sqlFindUserTrack")
-    UserLoginTrack findUserTrackByUserId(@Param("userId") Integer userId);
+    UserLoginTrack selectUserTrackByUserId(@Param("userId") Integer userId);
 }

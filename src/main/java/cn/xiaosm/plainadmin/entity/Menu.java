@@ -32,13 +32,14 @@ public class Menu extends BaseEntity {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name; // 菜单名称
-    private Integer level; // 菜单级别
+    private Integer type; // 菜单类型
     private Integer parentMenu; // 上级菜单
     private String icon; // 菜单图标
     private Integer order; // 排序
     private String index; // 组件路径
     private String component; // 组件名称
+    private String permission; // 权限许可
     private Integer status; // 状态
-    private List<Menu> children;
+    private List<Menu> children; // 子菜单
 
 }

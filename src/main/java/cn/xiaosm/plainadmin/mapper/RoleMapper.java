@@ -15,6 +15,8 @@ import cn.xiaosm.plainadmin.entity.dto.RoleDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -30,8 +32,17 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM `role` WHERE `role`.user_id = #{userId}")
-    Role findByUserId(Integer userId);
+    @Select("SELECT r.* FROM role r " +
+            " LEFT JOIN user_role ur ON ur.role_id = r.id" +
+            " LEFT JOIN `user` u ON ur.user_id = u.id" +
+            " WHERE u.id = #{userId}")
+    List<Role> selectByUserId(Integer userId);
+
+    @Select("SELECT r.id, r.name FROM role r " +
+            " LEFT JOIN user_role ur ON ur.role_id = r.id" +
+            " LEFT JOIN `user` u ON ur.user_id = u.id" +
+            " WHERE u.id = #{userId}")
+    List<Role> selectByUserIdForName(Integer userId);
 
     @Select("SELECT * FROM `role` WHERE `role`.user_id = #{userId}")
     // @Results(id = "menus", value = {

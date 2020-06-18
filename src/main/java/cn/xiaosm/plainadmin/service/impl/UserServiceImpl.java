@@ -12,14 +12,18 @@ package cn.xiaosm.plainadmin.service.impl;
 
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.mapper.UserMapper;
 import cn.xiaosm.plainadmin.service.UserService;
-import cn.xiaosm.plainadmin.utils.Response;
+import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 〈一句话功能简述〉
@@ -32,14 +36,19 @@ import java.util.List;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public ResponseEntity findById(Integer id) {
+    public ResponseEntity getById(Integer id) {
         return null;
     }
 
     @Override
-    public ResponseEntity removeEntity(Integer id) {
+    public ResponseEntity deleteEntity(User user) {
         return null;
     }
 
@@ -49,20 +58,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public ResponseEntity saveEntity(User o) {
+    public ResponseEntity addEntity(User o) {
+        // 加密密码
+        o.setPassword(passwordEncoder.encode(o.getPassword()));
         boolean b = this.save(o);
-        return b ? Response.buildSuccess(o) : Response.buildFail("保存失败");
+        return b ? ResponseUtils.buildSuccess(o) : ResponseUtils.buildFail("保存失败");
+    }
+
+    /**
+     * 根据用户名查询用户信息
+     * @param username
+     * @return
+     */
+    @Override
+    public UserDTO getByUsername(String username) {
+        return userMapper.selectByUsername(username);
     }
 
     @Override
     public User login(User user) {
         User condition = new User();
         condition.setUsername(user.getUsername());
-        condition.setPassword(user.getPassword());
+        condition.setPassword(passwordEncoder.encode(user.getPassword()));
         QueryWrapper<User> queryWrapper = new QueryWrapper<>(condition);
-        List<User> list = this.list(queryWrapper);
-        if (list.isEmpty()) return null;
-        return list.get(0);
+        User re = this.getOne(queryWrapper);
+        if (Objects.isNull(re)) return null;
+        return re;
     }
 
     public List findByCondition(QueryWrapper<User> queryWrapper) {

@@ -14,9 +14,16 @@ import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.Role;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.entity.UserLoginTrack;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,7 +37,9 @@ import java.util.List;
 @Data
 public class UserDTO extends User implements Serializable {
 
-    private Role role;
+    @JsonIgnore
+    private String password;
+    private List<Role> roles;
     private List<Menu> menus;
     private List<UserLoginTrack> userLoginTracks;
 

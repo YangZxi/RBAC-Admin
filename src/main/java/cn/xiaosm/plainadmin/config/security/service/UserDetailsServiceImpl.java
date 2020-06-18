@@ -10,20 +10,30 @@
  */
 package cn.xiaosm.plainadmin.config.security.service;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.xiaosm.plainadmin.entity.LoginUser;
+import cn.xiaosm.plainadmin.entity.Menu;
+import cn.xiaosm.plainadmin.entity.Role;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.service.UserService;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.LockedException;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 〈一句话功能简述〉
@@ -50,12 +60,40 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new LockedException("用户已被禁用，请联系管理员");
         }
 
-        // 添加用户所拥有的菜单
-        user.setMenus(menuService.getByRoleId(user.getRoleId()));
+        // 设置用户id（字符串，已英文逗号分隔）
+        user.setRoleIds(ArrayUtil.join(user.getRoles()
+                .stream()
+                .map(Role::getId)
+                .toArray(), ","));
+        // 通过roleIds 字符串添加用户所拥有的菜单<注意，这里还只是链表结构>
+        user.setMenus(menuService.getByRoleId(user.getRoleIds()));
 
         // 转变为 UserDetails 类型
         LoginUser loginUser = new LoginUser();
-        BeanUtils.copyProperties(user, loginUser);
+        BeanUtils.copyProperties(user, loginUser, "roles");
+
+        // 设置登录用户的角色
+        loginUser.setRoles(user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList()));
+
+        // 从菜单中获取并设置登录用户的权限
+        Collection<SimpleGrantedAuthority> authorities =
+                loginUser.getMenus().stream()
+                        .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
+                        .map(Menu::getPermission)
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+        authorities.addAll(
+                user.getRoles().stream()
+                        .map(Role::getName)
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList())
+        );
+        loginUser.setAuthorities(authorities);
+        // 构建登录用户菜单树
+        loginUser.setMenus(menuService.buildTree(loginUser.getMenus()));
+
         return loginUser;
     }
 

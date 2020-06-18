@@ -36,7 +36,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
-        ResponseUtils.sendSuccess(response, "登录成功");
+        ResponseUtils.buildSuccess(response, "登录成功");
     }
 
 }

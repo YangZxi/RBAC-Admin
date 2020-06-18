@@ -22,11 +22,11 @@ import cn.xiaosm.plainadmin.entity.ResponseEntity;
  */
 public interface BaseService<DOMAIN>  {
 
-    ResponseEntity findById(Integer id);
+    ResponseEntity getById(Integer id);
 
-    ResponseEntity saveEntity(DOMAIN domain);
+    ResponseEntity addEntity(DOMAIN domain);
 
-    ResponseEntity removeEntity(Integer id);
+    ResponseEntity deleteEntity(DOMAIN domain);
 
     ResponseEntity modifyEntity(DOMAIN domain);
 

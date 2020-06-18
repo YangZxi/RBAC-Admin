@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.config.security.handler;
 
+import cn.xiaosm.plainadmin.entity.ResponseStatus;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -35,8 +36,9 @@ public class LoginFailHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(
             HttpServletRequest request,
             HttpServletResponse response,
-            AuthenticationException e) throws IOException, ServletException {
-        ResponseUtils.sendError(response, e.getMessage(), HttpServletResponse.SC_UNAUTHORIZED);
+            AuthenticationException e) {
+        ResponseUtils.sendError(response, ResponseStatus.AUTHENTICATION_EXPIRE,
+                e.getMessage(), HttpServletResponse.SC_UNAUTHORIZED);
     }
 
 }

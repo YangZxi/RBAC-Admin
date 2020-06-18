@@ -62,38 +62,19 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public List<Menu> getByRoleId(Integer roleId) {
-        //配置
-        TreeNodeConfig treeNodeConfig = new TreeNodeConfig();
-        // 自定义属性名 都要默认值的
-        treeNodeConfig.setWeightKey("order");
-        treeNodeConfig.setIdKey("id");
-        // 最大递归深度
-        treeNodeConfig.setDeep(3);
-        List<Menu> menus = menuMapper.selectAllByRoleId(roleId);
-        if (!menus.isEmpty()) {
-            //转换器
-            List<Tree<Integer>> treeNodes = TreeUtil.build(menus, 0, treeNodeConfig,
-                    (menu, tree) -> {
-                        tree.setId(menu.getId());
-                        tree.setParentId(menu.getParentMenu());
-                        tree.setWeight(menu.getOrder());
-                        tree.setName(menu.getName());
-                        // 扩展属性 ...
-                        tree.putExtra("test", 666);
-                        tree.putExtra("other", new Object());
-                    });
-
-            List<Menu> menuTree = menus.stream().filter(el -> el.getParentMenu() == 0)
-                    .collect(Collectors.toList());
-            Long l = System.currentTimeMillis();
-            System.out.println(System.currentTimeMillis() - l);
-
-        }
+    public List<Menu> getByRoleId(String roleIds) {
+        List<Menu> menus = menuMapper.selectAllByRoleId(roleIds);
         return menus;
     }
 
-    public List<Menu> buildTree(List<Menu> menuTree, List<Menu> menuList) {
+    @Override
+    public List<Menu> buildTree(List<Menu> menuList) {
+        List<Menu> menuTree = menuList.stream().filter(el -> el.getParentMenu() == 0)
+                .collect(Collectors.toList());
+        return this.buildTree(menuTree, menuList);
+    }
+
+    private List<Menu> buildTree(List<Menu> menuTree, List<Menu> menuList) {
         if (menuList.isEmpty() || menuTree.isEmpty()) return menuList;
         List<Menu> temp = new LinkedList<>();
         Iterator<Menu> it = null;

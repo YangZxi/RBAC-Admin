@@ -31,10 +31,8 @@ import java.util.List;
 public class LoginUser extends User implements Serializable, UserDetails {
 
     @JsonIgnore
-    private String uuid;
-    @JsonIgnore
     private String password;
-    private Role role;
+    private List<String> roles;
     private List<Menu> menus;
     private List<UserLoginTrack> userLoginTracks;
     private Collection<? extends GrantedAuthority> authorities;

@@ -10,15 +10,16 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
+import cn.xiaosm.plainadmin.config.security.service.TokenService;
+import cn.xiaosm.plainadmin.entity.PageInfo;
+import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.service.UserService;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 〈一句话功能简述〉
@@ -29,17 +30,53 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0.0
  */
 @RestController
-@RequestMapping("")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    TokenService tokenService;
 
-    @GetMapping("/get")
-    public ResponseEntity get(@RequestBody Page page) {
+    // @GetMapping("/{id}")
+    // @PreAuthorize("('user:get')")
+    // public ResponseEntity getUsers(@PathVariable int id) {
+    //
+    //     return ResponseUtils.sendSuccess("获取了单个用户");
+    // }
 
-        return null;
+
+    @GetMapping("/info")
+    public ResponseEntity userInfo(HttpServletRequest request) {
+        return ResponseUtils.buildSuccess(tokenService.getLoginUser(request));
     }
 
+    @GetMapping("")
+    @PreAuthorize("hasAuthority('find')")
+    public ResponseEntity queryUsers(PageInfo pageInfo) {
+
+        return ResponseUtils.buildSuccess("获取了用户列表");
+    }
+
+    @PutMapping
+    @PreAuthorize("('user:add')")
+    public ResponseEntity saveUser() {
+
+        return ResponseUtils.buildSuccess("保存了用户信息");
+    }
+
+    @PostMapping
+    @PreAuthorize("('user:modify')")
+    public ResponseEntity modifyUser() {
+
+        return ResponseUtils.buildSuccess("修改了用户信息");
+    }
+
+    @DeleteMapping
+    @PreAuthorize("('user:delete')")
+    public ResponseEntity deleteUsers() {
+
+        return ResponseUtils.buildSuccess("删除了用户信息");
+    }
 
 }

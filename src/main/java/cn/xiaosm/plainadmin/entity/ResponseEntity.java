@@ -24,6 +24,26 @@ public class ResponseEntity {
     private String msg;
     private Object data;
 
+    public ResponseEntity (ResponseStatus status) {
+        this.setStatus(status);
+    }
+
+    public ResponseEntity (ResponseStatus status, String msg) {
+        this.setStatus(status);
+        this.setMsg(msg);
+    }
+
+    public ResponseEntity (ResponseStatus status, Object data) {
+        this.setStatus(status);
+        this.setData(data);
+    }
+
+    public ResponseEntity (ResponseStatus status, String msg,Object data) {
+        this.setStatus(status);
+        this.setMsg(msg);
+        this.setData(data);
+    }
+
     public void setStatus(ResponseStatus status) {
         this.code = status.getCode();
         this.msg = status.getMsg();

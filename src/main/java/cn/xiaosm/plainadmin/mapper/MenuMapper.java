@@ -48,17 +48,28 @@ public interface MenuMapper extends BaseMapper<Menu> {
 
     /**
      * 通过角色 id 查询所有菜单
+     * 以树形结构存储，影响数据库效率，弃用
      * @param roleId
      * @return
      */
-    @SelectProvider(value = MenuProvider.class, method = "selectByRoleId")
+    @SelectProvider(value = MenuProvider.class, method = "sqlSelectByRoleIdAndRootMenu")
     @Results(id = "menuMapByRoleId", value = {
             @Result(id = true, property = "id", column = "id"),
             @Result(property = "children", column = "{roleId = r.id, parentId = id}",
-                many = @Many(select = "cn.xiaosm.plainadmin.mapper.MenuMapper.findAllByRoleIdAndParentId",
+                many = @Many(select = "cn.xiaosm.plainadmin.mapper.MenuMapper.selectAllByRoleIdAndParentId",
                         fetchType = FetchType.LAZY))
     })
-    List<Menu> findAllByRoleId(Integer roleId);
+    @Deprecated
+    List<Menu> selectAllByRoleIdOfTree(String roleId);
+
+    /**
+     * 通过角色 id 查询所有菜单
+     * 这里是直接查角色拥有的所有菜单，树结构的创建交给后端处理
+     * @param roleId
+     * @return
+     */
+    @SelectProvider(value = MenuProvider.class, method = "sqlSelectByRoleId")
+    List<Menu> selectAllByRoleId(String roleId);
 
     /**
      * 通过角色 id 和父级菜单 id 查询所有菜单
@@ -66,8 +77,8 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param parentId
      * @return
      */
-    @SelectProvider(value = MenuProvider.class, method = "selectByRoleIdAndParentId")
+    @SelectProvider(value = MenuProvider.class, method = "sqlSelectByRoleIdAndParentId")
     @ResultMap("menuMapByRoleId")
-    List<Menu> findAllByRoleIdAndParentId(Integer roleId, Integer parentId);
+    List<Menu> selectAllByRoleIdAndParentId(String roleId, Integer parentId);
 
 }

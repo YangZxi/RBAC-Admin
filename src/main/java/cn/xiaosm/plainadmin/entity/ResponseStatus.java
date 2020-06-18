@@ -20,9 +20,11 @@ package cn.xiaosm.plainadmin.entity;
  */
 public enum ResponseStatus {
 
-    FAIL(0, "失败"),
-    SUCCESS(1, "成功"),
-    ERROR_PARAM(400, "参数错误"),
+    FAIL(500, "失败"),
+    SUCCESS(200, "成功"),
+    ERROR(400, "请求出现错误"),
+    AUTHENTICATION_EXPIRE(401, "身份认证过期，请重新登录"),
+    AUTHORITIES_DENIED(403, "权限不足"),
     DATA_NULL(404, "查询数据空");
 
     private int code;

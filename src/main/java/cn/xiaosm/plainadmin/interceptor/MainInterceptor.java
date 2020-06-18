@@ -11,14 +11,11 @@ package cn.xiaosm.plainadmin.interceptor;
 import cn.hutool.extra.servlet.ServletUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * 〈一句话功能简述〉
@@ -31,6 +28,7 @@ import java.util.Date;
 public class MainInterceptor implements HandlerInterceptor {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Long timer = 0l;
 
     /**
      * 在DispatcherServlet之前执行
@@ -42,24 +40,17 @@ public class MainInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        timer = System.currentTimeMillis();
         response.setCharacterEncoding("UTF-8");
-        System.out.println("\n=============================================================");
-        System.out.println("主拦截器执行了");
-        // System.out.println("客户端IP：" + ServletUtil.getClientIP(request));
-        System.out.println("请求地址：" + request.getRequestURI());
-        try {
-            HandlerMethod method = (HandlerMethod) handler;
-            System.out.println("请求方法：" + method.getMethod().getName());
-        }catch (ClassCastException e) {
-            System.err.println(e.getMessage() + "无法转换为方法处理器");
+        if ("/eroor".equals(request.getRequestURI())) {
+            logger.info("客户端IP=[{}]，请求地址=[{}]",
+                    ServletUtil.getClientIP(request),
+                    request.getRequestURI());
+        } else {
+            logger.info("客户端IP=[{}]，请求地址=[{}]",
+                    ServletUtil.getClientIP(request),
+                    request.getRequestURI());
         }
-        System.out.println("请求时间：" + new Date(System.currentTimeMillis()));
-        System.out.println("=============================================================\n");
-
-        logger.info("客户端IP:{}，请求地址=[{}]",
-                ServletUtil.getClientIP(request),
-                request.getRequestURI());
-
 //        response.sendRedirect("http://www.baidu.com");
         return true;
     }
@@ -75,6 +66,7 @@ public class MainInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 //        System.out.println(1);
+        logger.info("本次请求耗时={}ms", System.currentTimeMillis() - timer);
     }
 
     /**

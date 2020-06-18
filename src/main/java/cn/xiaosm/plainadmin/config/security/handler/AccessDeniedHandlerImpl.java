@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.config.security.handler;
 
+import cn.xiaosm.plainadmin.entity.ResponseStatus;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -33,9 +34,10 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException e) throws IOException, ServletException {
+                       AccessDeniedException e) {
         // 当用户没有授权（拥有JWT）的情况下访问受保护的路径和资源时
         // 将调用此方法 返回 403 Forbidden 响应
-        ResponseUtils.sendError(response, e.getMessage(), HttpServletResponse.SC_FORBIDDEN);
+        ResponseUtils.sendError(response, ResponseStatus.AUTHORITIES_DENIED,
+                e.getMessage(), HttpServletResponse.SC_FORBIDDEN);
     }
 }

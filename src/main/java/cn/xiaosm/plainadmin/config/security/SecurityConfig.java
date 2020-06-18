@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -48,7 +49,7 @@ import java.util.Set;
  */
 @Configuration
 @EnableWebSecurity
-// @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -62,6 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private LoginSuccessHandler loginSuccessHandler;
     @Autowired
     private LoginFailHandler loginFailHandler;
+    @Autowired
+    CorsFilter corsFilter;
     @Autowired
     private JWTAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
@@ -111,6 +114,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 不创建会话，因为此项目基于 Java Web Token 进行登录
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // 添加跨域请求（允许）过滤器
+        security.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class);
         // 添加 JWT 过滤器
         security.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // 登录处理
@@ -141,12 +146,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 自定义匿名访问所有url放行 ： 允许匿名和带权限以及登录用户访问
                 .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
+                // .antMatchers("/api/user").hasRole("manager")
+                // .antMatchers("/api/user").hasAnyAuthority("user:query")
                 // 所有请求都需要认证
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();
                 // .and().apply(securityConfigurerAdapter())
-
     }
 
 }
