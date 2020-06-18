@@ -1,8 +1,8 @@
 /**
  * Copyright: 2019-2020，小树苗(www.xiaosm.cn)
- * FileName: TaskServiceImpl
+ * FileName: PropServiceImpl
  * Author:   Young
- * Date:     2020/6/18 16:02
+ * Date:     2020/6/18 16:10
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -10,10 +10,10 @@
  */
 package cn.xiaosm.plainadmin.service.impl;
 
+import cn.xiaosm.plainadmin.entity.Prop;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
-import cn.xiaosm.plainadmin.entity.Task;
-import cn.xiaosm.plainadmin.mapper.TaskMapper;
-import cn.xiaosm.plainadmin.service.TaskService;
+import cn.xiaosm.plainadmin.mapper.PropMapper;
+import cn.xiaosm.plainadmin.service.PropService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements TaskService {
+public class PropServiceImpl extends ServiceImpl<PropMapper, Prop> implements PropService {
 
     @Override
     public ResponseEntity getById(Integer id) {
@@ -36,22 +36,22 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     @Override
-    public ResponseEntity addEntity(Task task) {
+    public ResponseEntity addEntity(Prop prop) {
         return null;
     }
 
     @Override
-    public ResponseEntity deleteEntity(Task task) {
+    public ResponseEntity deleteEntity(Prop prop) {
         return null;
     }
 
     @Override
-    public ResponseEntity modifyEntity(Task task) {
+    public ResponseEntity modifyEntity(Prop prop) {
         return null;
     }
 
     @Override
-    public Page<Task> listOfPage(Page<Task> page, QueryWrapper<Task> queryWrapper) {
+    public Page<Prop> listOfPage(Page<Prop> page, QueryWrapper<Prop> queryWrapper) {
         return null;
     }
 }

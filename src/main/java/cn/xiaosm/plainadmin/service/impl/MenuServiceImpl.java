@@ -18,6 +18,8 @@ import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.mapper.MenuMapper;
 import cn.xiaosm.plainadmin.service.MenuService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +60,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public ResponseEntity modifyEntity(Menu menu) {
+        return null;
+    }
+
+    @Override
+    public Page<Menu> listOfPage(Page<Menu> page, QueryWrapper<Menu> queryWrapper) {
         return null;
     }
 
