@@ -1,8 +1,8 @@
 /**
  * Copyright: 2019-2020，小树苗(www.xiaosm.cn)
- * FileName: Operator
+ * FileName: Task
  * Author:   Young
- * Date:     2020/6/16 10:35
+ * Date:     2020/6/18 15:58
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -10,22 +10,14 @@
  */
 package cn.xiaosm.plainadmin.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-
 /**
  * 〈一句话功能简述〉
  * 〈〉
  *
  * @author Young
- * @create 2020/6/16
+ * @create 2020/6/18
  * @since 1.0.0
  */
-@TableName("operate_log")
-public class OperatorLog extends BaseEntity {
-
-    private Long id;
-    private String name;
-    private String username;
-    private String ip;
+public class Task {
 
 }

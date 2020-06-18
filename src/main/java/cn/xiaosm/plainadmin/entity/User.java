@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,13 +39,14 @@ public class User extends BaseEntity implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
+    // @JsonIgnore
+    @JsonIgnoreProperties(allowSetters = true)
     private String password;
     private String nickname;
     private String email;
     private String gender;
     private Integer age;
     private Integer status;
-    private String roleIds;
     @JsonIgnore
     private String uuid;
 

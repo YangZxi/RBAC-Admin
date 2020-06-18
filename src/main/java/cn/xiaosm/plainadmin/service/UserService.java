@@ -13,7 +13,11 @@ package cn.xiaosm.plainadmin.service;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉
@@ -23,11 +27,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @create 2020/6/13
  * @since 1.0.0
  */
-public interface UserService extends IService<User>, BaseService<User> {
+public interface UserService extends BaseService<User> {
 
     ResponseEntity getById(Integer id);
 
     UserDTO getByUsername(String username);
 
     User login(User user);
+
 }

@@ -39,6 +39,7 @@ public class UserDTO extends User implements Serializable {
 
     @JsonIgnore
     private String password;
+    private String roleIds;
     private List<Role> roles;
     private List<Menu> menus;
     private List<UserLoginTrack> userLoginTracks;

@@ -32,6 +32,7 @@ public class LoginUser extends User implements Serializable, UserDetails {
 
     @JsonIgnore
     private String password;
+    private String roleIds;
     private List<String> roles;
     private List<Menu> menus;
     private List<UserLoginTrack> userLoginTracks;

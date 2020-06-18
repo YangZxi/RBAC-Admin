@@ -52,7 +52,7 @@ public class TokenService {
     private final int SECOND = 1000;
     private final int MINUTE = 60 * SECOND;
     // 设置 Token 到期时间 十分钟
-    private final int EXPIRES = 1 * MINUTE;
+    private final int EXPIRES = 5 * MINUTE;
     private JWTVerifier verifier = JWT.require(Algorithm.HMAC256(HMAC256))
             .build();
     @Autowired

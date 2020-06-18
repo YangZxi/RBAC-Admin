@@ -10,7 +10,7 @@
  */
 package cn.xiaosm.plainadmin.config.security;
 
-import cn.xiaosm.plainadmin.entity.ResponseStatus;
+import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.AuthenticationException;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * 〈一句话功能简述〉

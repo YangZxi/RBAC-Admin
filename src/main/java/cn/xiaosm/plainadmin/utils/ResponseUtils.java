@@ -12,12 +12,11 @@ package cn.xiaosm.plainadmin.utils;
 
 import cn.hutool.json.JSONUtil;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
-import cn.xiaosm.plainadmin.entity.ResponseStatus;
+import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 〈一句话功能简述〉

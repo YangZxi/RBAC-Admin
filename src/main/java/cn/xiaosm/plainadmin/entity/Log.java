@@ -1,16 +1,16 @@
 /**
  * Copyright: 2019-2020，小树苗(www.xiaosm.cn)
- * FileName: OperatorService
+ * FileName: Operator
  * Author:   Young
- * Date:     2020/6/16 10:33
+ * Date:     2020/6/16 10:35
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
  * Young         修改时间           版本号             描述
  */
-package cn.xiaosm.plainadmin.service;
+package cn.xiaosm.plainadmin.entity;
 
-import cn.xiaosm.plainadmin.entity.OperatorLog;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * 〈一句话功能简述〉
@@ -20,6 +20,12 @@ import cn.xiaosm.plainadmin.entity.OperatorLog;
  * @create 2020/6/16
  * @since 1.0.0
  */
-public interface OperatorService extends BaseService<OperatorLog> {
+@TableName("operate_log")
+public class Log extends BaseEntity {
+
+    private Long id;
+    private String name;
+    private String username;
+    private String ip;
 
 }

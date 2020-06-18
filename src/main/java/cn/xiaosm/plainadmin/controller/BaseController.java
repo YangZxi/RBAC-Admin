@@ -10,9 +10,6 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
-import cn.xiaosm.plainadmin.entity.ResponseStatus;
-
 /**
  * 〈一句话功能简述〉
  * 〈〉

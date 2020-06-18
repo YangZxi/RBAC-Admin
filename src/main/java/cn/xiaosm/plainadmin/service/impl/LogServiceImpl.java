@@ -10,14 +10,14 @@
  */
 package cn.xiaosm.plainadmin.service.impl;
 
-import cn.xiaosm.plainadmin.entity.OperatorLog;
+import cn.xiaosm.plainadmin.entity.Log;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
-import cn.xiaosm.plainadmin.entity.User;
-import cn.xiaosm.plainadmin.mapper.OperatorMapper;
-import cn.xiaosm.plainadmin.mapper.UserMapper;
-import cn.xiaosm.plainadmin.service.OperatorService;
-import cn.xiaosm.plainadmin.service.UserService;
+import cn.xiaosm.plainadmin.mapper.LogMapper;
+import cn.xiaosm.plainadmin.service.LogService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
 
 /**
  * 〈一句话功能简述〉
@@ -27,7 +27,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
  * @create 2020/6/16
  * @since 1.0.0
  */
-public class OperatorServiceImpl extends ServiceImpl<OperatorMapper, OperatorLog> implements OperatorService {
+@Service
+public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogService {
 
     @Override
     public ResponseEntity getById(Integer id) {
@@ -35,17 +36,22 @@ public class OperatorServiceImpl extends ServiceImpl<OperatorMapper, OperatorLog
     }
 
     @Override
-    public ResponseEntity addEntity(OperatorLog operatorLog) {
+    public ResponseEntity addEntity(Log log) {
         return null;
     }
 
     @Override
-    public ResponseEntity deleteEntity(OperatorLog operatorLog) {
+    public ResponseEntity deleteEntity(Log log) {
         return null;
     }
 
     @Override
-    public ResponseEntity modifyEntity(OperatorLog operatorLog) {
+    public ResponseEntity modifyEntity(Log log) {
         return null;
+    }
+
+    @Override
+    public Page<Log> listOfPage(Page<Log> page, QueryWrapper<Log> queryWrapper) {
+        return this.page(page, queryWrapper);
     }
 }

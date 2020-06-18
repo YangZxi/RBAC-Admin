@@ -10,6 +10,8 @@
  */
 package cn.xiaosm.plainadmin.entity;
 
+import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
