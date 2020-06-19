@@ -12,14 +12,18 @@ package cn.xiaosm.plainadmin.controller;
 
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.Menu;
+import cn.xiaosm.plainadmin.entity.vo.MenuVO;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 〈一句话功能简述〉
@@ -37,10 +41,18 @@ public class MenuController {
     MenuService menuService;
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('menu:query')")
-    public ResponseEntity queryMenus(Page<Menu> page) {
-        Page<Menu> list = menuService.page(page, null);
-        return ResponseUtils.buildSuccess("获取了菜单列表", list);
+    @PreAuthorize("hasAuthority('menu:query') or hasRole('admin')")
+    public ResponseEntity queryMenus(Page<Menu> page, MenuVO menu) {
+        if ("tree".equals(menu.getShowType())) {
+            return ResponseUtils.buildSuccess("成功获取菜单列表",
+                    menuService.getByParentIdOfTree(menu.getParentMenu()));
+        } else {
+            QueryWrapper<Menu> wrapper = new QueryWrapper<>();
+            wrapper.eq("parent_menu", menu.getParentMenu());
+            return ResponseUtils.buildSuccess("获取了菜单列表",
+                    menuService.page(page, wrapper));
+        }
+
     }
 
     @PutMapping
@@ -66,4 +78,5 @@ public class MenuController {
         return b == true ? ResponseUtils.buildSuccess("删除菜单信息成功")
                 : ResponseUtils.buildFail("删除菜单失败");
     }
+
 }

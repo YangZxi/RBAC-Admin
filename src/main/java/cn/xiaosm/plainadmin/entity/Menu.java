@@ -11,9 +11,11 @@
 package cn.xiaosm.plainadmin.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -35,11 +37,13 @@ public class Menu extends BaseEntity {
     private Integer type; // 菜单类型
     private Integer parentMenu; // 上级菜单
     private String icon; // 菜单图标
+    @TableField(value = "`order`")
     private Integer order; // 排序
-    private String index; // 组件路径
+    private String path; // 组件路径
     private String component; // 组件名称
     private String permission; // 权限许可
     private Integer status; // 状态
+    @TableField(exist = false)
     private List<Menu> children; // 子菜单
 
 }

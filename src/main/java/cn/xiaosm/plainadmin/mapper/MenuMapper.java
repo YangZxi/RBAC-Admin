@@ -44,7 +44,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @return
      */
     @Select("SELECT * FROM meun WHERE parent_menu = ${parentId}")
-    List<Menu> findAllByParentId(Integer parentId);
+    List<Menu> selectAllByParentId(Integer parentId);
 
     /**
      * 通过角色 id 查询所有菜单
@@ -68,8 +68,8 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param roleId
      * @return
      */
-    @SelectProvider(value = MenuProvider.class, method = "sqlSelectByRoleId")
-    List<Menu> selectAllByRoleId(String roleId);
+    @SelectProvider(value = MenuProvider.class, method = "sqlSelectByRoleIds")
+    List<Menu> selectAllByRoleIds(String roleId);
 
     /**
      * 通过角色 id 和父级菜单 id 查询所有菜单

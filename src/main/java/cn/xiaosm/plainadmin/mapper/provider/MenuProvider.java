@@ -36,11 +36,11 @@ public class MenuProvider {
 
     /**
      * 通过角色 id 查询所有的菜单
-     * @param roleId
+     * @param roleIds
      * @return
      */
-    public String sqlSelectByRoleId(String roleId) {
-        return this.sqlSelectByRoleIdAndParentId(roleId, null);
+    public String sqlSelectByRoleIds(String roleIds) {
+        return this.sqlSelectByRoleIdAndParentId(roleIds, null);
     }
 
     /**

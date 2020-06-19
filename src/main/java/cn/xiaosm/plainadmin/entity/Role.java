@@ -11,6 +11,7 @@
 package cn.xiaosm.plainadmin.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class Role extends BaseEntity {
     private Integer id;
     private String name;
     private String nameZh;
+    @TableField(value = "`desc`")
     private String desc;
     private Integer status;
 

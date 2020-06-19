@@ -24,7 +24,15 @@ import java.util.List;
  */
 public interface MenuService extends BaseService<Menu> {
 
-    List<Menu> getByRoleId(String roleId);
+    List<Menu> getByParentId(Integer parentId);
 
-    List<Menu> buildTree(List<Menu> menuList);
+    List<Menu> getByParentId(Integer parentId, boolean getChild);
+
+    List<Menu> getByParentIdOfTree(Integer parentId);
+
+    List<Menu> getByRoleIds(String roleId);
+
+    List<Menu> buildTree(List<Menu> menuList, Integer parentId);
+
+    List<Menu> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent);
 }

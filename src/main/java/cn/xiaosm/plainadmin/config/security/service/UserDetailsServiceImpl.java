@@ -14,7 +14,6 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.xiaosm.plainadmin.entity.LoginUser;
 import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.Role;
-import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.service.UserService;
@@ -23,14 +22,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.LockedException;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -66,7 +62,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .map(Role::getId)
                 .toArray(), ","));
         // 通过roleIds 字符串添加用户所拥有的菜单<注意，这里还只是链表结构>
-        user.setMenus(menuService.getByRoleId(user.getRoleIds()));
+        user.setMenus(menuService.getByRoleIds(user.getRoleIds()));
 
         // 转变为 UserDetails 类型
         LoginUser loginUser = new LoginUser();
@@ -92,7 +88,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         );
         loginUser.setAuthorities(authorities);
         // 构建登录用户菜单树
-        loginUser.setMenus(menuService.buildTree(loginUser.getMenus()));
+        loginUser.setMenus(menuService.buildTree(loginUser.getMenus(), 0));
 
         return loginUser;
     }

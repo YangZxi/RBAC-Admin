@@ -18,8 +18,8 @@ public class DruidConfig {
         //设置ip黑名单，如果allow与deny共同存在时,deny优先于allow
         servletRegistrationBean.addInitParameter("deny","192.168.0.19");
         //设置控制台管理用户
-        servletRegistrationBean.addInitParameter("loginUsername","druid");
-        servletRegistrationBean.addInitParameter("loginPassword","123456");
+        servletRegistrationBean.addInitParameter("loginUsername","admin");
+        servletRegistrationBean.addInitParameter("loginPassword","admin");
         //是否可以重置数据
         servletRegistrationBean.addInitParameter("resetEnable","false");
         return servletRegistrationBean;

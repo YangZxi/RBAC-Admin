@@ -10,11 +10,17 @@
  */
 package cn.xiaosm.plainadmin.utils;
 
+import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -35,6 +41,19 @@ public class MemoryUtils {
 
     public static Object getObject(String key) {
         return map.get(key);
+    }
+
+    public static<T> Object getObject(String key, Class clazz) {
+        if (map.containsKey(key)) {
+            try {
+                return new ObjectMapper().readValue(JSONUtil.toJsonStr(map.get(key)), clazz);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+        }
+        return null;
     }
 
     public static void removeObject(String key) {

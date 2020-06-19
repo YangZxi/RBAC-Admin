@@ -30,6 +30,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -54,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier("userDetailsService")
-    UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
     @Autowired
     private AccessDeniedHandlerImpl accessDeniedHandler;
     @Autowired
@@ -64,7 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoginFailHandler loginFailHandler;
     @Autowired
-    CorsFilter corsFilter;
+    private LogoutSuccessHandler logoutSuccessHandler;
+    @Autowired
+    private CorsFilter corsFilter;
     @Autowired
     private JWTAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
@@ -83,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // web.ignoring().antMatchers("/login");
-        web.ignoring().antMatchers("/druid/**");
+        // web.ignoring().antMatchers("/druid/**");
         super.configure(web);
     }
 
@@ -120,6 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         // 登录处理
         security.formLogin()
+                // 因为写了自己的Controller，所以需要注释这行，防止我们自定义的不生效
                 // .loginProcessingUrl("/api/login")
                 // 登录成功调用
                 .successHandler(loginSuccessHandler)
@@ -129,6 +133,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler);
+
+        // 退出登录处理
+        security.logout()
+                .logoutUrl("/api/logout")
+                // .clearAuthentication(true)
+                .logoutSuccessHandler(logoutSuccessHandler);
 
         security.authorizeRequests()
                 .antMatchers("/api/login").anonymous()
@@ -141,7 +151,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.ico"
                 ).permitAll()
                 // 阿里巴巴 druid
-                // .antMatchers("/druid/**").permitAll()
+                .antMatchers("/druid/**").anonymous()
                 // 放行OPTIONS请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 自定义匿名访问所有url放行 ： 允许匿名和带权限以及登录用户访问

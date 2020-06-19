@@ -49,7 +49,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
           查找用户是否存在 且 Token还未过期
          */
         if (Objects.nonNull(loginUser) && tokenService.verifyToken(token)) {
-            log.info("一次授权的请求");
+            log.info("一次授权的请求 => {}", request.getRequestURI());
             /*
               创建 UsernamePasswordAuthenticationToken 对象，设置到 SecurityContextHolder 中
               如果没有此段代码，security将不不会允许即使有 token 的请求
@@ -60,7 +60,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             /* ******  很重要的代码  ****** */
         } else {
-            log.info("未授权，请先登录");
+            log.info("未授权，请先登录 => {}", request.getRequestURI());
         }
         chain.doFilter(request, response);
     }
