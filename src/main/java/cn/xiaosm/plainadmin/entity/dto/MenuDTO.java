@@ -24,6 +24,26 @@ import java.util.List;
  */
 public class MenuDTO extends Menu {
 
+    private boolean hasChildren = true;
     private List<Menu> children; // 子菜单
 
+    public boolean isHasChildren() {
+        return hasChildren;
+    }
+
+    public MenuDTO setHasChildren(boolean hasChildren) {
+        this.hasChildren = hasChildren;
+        return this;
+    }
+
+    @Override
+    public List<Menu> getChildren() {
+        return children;
+    }
+
+    @Override
+    public MenuDTO setChildren(List<Menu> children) {
+        this.children = children;
+        return this;
+    }
 }

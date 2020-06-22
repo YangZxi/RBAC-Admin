@@ -13,18 +13,22 @@ package cn.xiaosm.plainadmin.service.impl;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
+import cn.xiaosm.plainadmin.entity.vo.UserVO;
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.mapper.UserMapper;
 import cn.xiaosm.plainadmin.service.UserService;
-import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉
@@ -35,6 +39,7 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Service
+@Transactional
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
@@ -49,21 +54,63 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public ResponseEntity deleteEntity(User user) {
-        return null;
+    public boolean removeEntity(User user) {
+        return false;
     }
 
     @Override
-    public ResponseEntity modifyEntity(User o) {
-        return null;
+    public boolean modifyEntity(User user) {
+        if (Objects.nonNull(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        user.setUpdateTime(new Date());
+        this.updateById(user);
+        if (Objects.nonNull( ((UserVO) user).getRoleIds() )) {
+            // 先清除所有的角色信息
+            this.removeUserRoles(user.getId());
+            // 在进行新的插入
+            this.addUserRoles(user.getId(), ((UserVO) user).getRoleIds());
+        }
+        return true;
     }
 
     @Override
-    public ResponseEntity addEntity(User o) {
-        // 加密密码
-        o.setPassword(passwordEncoder.encode(o.getPassword()));
-        boolean b = this.save(o);
-        return b ? ResponseUtils.buildSuccess(o) : ResponseUtils.buildFail("保存失败");
+    public boolean addEntity(User user) {
+        user.setCreateTime(new Date()).setUpdateTime(new Date());
+        // 设置默认密码
+        user.setPassword(passwordEncoder.encode("123456"));
+        userMapper.insert(user);
+        this.addUserRoles(user.getId(), ((UserVO) user).getRoleIds());
+        return true;
+    }
+
+    public void removeUserRoles(Integer userId) {
+        userMapper.deleteUserRole(userId);
+    }
+
+    public int addUserRoles(Integer userId, Set<Integer> roleIds) {
+        for (Integer roleId : roleIds) {
+            try {
+                int i = userMapper.insertUserRole(userId, roleId);
+            } catch (Exception e) {
+                throw new SQLOperateException("保存失败###选择角色不存在");
+            }
+        }
+        return 1;
+    }
+
+    @Override
+    public int removeById(Integer id) {
+        return userMapper.updateUserIsDeleted(id);
+    }
+
+    @Override
+    public int removeByIds(Set<Integer> ids) {
+        int count = 0;
+        for (Integer id : ids) {
+            count += this.removeById(id);
+        }
+        return count;
     }
 
     /**

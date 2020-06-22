@@ -31,8 +31,6 @@ import java.util.Date;
  * @create 2020/6/13
  * @since 1.0.0
  */
-@Data
-@NoArgsConstructor
 @TableName(value = "user")
 public class User extends BaseEntity implements Serializable {
 
@@ -49,6 +47,8 @@ public class User extends BaseEntity implements Serializable {
     @JsonIgnore
     private String uuid;
 
+    public User() {}
+
     public User(Integer id, String uuid) {
         this.id = id;
         this.uuid = uuid;
@@ -56,5 +56,81 @@ public class User extends BaseEntity implements Serializable {
 
     public void setUuid(String uuid) {
         this.uuid = uuid == null ? "" : uuid;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public User setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public User setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public User setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public User setNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public User setGender(String gender) {
+        this.gender = gender;
+        return this;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public User setAge(Integer age) {
+        this.age = age;
+        return this;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public User setStatus(Integer status) {
+        this.status = status;
+        return this;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 }

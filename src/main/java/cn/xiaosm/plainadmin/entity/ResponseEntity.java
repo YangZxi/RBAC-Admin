@@ -64,6 +64,9 @@ public class ResponseEntity {
     }
 
     public void setMsg(String msg) {
+        if (msg.contains("Exception")) {
+            return;
+        }
         this.msg = msg;
     }
 

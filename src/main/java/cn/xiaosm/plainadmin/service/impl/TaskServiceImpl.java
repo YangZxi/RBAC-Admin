@@ -36,18 +36,18 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     @Override
-    public ResponseEntity addEntity(Task task) {
-        return null;
+    public boolean addEntity(Task task) {
+        return false;
     }
 
     @Override
-    public ResponseEntity deleteEntity(Task task) {
-        return null;
+    public boolean removeEntity(Task task) {
+        return false;
     }
 
     @Override
-    public ResponseEntity modifyEntity(Task task) {
-        return null;
+    public boolean modifyEntity(Task task) {
+        return false;
     }
 
     @Override

@@ -34,11 +34,11 @@ public interface BaseService<DOMAIN> extends IService<DOMAIN> {
 
     ResponseEntity getById(Integer id);
 
-    ResponseEntity addEntity(DOMAIN domain);
+    boolean addEntity(DOMAIN domain);
 
-    ResponseEntity deleteEntity(DOMAIN domain);
+    boolean removeEntity(DOMAIN domain);
 
-    ResponseEntity modifyEntity(DOMAIN domain);
+    boolean modifyEntity(DOMAIN domain);
 
     Page<DOMAIN> listOfPage(Page<DOMAIN> page, QueryWrapper<DOMAIN> queryWrapper);
 

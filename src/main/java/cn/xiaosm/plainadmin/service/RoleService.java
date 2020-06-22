@@ -12,6 +12,8 @@ package cn.xiaosm.plainadmin.service;
 
 import cn.xiaosm.plainadmin.entity.Role;
 
+import java.util.List;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -22,4 +24,5 @@ import cn.xiaosm.plainadmin.entity.Role;
  */
 public interface RoleService extends BaseService<Role> {
 
+    List<Role> getByUserId(Integer userId);
 }

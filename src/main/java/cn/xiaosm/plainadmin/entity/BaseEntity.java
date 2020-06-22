@@ -46,15 +46,17 @@ public class BaseEntity {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public BaseEntity setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+        return this;
     }
 
     public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public BaseEntity setCreateTime(Date createTime) {
         this.createTime = createTime;
+        return this;
     }
 }

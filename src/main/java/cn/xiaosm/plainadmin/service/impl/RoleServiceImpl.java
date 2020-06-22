@@ -20,6 +20,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -40,18 +42,18 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public ResponseEntity addEntity(Role role) {
-        return null;
+    public boolean addEntity(Role role) {
+        return false;
     }
 
     @Override
-    public ResponseEntity deleteEntity(Role role) {
-        return null;
+    public boolean removeEntity(Role role) {
+        return false;
     }
 
     @Override
-    public ResponseEntity modifyEntity(Role role) {
-        return null;
+    public boolean modifyEntity(Role role) {
+        return false;
     }
 
     @Override
@@ -62,5 +64,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         // 要点!! 分页返回的对象与传入的对象是同一个
         // this.page(page, queryWrapper);
         return roleMapper.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public List<Role> getByUserId(Integer userId) {
+        return roleMapper.selectByUserId(userId);
     }
 }

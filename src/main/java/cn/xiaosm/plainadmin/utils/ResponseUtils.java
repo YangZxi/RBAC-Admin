@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.utils;
 
+import cn.hutool.http.HttpStatus;
 import cn.hutool.json.JSONUtil;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
@@ -34,6 +35,18 @@ public class ResponseUtils {
             put("msg", "登录成功");
             put("token", token);
         }}, HttpServletResponse.SC_OK);
+    }
+
+    public static ResponseEntity build(ResponseStatus status, String msg) {
+        return new ResponseEntity(status, msg);
+    }
+
+    public static ResponseEntity build(ResponseStatus status, Object data) {
+        return new ResponseEntity(status, data);
+    }
+
+    public static ResponseEntity build(ResponseStatus status, String msg, Object data) {
+        return new ResponseEntity(status, msg, data);
     }
 
     public static ResponseEntity buildSuccess(String msg) {
@@ -79,7 +92,7 @@ public class ResponseUtils {
     }
 
     public static void sendError(HttpServletResponse response, String msg, int sc) {
-        writeBody(response, buildError(msg), sc);
+        writeBody(response, build(ResponseStatus.SUCCESS, msg), sc);
     }
 
     public static void sendError(HttpServletResponse response, ResponseStatus status, String msg, int sc) {
@@ -87,6 +100,7 @@ public class ResponseUtils {
     }
 
     private static<T> void writeBody(HttpServletResponse response, T entity, int sc) {
+        // response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(sc);
         try {

@@ -55,11 +55,12 @@ public class MenuProvider {
             .FROM("menu m")
             .LEFT_OUTER_JOIN("role_menu rm ON rm.menu_id = m.id")
             .LEFT_OUTER_JOIN("role r ON rm.role_id = r.id")
-            .WHERE("r.id IN (#{roleId})");
+            .WHERE("r.id IN (#{roleId})")
+            .WHERE("m.status = 1");
         if (Objects.isNull(parentId)) {
             sql.WHERE("NOT ISNULL(parent_menu)");
         } else if (parentId == 0) {
-            // 由于调用此方法的函数只有一个参数，
+            // 由于调用此方法的函数只有(给)了一个参数，
             // 所以如果使用占位符代替会出现值和第一个参数值相同
             sql.WHERE("m.parent_menu = 0");
         } else {

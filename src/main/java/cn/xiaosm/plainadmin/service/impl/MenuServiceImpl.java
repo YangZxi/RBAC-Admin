@@ -10,16 +10,23 @@
  */
 package cn.xiaosm.plainadmin.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.mapper.MenuMapper;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.utils.MemoryUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,18 +51,49 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public ResponseEntity addEntity(Menu menu) {
-        return null;
+    public boolean addEntity(Menu menu) {
+        menu.setCreateTime(new Date());
+        menu.setUpdateTime(new Date());
+        this.clearAttr(menu);
+        try {
+            return this.save(menu);
+        } catch (Exception e) {
+            throw new SQLOperateException(menu.getPermission() + "已存在，请勿重复添加");
+        }
     }
 
     @Override
-    public ResponseEntity deleteEntity(Menu menu) {
-        return null;
+    public boolean removeEntity(Menu menu) {
+
+        return false;
     }
 
     @Override
-    public ResponseEntity modifyEntity(Menu menu) {
-        return null;
+    @Transactional
+    public int removeById(Integer id) {
+        Menu menu = null;
+        if (Objects.nonNull( (menu = menuMapper.selectById(id)) )) {
+            throw new SQLOperateException(
+                    StrUtil.format("删除失败###{}下含有子菜单，本次删除操作已被取消", menu.getName())
+            );
+        }
+        int i = menuMapper.deleteById(id);
+        return i;
+    }
+
+    @Override
+    public int removeByIds(Set<Integer> ids) {
+        int count = 0;
+        for (Integer id : ids) {
+            count += this.removeById(id);
+        }
+        return count;
+    }
+
+    @Override
+    public boolean modifyEntity(Menu menu) {
+        menu.setUpdateTime(new Date());
+        return this.updateById(menu);
     }
 
     @Override
@@ -63,23 +101,36 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return null;
     }
 
-    /**
-     * 获取所有的菜单
-     * @return
-     */
-    public List<Menu> getAll() {
-        List<Menu> list = (List<Menu>) MemoryUtils.getObject("MenuList");
-        list = list.stream().filter(el -> Objects.nonNull(el.getId())).collect(Collectors.toList());
-        if (Objects.isNull(list)) {
-            list = this.list();
-            MemoryUtils.saveObject("MenuList", list);
-        }
-        return list;
-    }
-
     @Override
     public List<Menu> getByParentId(Integer parentId) {
         return this.getByParentId(parentId, false);
+    }
+
+    /**
+     * 根据类型，清楚不必要的内容
+     * @param menu
+     */
+    // @SneakyThrows
+    public void clearAttr(Menu menu) {
+        if (menu.getType() == 1) {
+            menu.setComponent(null);
+        } else if (menu.getType() == 2) {
+
+        } else {
+            if (Objects.nonNull(menuMapper.selectOne(new QueryWrapper<Menu>(menu, "permission")))) {
+
+            }
+            menu.setComponent(null);
+            menu.setPath(null);
+        }
+    }
+
+    /**
+     * 刷新菜单
+     */
+    @Override
+    public void refreshMenus() {
+        MemoryUtils.saveObject("MenuList", this.list());
     }
 
     /**
@@ -90,7 +141,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public List<Menu> getByParentId(Integer parentMenu, boolean recursive) {
-        List<Menu> menuList = this.getAll();
+        List<Menu> menuList = this.getAll(true);
         if (recursive) {
             // 获取第一级子菜单
             List<Menu> reList = menuList.stream()
@@ -109,11 +160,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return
      */
     @Override
-    public List<Menu> getByParentIdOfTree(Integer parentId) {
-        /**
-         *
-         */
-        return this.buildTree(this.getAll(), parentId);
+    public List<Menu> getByParentIdOfTree(Integer parentId, boolean includeButton) {
+        return this.buildTree(this.getAll(includeButton), parentId);
     }
 
     // @Override
@@ -148,6 +196,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<Menu> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent) {
         List<Menu> menuTree = menuList.stream()
                 .filter(el -> includeParent ? el.getId() == parentId : el.getParentMenu() == parentId)
+                // 过滤状态不是启用的，这里只要将父类别过滤了，子类别是添加不进的
+                .filter(el-> el.getStatus() == 1)
                 .collect(Collectors.toList());
         return this.buildTree(menuTree, menuList);
     }
@@ -164,7 +214,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         Iterator<Menu> it = null;
         Menu next;
         for (Menu menu : menuTree) {
-            // 排除按钮
+            // 如果是按钮，将不会继续找他的孩子
             if (menu.getType() != 3) {
                 it = menuList.iterator();
                 while (it.hasNext()) {
@@ -180,5 +230,21 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             }
         }
         return menuTree;
+    }
+
+    /**
+     * 获取所有的菜单
+     * @return
+     */
+    public List<Menu> getAll(boolean includeButton) {
+        List<Menu> list = (List<Menu>) MemoryUtils.getObject("MenuList");
+        list = list.stream()
+                .filter(el -> includeButton ? el.getType() <= 3 : el.getType() < 3)
+                .collect(Collectors.toList());
+        if (Objects.isNull(list)) {
+            list = this.list();
+            MemoryUtils.saveObject("MenuList", list);
+        }
+        return list;
     }
 }

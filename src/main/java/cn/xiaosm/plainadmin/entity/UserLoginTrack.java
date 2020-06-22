@@ -27,7 +27,6 @@ import java.util.Date;
  * @create 2020/6/14
  * @since 1.0.0
  */
-@Data
 @TableName(value = "user_login_track")
 public class UserLoginTrack implements Serializable {
 
@@ -38,4 +37,39 @@ public class UserLoginTrack implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date loginTime;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public UserLoginTrack setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public UserLoginTrack setUserId(Integer userId) {
+        this.userId = userId;
+        return this;
+    }
+
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public UserLoginTrack setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+        return this;
+    }
+
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public UserLoginTrack setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+        return this;
+    }
 }

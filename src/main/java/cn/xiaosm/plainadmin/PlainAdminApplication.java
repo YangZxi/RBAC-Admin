@@ -1,19 +1,17 @@
 package cn.xiaosm.plainadmin;
 
-import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.utils.MemoryUtils;
 import cn.xiaosm.plainadmin.utils.SpringContextUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @MapperScan("cn.xiaosm.plainadmin.mapper")
+// @PropertySource("classpath:application.properties")
+@EnableTransactionManagement
 @SpringBootApplication
 public class PlainAdminApplication {
 

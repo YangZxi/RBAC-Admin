@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,18 +50,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
+        // 获取 user 信息
         UserDTO user = userService.getByUsername(username);
-        if (Objects.isNull(user)) {
-            throw new AuthenticationCredentialsNotFoundException("用户名输入错误");
-        } else if (user.getStatus() == 0){
-            throw new LockedException("用户已被禁用，请联系管理员");
-        }
+        // 验证用户状态
+        this.validateUser(user);
 
-        // 设置用户id（字符串，已英文逗号分隔）
+        // 设置用户id（字符串，以英文逗号分隔）
         user.setRoleIds(ArrayUtil.join(user.getRoles()
                 .stream()
                 .map(Role::getId)
                 .toArray(), ","));
+
         // 通过roleIds 字符串添加用户所拥有的菜单<注意，这里还只是链表结构>
         user.setMenus(menuService.getByRoleIds(user.getRoleIds()));
 
@@ -91,6 +91,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         loginUser.setMenus(menuService.buildTree(loginUser.getMenus(), 0));
 
         return loginUser;
+    }
+
+    private void validateUser(UserDTO user) {
+        if (Objects.isNull(user)) {
+            throw new AuthenticationCredentialsNotFoundException("用户名输入错误");
+        } else if (user.getStatus() == 0){
+            throw new LockedException("用户已被禁用，请联系管理员");
+        } else if (user.getStatus() == 2) {
+            throw new DisabledException("用户状态异常，请联系管理员");
+        }
     }
 
 }

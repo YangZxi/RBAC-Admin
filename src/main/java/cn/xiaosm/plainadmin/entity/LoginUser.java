@@ -27,7 +27,6 @@ import java.util.List;
  * @create 2020/6/16
  * @since 1.0.0
  */
-@Data
 public class LoginUser extends User implements Serializable, UserDetails {
 
     @JsonIgnore
@@ -61,5 +60,57 @@ public class LoginUser extends User implements Serializable, UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public LoginUser setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public String getRoleIds() {
+        return roleIds;
+    }
+
+    public LoginUser setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
+        return this;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public LoginUser setRoles(List<String> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public List<Menu> getMenus() {
+        return menus;
+    }
+
+    public LoginUser setMenus(List<Menu> menus) {
+        this.menus = menus;
+        return this;
+    }
+
+    public List<UserLoginTrack> getUserLoginTracks() {
+        return userLoginTracks;
+    }
+
+    public LoginUser setUserLoginTracks(List<UserLoginTrack> userLoginTracks) {
+        this.userLoginTracks = userLoginTracks;
+        return this;
+    }
+
+    public LoginUser setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
+        return this;
     }
 }

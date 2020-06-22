@@ -13,6 +13,7 @@ package cn.xiaosm.plainadmin.service;
 import cn.xiaosm.plainadmin.entity.Menu;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉
@@ -24,11 +25,17 @@ import java.util.List;
  */
 public interface MenuService extends BaseService<Menu> {
 
+    int removeById(Integer id);
+
+    int removeByIds(Set<Integer> ids);
+
     List<Menu> getByParentId(Integer parentId);
+
+    void refreshMenus();
 
     List<Menu> getByParentId(Integer parentId, boolean getChild);
 
-    List<Menu> getByParentIdOfTree(Integer parentId);
+    List<Menu> getByParentIdOfTree(Integer parentId, boolean includeButton);
 
     List<Menu> getByRoleIds(String roleId);
 

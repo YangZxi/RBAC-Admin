@@ -36,18 +36,18 @@ public class PropServiceImpl extends ServiceImpl<PropMapper, Prop> implements Pr
     }
 
     @Override
-    public ResponseEntity addEntity(Prop prop) {
-        return null;
+    public boolean addEntity(Prop prop) {
+        return false;
     }
 
     @Override
-    public ResponseEntity deleteEntity(Prop prop) {
-        return null;
+    public boolean removeEntity(Prop prop) {
+        return false;
     }
 
     @Override
-    public ResponseEntity modifyEntity(Prop prop) {
-        return null;
+    public boolean modifyEntity(Prop prop) {
+        return false;
     }
 
     @Override

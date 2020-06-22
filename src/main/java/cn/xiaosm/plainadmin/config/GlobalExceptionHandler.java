@@ -8,6 +8,8 @@
  */
 package cn.xiaosm.plainadmin.config;
 
+import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import lombok.extern.log4j.Log4j2;
@@ -45,12 +47,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class) // 没有访问权限。使用 @PreAuthorize 校验权限不通过时，就会抛出 AccessDeniedException 异常
     public ResponseEntity handleAuthorizationException(AccessDeniedException e) {
         log.error(e.getMessage());
-        return ResponseUtils.buildError("没有权限，请联系管理员授权");
+        return ResponseUtils.build(ResponseStatus.AUTHORITIES_DENIED, "没有权限，请联系管理员授权");
     }
 
     @ExceptionHandler(UsernameNotFoundException.class) // 用户名不存在
     public ResponseEntity handleUsernameNotFoundException(UsernameNotFoundException e) {
         log.error(e.getMessage(), e);
+        return ResponseUtils.buildError(e.getMessage());
+    }
+
+    @ExceptionHandler(SQLOperateException.class) // 用户名不存在
+    public ResponseEntity exception5(SQLOperateException e) {
+        log.error(e.getMessage(), "字段重复");
         return ResponseUtils.buildError(e.getMessage());
     }
 

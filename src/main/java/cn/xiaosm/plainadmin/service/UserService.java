@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉
@@ -30,6 +31,10 @@ import java.util.List;
 public interface UserService extends BaseService<User> {
 
     ResponseEntity getById(Integer id);
+
+    int removeById(Integer id);
+
+    int removeByIds(Set<Integer> ids);
 
     UserDTO getByUsername(String username);
 

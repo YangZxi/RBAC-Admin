@@ -66,4 +66,24 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("SELECT * FROM user_login_track WHERE user_id = #{userId} ORDER BY login_time DESC LIMIT 1")
     // @SelectProvider(value = UserProvider.class, method = "sqlFindUserTrack")
     UserLoginTrack selectUserTrackByUserId(@Param("userId") Integer userId);
+
+    @Update("UPDATE `plain_admin`.`user` SET `status` = 2 WHERE `id` = #{userId}")
+    int updateUserIsDeleted(Integer userId);
+
+    /**
+     * 删除所有的用户角色信息
+     * @param userId
+     * @return
+     */
+    @Update("DELETE FROM `user_role` WHERE `user_id` = #{userId}")
+    int deleteUserRole(Integer userId);
+
+    /**
+     * 插入用户角色信息
+     * @param userId
+     * @param roleId
+     * @return
+     */
+    @Update("INSERT INTO `user_role`(`user_id`, `role_id`) VALUES (#{userId}, #{roleId})")
+    int insertUserRole(Integer userId, Integer roleId);
 }

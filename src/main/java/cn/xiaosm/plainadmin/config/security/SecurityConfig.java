@@ -137,7 +137,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 退出登录处理
         security.logout()
                 .logoutUrl("/api/logout")
-                // .clearAuthentication(true)
+                .clearAuthentication(false)
                 .logoutSuccessHandler(logoutSuccessHandler);
 
         security.authorizeRequests()

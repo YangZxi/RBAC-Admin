@@ -17,12 +17,14 @@ import cn.xiaosm.plainadmin.utils.MemoryUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,22 +43,40 @@ import java.util.UUID;
 @Component
 public class TokenService {
 
+    @Autowired
+    UserService userService;
+
     // 存放 Token 的头部名称
-    private final String AUTH_HEADER = "Authorization";
+    @Value("${security.token.header}")
+    private String AUTH_HEADER;
     // Token 前缀
-    private final String TOKEN_PREFIX = "Bearer";
+    @Value("${security.token.prefix}")
+    private String TOKEN_PREFIX;
+    // 用于加密的字段
+    private String SECRET_KEY;
     // Token 的 claim 信息
     private final String JWT_CLAIM_UUID = "UUID";
-    // 用于加密的字段
-    private final String HMAC256= "1282381264";
     private final int SECOND = 1000;
     private final int MINUTE = 60 * SECOND;
     // 设置 Token 到期时间 十分钟
-    private final int EXPIRES = 30 * MINUTE;
-    private JWTVerifier verifier = JWT.require(Algorithm.HMAC256(HMAC256))
-            .build();
-    @Autowired
-    UserService userService;
+    private int EXPIRES;
+    // Token 验证
+    private JWTVerifier verifier = null;
+
+
+    @Value("${security.token.expires}")
+    public void setEXPIRES(int EXPIRES) {
+        this.EXPIRES = EXPIRES * MINUTE;
+    }
+
+    @Value("${security.token.secret-key}")
+    public void setSECRET_KEY(String SECRET_KEY) {
+        this.SECRET_KEY = SECRET_KEY;
+        this.verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY))
+                .build();
+    }
+
+
 
     /**
      * 创建 Token
@@ -75,7 +95,7 @@ public class TokenService {
                 .withAudience(loginUser.getUsername())
                 .withClaim(JWT_CLAIM_UUID, uuid)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRES))
-                .sign(Algorithm.HMAC256(HMAC256));
+                .sign(Algorithm.HMAC256(SECRET_KEY));
         // JWTCreator.Builder builder = JWT.create().withAudience(user.getUsername());
         // 更新数据库中的 UUID
         userService.updateById(new User(loginUser.getId(), uuid));
@@ -117,7 +137,11 @@ public class TokenService {
     }
 
     public String getUUID(String token) {
-        return JWT.decode(token).getClaim(JWT_CLAIM_UUID).asString();
+        try {
+            return JWT.decode(token).getClaim(JWT_CLAIM_UUID).asString();
+        } catch (JWTDecodeException e) {
+            return "";
+        }
     }
 
     /**

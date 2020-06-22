@@ -36,18 +36,18 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
     }
 
     @Override
-    public ResponseEntity addEntity(Log log) {
-        return null;
+    public boolean addEntity(Log log) {
+        return false;
     }
 
     @Override
-    public ResponseEntity deleteEntity(Log log) {
-        return null;
+    public boolean removeEntity(Log log) {
+        return false;
     }
 
     @Override
-    public ResponseEntity modifyEntity(Log log) {
-        return null;
+    public boolean modifyEntity(Log log) {
+        return false;
     }
 
     @Override

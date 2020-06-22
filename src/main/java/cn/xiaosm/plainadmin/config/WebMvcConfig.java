@@ -48,16 +48,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new MainInterceptor();
     }
 
-    @Bean
-    public JwtInterceptor createJwtInterceptor() {
-        System.out.println("加载JWT拦截器");
-        return new JwtInterceptor();
-    }
+    // @Bean
+    // public JwtInterceptor createJwtInterceptor() {
+    //     System.out.println("加载JWT拦截器");
+    //     return new JwtInterceptor();
+    // }
 
-    @Bean
-    public CorsInterceptor createCorsInterceptor() {
-        System.out.println("加载Cors拦截器");
-        return new CorsInterceptor();
-    }
+    // @Bean
+    // public CorsInterceptor createCorsInterceptor() {
+    //     System.out.println("加载Cors拦截器");
+    //     return new CorsInterceptor();
+    // }
 
 }

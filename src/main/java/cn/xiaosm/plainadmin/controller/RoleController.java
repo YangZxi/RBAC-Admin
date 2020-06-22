@@ -13,15 +13,18 @@ package cn.xiaosm.plainadmin.controller;
 import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.Role;
+import cn.xiaosm.plainadmin.entity.vo.RoleVO;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.service.RoleService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -44,9 +47,18 @@ public class RoleController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('role:query') or hasRole('admin')")
-    public ResponseEntity queryRoles(Page<Role> page) {
-        Page<Role> list = roleService.page(page, null);
-        return ResponseUtils.buildSuccess("获取了角色列表", list);
+    public ResponseEntity queryRoles(Page<Role> page, RoleVO roleVO) {
+        // 如果用户id不为空，则查询当前用户的角色
+        if (Objects.nonNull(roleVO.getUserId())) {
+            return ResponseUtils.buildSuccess("",
+                    roleService.getByUserId(roleVO.getUserId()).stream()
+                    // 由于暂时仅需要角色的id
+                    .map(Role::getId).collect(Collectors.toList())
+            );
+        } else {
+            return ResponseUtils.buildSuccess("获取了角色列表",
+                    roleService.page(page, null));
+        }
     }
 
     @PutMapping

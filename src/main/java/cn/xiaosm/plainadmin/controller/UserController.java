@@ -13,15 +13,20 @@ package cn.xiaosm.plainadmin.controller;
 import cn.xiaosm.plainadmin.config.security.service.TokenService;
 import cn.xiaosm.plainadmin.entity.ResponseEntity;
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.entity.enums.StatusEnum;
+import cn.xiaosm.plainadmin.entity.vo.UserVO;
 import cn.xiaosm.plainadmin.service.UserService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉
@@ -54,34 +59,37 @@ public class UserController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('user:query')")
-    public ResponseEntity queryUsers(Page<User> page) {
-        Page<User> list = userService.page(page, null);
+    @PreAuthorize("hasAuthority('user:query') or hasRole('admin')")
+    public ResponseEntity queryUsers(Page<User> page, UserVO userVO) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+
+        // 不查询已删除的用户
+        wrapper.ne("status", StatusEnum.DELETED.getCode());
+        Page<User> list = userService.page(page, wrapper);
         return ResponseUtils.buildSuccess("获取了用户列表", list);
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('user:add')")
-    public ResponseEntity saveUser(@RequestBody User user) {
-        boolean b = userService.save(user);
+    @PreAuthorize("(hasAuthority('user:add') and hasAuthority('role:query')) or hasRole('admin')")
+    public ResponseEntity saveUser(@RequestBody UserVO userVO) {
+        boolean b = userService.addEntity(userVO);
         return b == true ? ResponseUtils.buildSuccess("新增用户信息成功")
                 : ResponseUtils.buildFail("保存失败");
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('user:modify')")
-    public ResponseEntity modifyUser(@RequestBody User user) {
-        boolean b = userService.updateById(user);
+    @PreAuthorize("hasAuthority('user:modify') or hasRole('admin')")
+    public ResponseEntity modifyUser(@RequestBody UserVO userVO) {
+        boolean b = userService.modifyEntity(userVO);
         return b == true ? ResponseUtils.buildSuccess("修改用户信息成功")
                 : ResponseUtils.buildFail("修改失败");
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('user:delete')")
-    public ResponseEntity deleteUsers(List<Integer> ids) {
-        boolean b = userService.removeByIds(ids);
-        return b == true ? ResponseUtils.buildSuccess("删除用户信息成功")
-                : ResponseUtils.buildFail("删除用户失败");
+    @PreAuthorize("hasAuthority('user:delete') or hasRole('admin')")
+    public ResponseEntity deleteUsers(@RequestBody Set<Integer> ids) {
+        int b = userService.removeByIds(ids);
+        return ResponseUtils.buildSuccess("删除用户成功，本次删除" + b + "条用户");
     }
 
 }
