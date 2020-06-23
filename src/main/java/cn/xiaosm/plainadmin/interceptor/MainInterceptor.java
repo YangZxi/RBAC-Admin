@@ -44,13 +44,13 @@ public class MainInterceptor implements HandlerInterceptor {
         timer = System.currentTimeMillis();
         response.setCharacterEncoding("UTF-8");
         if ("/eroor".equals(request.getRequestURI())) {
-            logger.info("客户端IP=[{}]，请求地址=[{}]",
-                    ServletUtil.getClientIP(request),
-                    request.getRequestURI());
+            // logger.info("客户端IP=[{}]，请求地址=[{}]，请求类型=[{}]",
+            //         ServletUtil.getClientIP(request),
+            //         request.getRequestURI(), request.getMethod());
         } else {
-            logger.info("客户端IP=[{}]，请求地址=[{}]",
+            logger.info("客户端IP=[{}]，请求地址=[{}]，请求类型=[{}]",
                     ServletUtil.getClientIP(request),
-                    request.getRequestURI());
+                    request.getRequestURI(), request.getMethod());
         }
 //        response.sendRedirect("http://www.baidu.com");
         return true;

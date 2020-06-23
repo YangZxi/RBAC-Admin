@@ -11,7 +11,7 @@
 package cn.xiaosm.plainadmin.controller;
 
 import cn.xiaosm.plainadmin.entity.Task;
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.service.TaskService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,14 +38,14 @@ public class TaskController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('task:query')")
-    public ResponseEntity queryTasks(Page<Task> page) {
+    public ResponseBody queryTasks(Page<Task> page) {
         Page<Task> list = taskService.page(page, null);
         return ResponseUtils.buildSuccess("获取了任务列表", list);
     }
 
     @PutMapping
     @PreAuthorize("hasAuthority('task:add')")
-    public ResponseEntity saveTask(@RequestBody Task task) {
+    public ResponseBody saveTask(@RequestBody Task task) {
         boolean b = taskService.save(task);
         return b == true ? ResponseUtils.buildSuccess("新增任务信息成功")
                 : ResponseUtils.buildFail("保存失败");
@@ -53,7 +53,7 @@ public class TaskController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('task:modify')")
-    public ResponseEntity modifyTask(@RequestBody Task task) {
+    public ResponseBody modifyTask(@RequestBody Task task) {
         boolean b = taskService.updateById(task);
         return b == true ? ResponseUtils.buildSuccess("修改任务信息成功")
                 : ResponseUtils.buildFail("修改失败");
@@ -61,7 +61,7 @@ public class TaskController {
 
     @DeleteMapping
     @PreAuthorize("hasAuthority('task:delete')")
-    public ResponseEntity deleteTasks(List<Integer> ids) {
+    public ResponseBody deleteTasks(List<Integer> ids) {
         boolean b = taskService.removeByIds(ids);
         return b == true ? ResponseUtils.buildSuccess("删除任务信息成功")
                 : ResponseUtils.buildFail("删除任务失败");

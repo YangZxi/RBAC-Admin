@@ -10,7 +10,7 @@
  */
 package cn.xiaosm.plainadmin.service.impl;
 
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.entity.vo.UserVO;
@@ -49,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public ResponseEntity getById(Integer id) {
+    public ResponseBody getById(Integer id) {
         return null;
     }
 

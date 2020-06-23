@@ -10,17 +10,10 @@
  */
 package cn.xiaosm.plainadmin.service;
 
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
-import cn.xiaosm.plainadmin.entity.Role;
-import cn.xiaosm.plainadmin.entity.User;
-import cn.xiaosm.plainadmin.mapper.RoleMapper;
-import cn.xiaosm.plainadmin.mapper.UserMapper;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 〈一句话功能简述〉
@@ -32,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public interface BaseService<DOMAIN> extends IService<DOMAIN> {
 
-    ResponseEntity getById(Integer id);
+    ResponseBody getById(Integer id);
 
     boolean addEntity(DOMAIN domain);
 

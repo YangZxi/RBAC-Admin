@@ -20,27 +20,27 @@ import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
  * @create 2020/6/13
  * @since 1.0.0
  */
-public class ResponseEntity {
+public class ResponseBody {
 
     private int code;
     private String msg;
     private Object data;
 
-    public ResponseEntity (ResponseStatus status) {
+    public ResponseBody(ResponseStatus status) {
         this.setStatus(status);
     }
 
-    public ResponseEntity (ResponseStatus status, String msg) {
+    public ResponseBody(ResponseStatus status, String msg) {
         this.setStatus(status);
         this.setMsg(msg);
     }
 
-    public ResponseEntity (ResponseStatus status, Object data) {
+    public ResponseBody(ResponseStatus status, Object data) {
         this.setStatus(status);
         this.setData(data);
     }
 
-    public ResponseEntity (ResponseStatus status, String msg,Object data) {
+    public ResponseBody(ResponseStatus status, String msg, Object data) {
         this.setStatus(status);
         this.setMsg(msg);
         this.setData(data);

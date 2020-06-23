@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.entity;
 
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -38,4 +39,8 @@ public class Role extends BaseEntity {
     private String desc;
     private Integer status;
 
+    public Role setId(Integer id) {
+        this.id = id;
+        return this;
+    }
 }

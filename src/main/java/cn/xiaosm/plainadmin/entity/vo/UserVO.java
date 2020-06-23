@@ -11,6 +11,7 @@
 package cn.xiaosm.plainadmin.entity.vo;
 
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.util.Set;
@@ -36,5 +37,10 @@ public class UserVO extends User {
     public UserVO setRoleIds(Set<Integer> roleIds) {
         this.roleIds = roleIds;
         return this;
+    }
+
+    @Override
+    public User setId(Integer id) {
+        return super.setId(id);
     }
 }

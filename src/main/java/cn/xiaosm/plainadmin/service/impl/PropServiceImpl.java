@@ -11,7 +11,7 @@
 package cn.xiaosm.plainadmin.service.impl;
 
 import cn.xiaosm.plainadmin.entity.Prop;
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.mapper.PropMapper;
 import cn.xiaosm.plainadmin.service.PropService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 public class PropServiceImpl extends ServiceImpl<PropMapper, Prop> implements PropService {
 
     @Override
-    public ResponseEntity getById(Integer id) {
+    public ResponseBody getById(Integer id) {
         return null;
     }
 

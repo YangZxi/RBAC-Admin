@@ -11,13 +11,13 @@
 package cn.xiaosm.plainadmin.controller;
 
 import cn.xiaosm.plainadmin.entity.Menu;
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.Role;
 import cn.xiaosm.plainadmin.entity.vo.RoleVO;
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.service.RoleService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,7 +48,7 @@ public class RoleController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('role:query') or hasRole('admin')")
-    public ResponseEntity queryRoles(Page<Role> page, RoleVO roleVO) {
+    public ResponseBody queryRoles(Page<Role> page, RoleVO roleVO) {
         // 如果用户id不为空，则查询当前用户的角色
         if (Objects.nonNull(roleVO.getUserId())) {
             return ResponseUtils.buildSuccess("",
@@ -64,7 +64,7 @@ public class RoleController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('role:add') or hasRole('admin')")
-    public ResponseEntity saveRole(@RequestBody Role role) {
+    public ResponseBody saveRole(@RequestBody Role role) {
         boolean b = roleService.save(role);
         return b == true ? ResponseUtils.buildSuccess("新增角色信息成功")
                 : ResponseUtils.buildFail("保存失败");
@@ -72,7 +72,10 @@ public class RoleController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('role:modify') or hasRole('admin')")
-    public ResponseEntity modifyRole(@RequestBody RoleVO roleVO) {
+    public ResponseBody modifyRole(@RequestBody RoleVO roleVO) {
+        if (roleVO.getId() == 1) {
+            throw new SQLOperateException("系统保留数据，请勿操作");
+        }
         boolean b = roleService.modifyEntity(roleVO);
         if (b == Objects.nonNull(roleVO.getMenuIds())) {
             return ResponseUtils.buildSuccess("修改角色权限成功");
@@ -83,8 +86,11 @@ public class RoleController {
 
     @DeleteMapping
     @PreAuthorize("hasAuthority('role:delete') or hasRole('admin')")
-    public ResponseEntity deleteRoles(Set<Integer> ids) {
-        boolean b = roleService.removeByIds(ids);
+    public ResponseBody deleteRoles(@RequestBody Set<Integer> roleIds) {
+        if (roleIds.stream().filter(el -> el == 1).count() == 1) {
+            throw new SQLOperateException("系统保留数据，请勿操作");
+        }
+        boolean b = roleService.removeByIds(roleIds);
         return b == true ? ResponseUtils.buildSuccess("删除角色信息成功")
                 : ResponseUtils.buildFail("删除角色失败");
     }
@@ -97,7 +103,7 @@ public class RoleController {
      */
     @GetMapping("/menu")
     @PreAuthorize("(hasAnyAuthority('role:query') and hasAuthority('menu:query')) or hasRole('admin')")
-    public ResponseEntity queryMenuByRoleId(@RequestParam Integer roleId) {
+    public ResponseBody queryMenuByRoleId(@RequestParam Integer roleId) {
         List<Integer> list = menuService.getByRoleIds(String.valueOf(roleId))
                 .stream().map(Menu::getId).collect(Collectors.toList());
         return ResponseUtils.buildSuccess(list);

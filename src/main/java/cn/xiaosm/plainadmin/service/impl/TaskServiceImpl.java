@@ -10,7 +10,7 @@
  */
 package cn.xiaosm.plainadmin.service.impl;
 
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.Task;
 import cn.xiaosm.plainadmin.mapper.TaskMapper;
 import cn.xiaosm.plainadmin.service.TaskService;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements TaskService {
 
     @Override
-    public ResponseEntity getById(Integer id) {
+    public ResponseBody getById(Integer id) {
         return null;
     }
 

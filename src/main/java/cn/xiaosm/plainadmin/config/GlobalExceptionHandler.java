@@ -11,8 +11,10 @@ package cn.xiaosm.plainadmin.config;
 import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,33 +35,35 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity catchValidException(MethodArgumentNotValidException e) {
+    public ResponseBody catchValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage());
         return ResponseUtils.buildError(e.getBindingResult().getFieldError().getDefaultMessage(), null);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity catchLoginException(AuthenticationException e) {
+    public ResponseBody catchLoginException(AuthenticationException e) {
         log.error(e.getMessage());
         return ResponseUtils.buildError(e.getMessage(), null);
     }
 
     @ExceptionHandler(AccessDeniedException.class) // 没有访问权限。使用 @PreAuthorize 校验权限不通过时，就会抛出 AccessDeniedException 异常
-    public ResponseEntity handleAuthorizationException(AccessDeniedException e) {
+    public ResponseBody handleAuthorizationException(AccessDeniedException e) {
         log.error(e.getMessage());
         return ResponseUtils.build(ResponseStatus.AUTHORITIES_DENIED, "没有权限，请联系管理员授权");
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class) // 用户名不存在
-    public ResponseEntity handleUsernameNotFoundException(UsernameNotFoundException e) {
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseBody handleUsernameNotFoundException(UsernameNotFoundException e) {
         log.error(e.getMessage(), e);
         return ResponseUtils.buildError(e.getMessage());
     }
 
-    @ExceptionHandler(SQLOperateException.class) // 用户名不存在
+    @ExceptionHandler(SQLOperateException.class)
     public ResponseEntity exception5(SQLOperateException e) {
-        log.error(e.getMessage(), "字段重复");
-        return ResponseUtils.buildError(e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(
+                ResponseUtils.buildError(e.getMessage()), HttpStatus.BAD_REQUEST
+        );
     }
 
 }

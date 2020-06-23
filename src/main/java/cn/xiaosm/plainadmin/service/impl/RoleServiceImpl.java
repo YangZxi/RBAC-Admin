@@ -10,10 +10,9 @@
  */
 package cn.xiaosm.plainadmin.service.impl;
 
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.Role;
 import cn.xiaosm.plainadmin.entity.vo.RoleVO;
-import cn.xiaosm.plainadmin.entity.vo.UserVO;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.mapper.RoleMapper;
 import cn.xiaosm.plainadmin.service.RoleService;
@@ -45,7 +44,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     RoleMapper roleMapper;
 
     @Override
-    public ResponseEntity getById(Integer id) {
+    public ResponseBody getById(Integer id) {
         return null;
     }
 

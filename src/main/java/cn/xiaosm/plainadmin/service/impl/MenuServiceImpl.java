@@ -11,17 +11,13 @@
 package cn.xiaosm.plainadmin.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSON;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.xiaosm.plainadmin.entity.Menu;
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.mapper.MenuMapper;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.utils.MemoryUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +42,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     MenuMapper menuMapper;
 
     @Override
-    public ResponseEntity getById(Integer id) {
+    public ResponseBody getById(Integer id) {
         return null;
     }
 

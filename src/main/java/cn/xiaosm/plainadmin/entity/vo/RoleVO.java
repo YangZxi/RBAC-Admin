@@ -11,6 +11,7 @@
 package cn.xiaosm.plainadmin.entity.vo;
 
 import cn.xiaosm.plainadmin.entity.Role;
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.util.Set;
@@ -46,5 +47,11 @@ public class RoleVO extends Role {
     public RoleVO setMenuIds(Set<Integer> menuIds) {
         this.menuIds = menuIds;
         return this;
+    }
+
+    @Override
+    public Role setId(Integer id) {
+        if (id == 1) throw new SQLOperateException("系统保留数据，请勿操作");
+        return super.setId(id);
     }
 }

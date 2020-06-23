@@ -10,9 +10,10 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
+import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.vo.MenuVO;
+import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -41,7 +42,7 @@ public class MenuController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('menu:query') or hasRole('admin')")
-    public ResponseEntity queryMenus(Page<Menu> page, MenuVO menu) {
+    public ResponseBody queryMenus(Page<Menu> page, MenuVO menu) {
         if ("tree".equals(menu.getShowType())) {
             return ResponseUtils.buildSuccess("成功获取菜单列表",
                     menuService.getByParentIdOfTree(menu.getParentMenu(), menu.isIncludeButton()));
@@ -57,7 +58,7 @@ public class MenuController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('menu:add') or hasRole('admin')")
-    public ResponseEntity saveMenu(@RequestBody Menu menu) {
+    public ResponseBody saveMenu(@RequestBody Menu menu) {
         boolean b = false;
         b = menuService.addEntity(menu);
         // 重新获取最新的菜单表到内存
@@ -68,7 +69,10 @@ public class MenuController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('menu:modify') or hasRole('admin')")
-    public ResponseEntity modifyMenu(@RequestBody Menu menu) {
+    public ResponseBody modifyMenu(@RequestBody Menu menu) {
+        if (menu.getId() <= 36) {
+            throw new SQLOperateException("系统保留数据，请勿操作");
+        }
         menu.setUpdateTime(new Date());
         boolean b = menuService.updateById(menu);
         // 重新获取最新的菜单表到内存
@@ -79,7 +83,10 @@ public class MenuController {
 
     @DeleteMapping
     @PreAuthorize("hasAuthority('menu:delete') or hasRole('admin')")
-    public ResponseEntity deleteMenus(@RequestBody Set<Integer> ids) {
+    public ResponseBody deleteMenus(@RequestBody Set<Integer> ids) {
+        if (ids.stream().filter(el -> el <= 36).count() >= 1) {
+            throw new SQLOperateException("系统保留数据，请勿操作");
+        }
         int b = menuService.removeByIds(ids);
         return ResponseUtils.buildSuccess("删除菜单信息成功，本次删除" + b + "条菜单");
     }
