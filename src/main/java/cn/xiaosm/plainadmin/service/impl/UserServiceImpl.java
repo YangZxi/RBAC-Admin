@@ -108,6 +108,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public int removeByIds(Set<Integer> ids) {
         int count = 0;
         for (Integer id : ids) {
+            if (id == 1) {
+                throw new SQLOperateException("系统保留数据，请勿操作");
+            }
             count += this.removeById(id);
         }
         return count;

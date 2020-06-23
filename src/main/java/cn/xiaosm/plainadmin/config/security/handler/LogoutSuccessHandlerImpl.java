@@ -15,6 +15,7 @@ import cn.xiaosm.plainadmin.config.security.service.TokenService;
 import cn.xiaosm.plainadmin.entity.LoginUser;
 import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
+import cn.xiaosm.plainadmin.exception.LoginException;
 import cn.xiaosm.plainadmin.utils.MemoryUtils;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import org.slf4j.Logger;
@@ -48,14 +49,13 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String uuid = tokenService.getUUID(tokenService.getToken(request));
+        response.setHeader("Access-Control-Allow-Origin", "*");
         try {
             logger.info("用户{}，退出登录成功", ((LoginUser) MemoryUtils.getObject(uuid)).getUsername());
         } catch (NullPointerException e) {
-            ResponseUtils.sendError(response, ResponseStatus.ERROR,
-                    "当前登录信息已过期", HttpStatus.HTTP_OK);
+            throw new LoginException("当前登录信息已过期");
         }
         MemoryUtils.removeObject(uuid);
-        response.setHeader("Access-Control-Allow-Origin", "*");
         ResponseUtils.sendError(response, "退出登录成功", HttpStatus.HTTP_OK);
     }
 }

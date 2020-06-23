@@ -40,6 +40,7 @@ public class MainInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 判断请求的
         timer = System.currentTimeMillis();
         response.setCharacterEncoding("UTF-8");
         if ("/eroor".equals(request.getRequestURI())) {

@@ -21,6 +21,7 @@ public class PlainAdminApplication {
     }
 
     public static void load() {
+        // 项目启动完成后加载所有菜单
         MenuService menuService = SpringContextUtils.getBean(MenuService.class);
         // List<Menu> list = menuService.list(new QueryWrapper<Menu>().isNotNull("parent_menu"));
         MemoryUtils.saveObject("MenuList", menuService.list());

@@ -13,7 +13,10 @@ package cn.xiaosm.plainadmin.mapper;
 import cn.xiaosm.plainadmin.entity.Role;
 import cn.xiaosm.plainadmin.entity.dto.RoleDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -51,4 +54,10 @@ public interface RoleMapper extends BaseMapper<Role> {
     //         @Result(property = "")
     // })
     RoleDTO findIncludeMenuByUserId(Integer userId);
+
+    @Delete("DELETE FROM `role_menu` WHERE `role_id` = #{roleId}")
+    int deleteAllRoleMenu(Integer roleId);
+
+    @Insert("INSERT INTO `role_menu`(`role_id`, `menu_id`) VALUES (#{roleId}, #{menuId})")
+    int insertRoleMenu(Integer roleId, Integer menuId);
 }

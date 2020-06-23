@@ -11,6 +11,9 @@
 package cn.xiaosm.plainadmin.entity.vo;
 
 import cn.xiaosm.plainadmin.entity.Role;
+import com.baomidou.mybatisplus.annotation.TableField;
+
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉
@@ -22,7 +25,10 @@ import cn.xiaosm.plainadmin.entity.Role;
  */
 public class RoleVO extends Role {
 
+    @TableField(exist = false)
     private Integer userId;
+    // @TableField(exist = false)
+    private Set<Integer> menuIds;
 
     public Integer getUserId() {
         return userId;
@@ -30,6 +36,15 @@ public class RoleVO extends Role {
 
     public RoleVO setUserId(Integer userId) {
         this.userId = userId;
+        return this;
+    }
+
+    public Set<Integer> getMenuIds() {
+        return menuIds;
+    }
+
+    public RoleVO setMenuIds(Set<Integer> menuIds) {
+        this.menuIds = menuIds;
         return this;
     }
 }

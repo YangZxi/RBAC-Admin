@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -62,7 +63,7 @@ public class RoleController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('role:add')")
+    @PreAuthorize("hasAuthority('role:add') or hasRole('admin')")
     public ResponseEntity saveRole(@RequestBody Role role) {
         boolean b = roleService.save(role);
         return b == true ? ResponseUtils.buildSuccess("新增角色信息成功")
@@ -70,16 +71,19 @@ public class RoleController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('role:modify')")
-    public ResponseEntity modifyRole(@RequestBody Role role) {
-        boolean b = roleService.updateById(role);
+    @PreAuthorize("hasAuthority('role:modify') or hasRole('admin')")
+    public ResponseEntity modifyRole(@RequestBody RoleVO roleVO) {
+        boolean b = roleService.modifyEntity(roleVO);
+        if (b == Objects.nonNull(roleVO.getMenuIds())) {
+            return ResponseUtils.buildSuccess("修改角色权限成功");
+        }
         return b == true ? ResponseUtils.buildSuccess("修改角色信息成功")
                 : ResponseUtils.buildFail("修改失败");
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('role:delete')")
-    public ResponseEntity deleteRoles(List<Integer> ids) {
+    @PreAuthorize("hasAuthority('role:delete') or hasRole('admin')")
+    public ResponseEntity deleteRoles(Set<Integer> ids) {
         boolean b = roleService.removeByIds(ids);
         return b == true ? ResponseUtils.buildSuccess("删除角色信息成功")
                 : ResponseUtils.buildFail("删除角色失败");

@@ -53,6 +53,11 @@ public class UserController {
     // }
 
 
+    /**
+     * 根据 Token 获取当前登录用户的信息
+     * @param request
+     * @return
+     */
     @GetMapping("/info")
     public ResponseEntity userInfo(HttpServletRequest request) {
         return ResponseUtils.buildSuccess(tokenService.getLoginUser(request));

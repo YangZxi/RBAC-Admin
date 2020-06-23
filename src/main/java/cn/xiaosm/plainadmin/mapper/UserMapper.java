@@ -75,7 +75,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param userId
      * @return
      */
-    @Update("DELETE FROM `user_role` WHERE `user_id` = #{userId}")
+    @Delete("DELETE FROM `user_role` WHERE `user_id` = #{userId}")
     int deleteUserRole(Integer userId);
 
     /**
@@ -84,6 +84,6 @@ public interface UserMapper extends BaseMapper<User> {
      * @param roleId
      * @return
      */
-    @Update("INSERT INTO `user_role`(`user_id`, `role_id`) VALUES (#{userId}, #{roleId})")
+    @Insert("INSERT INTO `user_role`(`user_id`, `role_id`) VALUES (#{userId}, #{roleId})")
     int insertUserRole(Integer userId, Integer roleId);
 }
