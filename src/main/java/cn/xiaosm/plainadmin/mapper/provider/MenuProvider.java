@@ -55,7 +55,7 @@ public class MenuProvider {
             .FROM("menu m")
             .LEFT_OUTER_JOIN("role_menu rm ON rm.menu_id = m.id")
             .LEFT_OUTER_JOIN("role r ON rm.role_id = r.id")
-            .WHERE("r.id IN (#{roleId})")
+            .WHERE("r.id IN (${roleId})")
             .WHERE("m.status = 1");
         if (Objects.isNull(parentId)) {
             sql.WHERE("NOT ISNULL(parent_menu)");

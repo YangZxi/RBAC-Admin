@@ -43,15 +43,7 @@ public class MainInterceptor implements HandlerInterceptor {
         // 判断请求的
         timer = System.currentTimeMillis();
         response.setCharacterEncoding("UTF-8");
-        if ("/eroor".equals(request.getRequestURI())) {
-            // logger.info("客户端IP=[{}]，请求地址=[{}]，请求类型=[{}]",
-            //         ServletUtil.getClientIP(request),
-            //         request.getRequestURI(), request.getMethod());
-        } else {
-            logger.info("客户端IP=[{}]，请求地址=[{}]，请求类型=[{}]",
-                    ServletUtil.getClientIP(request),
-                    request.getRequestURI(), request.getMethod());
-        }
+
 //        response.sendRedirect("http://www.baidu.com");
         return true;
     }
@@ -67,7 +59,16 @@ public class MainInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 //        System.out.println(1);
-        logger.info("本次请求耗时={}ms", System.currentTimeMillis() - timer);
+        if ("/eroor".equals(request.getRequestURI())) {
+            // logger.info("客户端IP=[{}]，请求地址=[{}]，请求类型=[{}]",
+            //         ServletUtil.getClientIP(request),
+            //         request.getRequestURI(), request.getMethod());
+        } else {
+            logger.info("客户端IP=[{}]，请求地址=[{}]，请求类型=[{}]，本次请求耗时={}ms",
+                    ServletUtil.getClientIP(request),
+                    request.getRequestURI(), request.getMethod(),
+                    System.currentTimeMillis() - timer);
+        }
     }
 
     /**

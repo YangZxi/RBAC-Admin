@@ -17,7 +17,14 @@ import cn.xiaosm.plainadmin.service.LogService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * 〈一句话功能简述〉
@@ -30,6 +37,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    LogMapper logMapper;
+
     @Override
     public ResponseBody getById(Integer id) {
         return null;
@@ -37,7 +49,10 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
 
     @Override
     public boolean addEntity(Log log) {
-        return false;
+        log.setCreateTime(new Date());
+        this.addEntityAsync(log);
+        logger.debug("记录日志=>{}", log.getTitle());
+        return true;
     }
 
     @Override
@@ -48,6 +63,13 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
     @Override
     public boolean modifyEntity(Log log) {
         return false;
+    }
+
+    @Async
+    public void addEntityAsync(Log log) {
+        // 查询ip地址属于哪
+        // http://ip-api.com/json/114.114.114.114?lang=zh-CN
+        logMapper.insert(log);
     }
 
     @Override

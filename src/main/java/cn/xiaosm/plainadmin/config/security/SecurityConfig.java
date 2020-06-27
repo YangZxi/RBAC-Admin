@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // web.ignoring().antMatchers("/login");
-        // web.ignoring().antMatchers("/druid/**");
+        // web.ignoring().antMatchers("/");
         super.configure(web);
     }
 
@@ -148,16 +148,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
-                        "/**/*.ico"
+                        "/**/*.ico",
+                        "/**/*.map",
+                        "/**/*.woff",
+                        "/**/*.ttf"
                 ).permitAll()
-                // 阿里巴巴 druid
+                // 阿里巴巴 druid/
                 .antMatchers("/druid/**").anonymous()
+                .antMatchers("/", "/index").anonymous()
                 // 放行OPTIONS请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 自定义匿名访问所有url放行 ： 允许匿名和带权限以及登录用户访问
                 .antMatchers(anonymousUrls.toArray(new String[0])).permitAll()
-                // .antMatchers("/api/user").hasRole("manager")
-                // .antMatchers("/api/user").hasAnyAuthority("user:query")
                 // 所有请求都需要认证
                 .anyRequest().authenticated()
                 .and()

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -103,7 +104,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     /**
-     * 根据类型，清楚不必要的内容
+     * 根据类型，清除不必要的内容
      * @param menu
      */
     // @SneakyThrows
@@ -143,7 +144,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             List<Menu> reList = menuList.stream()
                     .filter(el -> el.getParentMenu() == parentMenu)
                     .collect(Collectors.toList());
+            for (Menu menu : reList) {
 
+            }
             return null;
         } else {
             return menuList.stream().filter(el -> el.getParentMenu() == parentMenu).collect(Collectors.toList());
@@ -157,6 +160,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public List<Menu> getByParentIdOfTree(Integer parentId, boolean includeButton) {
+        parentId = parentId == null || parentId < 0 ? 0 : parentId;
         return this.buildTree(this.getAll(includeButton), parentId);
     }
 
@@ -176,6 +180,24 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return menuMapper.selectAllByRoleIds(roleIds);
     }
 
+    /**
+     * 构建菜单树
+     * 这里参数的菜单集合是不包括父菜单的
+     * @param menuList
+     * @return
+     */
+    @Override
+    public List<Menu> buildTree(List<Menu> menuList) {
+
+        return null;
+    }
+
+    /**
+     * 构建菜单树
+     * @param menuList
+     * @param parentId
+     * @return
+     */
     @Override
     public List<Menu> buildTree(List<Menu> menuList, Integer parentId) {
         return this.buildTree(menuList, parentId, false);
@@ -210,7 +232,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         Iterator<Menu> it = null;
         Menu next;
         for (Menu menu : menuTree) {
-            // 如果是按钮，将不会继续找他的孩子
+            // 如果是按钮，将不会继续找它的子级菜单
             if (menu.getType() != 3) {
                 it = menuList.iterator();
                 while (it.hasNext()) {
@@ -230,17 +252,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     /**
      * 获取所有的菜单
+     * @param includeButton 是否包含按钮
      * @return
      */
+    @Override
     public List<Menu> getAll(boolean includeButton) {
         List<Menu> list = (List<Menu>) MemoryUtils.getObject("MenuList");
-        list = list.stream()
-                .filter(el -> includeButton ? el.getType() <= 3 : el.getType() < 3)
-                .collect(Collectors.toList());
         if (Objects.isNull(list)) {
             list = this.list();
             MemoryUtils.saveObject("MenuList", list);
         }
+        // 按照规则取出菜单
+        list = list.stream()
+                .filter(el -> includeButton ? el.getType() <= 3 : el.getType() != 3)
+                .collect(Collectors.toList());
         return list;
     }
 }

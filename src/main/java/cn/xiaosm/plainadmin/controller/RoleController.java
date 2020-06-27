@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
+import cn.xiaosm.plainadmin.annotation.LogRecord;
 import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.Role;
@@ -63,6 +64,7 @@ public class RoleController {
     }
 
     @PutMapping
+    @LogRecord("角色添加")
     @PreAuthorize("hasAuthority('role:add') or hasRole('admin')")
     public ResponseBody saveRole(@RequestBody Role role) {
         boolean b = roleService.save(role);
@@ -71,6 +73,7 @@ public class RoleController {
     }
 
     @PostMapping
+    @LogRecord("角色修改")
     @PreAuthorize("hasAuthority('role:modify') or hasRole('admin')")
     public ResponseBody modifyRole(@RequestBody RoleVO roleVO) {
         if (roleVO.getId() == 1) {
@@ -85,6 +88,7 @@ public class RoleController {
     }
 
     @DeleteMapping
+    @LogRecord("角色删除")
     @PreAuthorize("hasAuthority('role:delete') or hasRole('admin')")
     public ResponseBody deleteRoles(@RequestBody Set<Integer> roleIds) {
         if (roleIds.stream().filter(el -> el == 1).count() == 1) {

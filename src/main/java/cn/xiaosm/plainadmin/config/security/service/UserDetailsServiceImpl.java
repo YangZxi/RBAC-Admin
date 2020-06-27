@@ -17,6 +17,7 @@ import cn.xiaosm.plainadmin.entity.Role;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.service.MenuService;
 import cn.xiaosm.plainadmin.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,12 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -55,14 +58,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 验证用户状态
         this.validateUser(user);
 
+        // 是否管理员
+        AtomicBoolean isAdmin = new AtomicBoolean(false);
         // 设置用户id（字符串，以英文逗号分隔）
         user.setRoleIds(ArrayUtil.join(user.getRoles()
                 .stream()
-                .map(Role::getId)
+                .map(el -> {
+                    // 如果是管理员则查出所有的菜单
+                    if ("ROLE_admin".equals(el.getName())) isAdmin.set(true);
+                    return el.getId();
+                })
                 .toArray(), ","));
-
         // 通过roleIds 字符串添加用户所拥有的菜单<注意，这里还只是链表结构>
-        user.setMenus(menuService.getByRoleIds(user.getRoleIds()));
+        if (isAdmin.get() == true) {
+            user.setMenus(menuService.getAll(true));
+        } else {
+            user.setMenus(menuService.getByRoleIds(user.getRoleIds()));
+        }
+
 
         // 转变为 UserDetails 类型
         LoginUser loginUser = new LoginUser();

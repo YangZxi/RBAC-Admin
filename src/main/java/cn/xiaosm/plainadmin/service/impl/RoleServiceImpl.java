@@ -62,6 +62,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public boolean modifyEntity(Role role) {
         role.setUpdateTime(new Date());
         this.updateById(role);
+        // 如果本次修改中有权限的修改
         if (Objects.nonNull( ((RoleVO) role).getMenuIds() )) {
             // 先清除所有的角色信息
             this.removeAllRoleMenu(role.getId());
@@ -71,10 +72,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return true;
     }
 
-    public void removeAllRoleMenu(Integer userId) {
-        roleMapper.deleteAllRoleMenu(userId);
+    /**
+     * 删除所有权限
+     * @param roleId 角色id
+     */
+    public void removeAllRoleMenu(Integer roleId) {
+        roleMapper.deleteAllRoleMenu(roleId);
     }
 
+    /**
+     * 添加权限
+     * @param roleId  角色id
+     * @param menuIds 菜单id集合
+     * @return
+     */
     public int addUserRoles(Integer roleId, Set<Integer> menuIds) {
         for (Integer menuId : menuIds) {
             try {

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @create 2020/6/15
  * @since 1.0.0
  */
-public class LoginException extends RuntimeException {
+public class LoginException extends CanShowException {
 
     public LoginException(String message) {
         super(message);

@@ -35,9 +35,9 @@ public class MenuVO extends Menu {
     private String showType; // 数据展示格式默认为 链表
     private boolean includeButton; // 是否包含按钮
 
-    @Override
     public MenuVO setParentMenu(Integer parentMenu) {
         super.setParentMenu(parentMenu == null || parentMenu < 0 ? 0 : parentMenu);
+        // super.setParentMenu(0);
         return this;
     }
 
@@ -45,7 +45,6 @@ public class MenuVO extends Menu {
         this.showType = StringUtils.isBlank(showType) ? "list" : showType;
     }
 
-    @Override
     public MenuVO setId(Integer id) {
         if (id == 1) throw new SQLOperateException("系统保留数据，请勿操作");
         super.setId(id);

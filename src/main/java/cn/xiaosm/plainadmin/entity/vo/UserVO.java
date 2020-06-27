@@ -43,4 +43,9 @@ public class UserVO extends User {
     public User setId(Integer id) {
         return super.setId(id);
     }
+
+    @Override
+    public User setPassword(String password) {
+        return super.setPassword(password);
+    }
 }

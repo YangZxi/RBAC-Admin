@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
+import cn.xiaosm.plainadmin.annotation.LogRecord;
 import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.Menu;
 import cn.xiaosm.plainadmin.entity.vo.MenuVO;
@@ -41,9 +42,11 @@ public class MenuController {
     MenuService menuService;
 
     @GetMapping("")
+    // @LogRecord("菜单查询")
     @PreAuthorize("hasAuthority('menu:query') or hasRole('admin')")
     public ResponseBody queryMenus(Page<Menu> page, MenuVO menu) {
         if ("tree".equals(menu.getShowType())) {
+            // 默认父级菜单为0，不包含按钮
             return ResponseUtils.buildSuccess("成功获取菜单列表",
                     menuService.getByParentIdOfTree(menu.getParentMenu(), menu.isIncludeButton()));
         } else {
@@ -57,6 +60,7 @@ public class MenuController {
     }
 
     @PutMapping
+    @LogRecord("菜单添加")
     @PreAuthorize("hasAuthority('menu:add') or hasRole('admin')")
     public ResponseBody saveMenu(@RequestBody Menu menu) {
         boolean b = false;
@@ -68,6 +72,7 @@ public class MenuController {
     }
 
     @PostMapping
+    @LogRecord("菜单修改")
     @PreAuthorize("hasAuthority('menu:modify') or hasRole('admin')")
     public ResponseBody modifyMenu(@RequestBody Menu menu) {
         if (menu.getId() <= 36) {
@@ -82,6 +87,7 @@ public class MenuController {
     }
 
     @DeleteMapping
+    @LogRecord("菜单删除")
     @PreAuthorize("hasAuthority('menu:delete') or hasRole('admin')")
     public ResponseBody deleteMenus(@RequestBody Set<Integer> ids) {
         if (ids.stream().filter(el -> el <= 36).count() >= 1) {

@@ -39,7 +39,11 @@ public interface MenuService extends BaseService<Menu> {
 
     List<Menu> getByRoleIds(String roleId);
 
+    List<Menu> buildTree(List<Menu> menuList);
+
     List<Menu> buildTree(List<Menu> menuList, Integer parentId);
 
     List<Menu> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent);
+
+    List<Menu> getAll(boolean includeButton);
 }

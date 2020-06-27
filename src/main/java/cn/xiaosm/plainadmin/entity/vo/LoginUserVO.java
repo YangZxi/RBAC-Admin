@@ -1,27 +1,30 @@
 /**
  * Copyright: 2019-2020
- * FileName: FieldUniqueException
+ * FileName: LoginUserVO
  * Author:   Young
- * Date:     2020/6/20 17:10
+ * Date:     2020/6/27 14:26
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
  * Young         修改时间           版本号             描述
  */
-package cn.xiaosm.plainadmin.exception;
+package cn.xiaosm.plainadmin.entity.vo;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
 
 /**
  * 〈一句话功能简述〉
  * 〈〉
  *
  * @author Young
- * @create 2020/6/20
+ * @create 2020/6/21
  * @since 1.0.0
  */
-public class SQLOperateException extends CanShowException {
+@Data
+public class LoginUserVO {
 
-    public SQLOperateException(String message) {
-        super(message);
-    }
+    private String username;
+    private String password;
 
 }

@@ -9,6 +9,7 @@
 package cn.xiaosm.plainadmin.config;
 
 import cn.xiaosm.plainadmin.entity.enums.ResponseStatus;
+import cn.xiaosm.plainadmin.exception.CanShowException;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import cn.xiaosm.plainadmin.entity.ResponseBody;
@@ -34,6 +35,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(Throwable.class)
+    public void catchException(Throwable e) {
+        log.error(e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseBody catchValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage());
@@ -46,20 +52,25 @@ public class GlobalExceptionHandler {
         return ResponseUtils.buildError(e.getMessage(), null);
     }
 
-    @ExceptionHandler(AccessDeniedException.class) // 没有访问权限。使用 @PreAuthorize 校验权限不通过时，就会抛出 AccessDeniedException 异常
-    public ResponseBody handleAuthorizationException(AccessDeniedException e) {
+    /**
+     * 没有访问权限。使用 @PreAuthorize 校验权限不通过时，就会抛出 AccessDeniedException 异常
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseBody catchAuthorizationException(AccessDeniedException e) {
         log.error(e.getMessage());
         return ResponseUtils.build(ResponseStatus.AUTHORITIES_DENIED, "没有权限，请联系管理员授权");
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseBody handleUsernameNotFoundException(UsernameNotFoundException e) {
+    public ResponseBody catchUsernameNotFoundException(UsernameNotFoundException e) {
         log.error(e.getMessage(), e);
         return ResponseUtils.buildError(e.getMessage());
     }
 
-    @ExceptionHandler(SQLOperateException.class)
-    public ResponseEntity exception5(SQLOperateException e) {
+    @ExceptionHandler(CanShowException.class)
+    public ResponseEntity catchCanShowException(CanShowException e) {
         log.error(e.getMessage());
         return new ResponseEntity<>(
                 ResponseUtils.buildError(e.getMessage()), HttpStatus.BAD_REQUEST

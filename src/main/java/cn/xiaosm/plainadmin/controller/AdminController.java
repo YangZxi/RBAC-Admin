@@ -13,6 +13,8 @@ package cn.xiaosm.plainadmin.controller;
 import cn.xiaosm.plainadmin.config.security.service.TokenService;
 import cn.xiaosm.plainadmin.entity.LoginUser;
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.entity.vo.LoginUserVO;
+import cn.xiaosm.plainadmin.entity.vo.UserVO;
 import cn.xiaosm.plainadmin.service.UserService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +49,15 @@ public class AdminController {
     TokenService tokenService;
 
     @RequestMapping("/login")
-    public void login(@RequestBody User user, HttpServletResponse response) {
+    public void login(@RequestBody LoginUserVO user, HttpServletResponse response) {
         // userService.
         // String token = "";
         // token = JWT.create()
-        //         .withAudience(user.getUsername())
-        //         .withClaim("role", user.getRoleId())
+        //         .withAudience(userVO.getUsername())
+        //         .withClaim("role", userVO.getRoleId())
         //         .withExpiresAt(new Date(System.currentTimeMillis() + 2 * 60 * 1000))
         //         .sign(Algorithm.HMAC256("1282381264"));
-        // JWTCreator.Builder builder = JWT.create().withAudience(user.getUsername());
+        // JWTCreator.Builder builder = JWT.create().withAudience(userVO.getUsername());
 
         /*该方法会去调用 UserDetailService 的方法
           由于我创建了此类的实现类，所以会去调用我自定义的登录逻辑，从后台获取 User 信息

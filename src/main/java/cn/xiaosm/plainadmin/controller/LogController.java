@@ -10,16 +10,20 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
+import cn.xiaosm.plainadmin.annotation.LogRecord;
 import cn.xiaosm.plainadmin.entity.Log;
 import cn.xiaosm.plainadmin.entity.ResponseBody;
+import cn.xiaosm.plainadmin.entity.vo.LogVO;
 import cn.xiaosm.plainadmin.service.LogService;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉
@@ -36,32 +40,21 @@ public class LogController {
     @Autowired
     LogService logService;
 
-    @GetMapping("")
-    @PreAuthorize("hasAuthority('log:query')")
-    public ResponseBody queryLogs(Page<Log> page) {
-        Page<Log> list = logService.page(page, null);
+    @GetMapping
+    @PreAuthorize("hasAuthority('log:query') or hasRole('admin')")
+    public ResponseBody queryLogs(Page<Log> page, LogVO logVO) {
+        Page<Log> list = logService.page(page,
+                new QueryWrapper<Log>()
+                    .eq("type", logVO.getType())
+                    .orderByDesc("create_time")
+        );
         return ResponseUtils.buildSuccess("获取了日志列表", list);
     }
 
-    @PutMapping
-    @PreAuthorize("hasAuthority('log:add')")
-    public ResponseBody saveLog(@RequestBody Log log) {
-        boolean b = logService.save(log);
-        return b == true ? ResponseUtils.buildSuccess("新增日志信息成功")
-                : ResponseUtils.buildFail("保存失败");
-    }
-
-    @PostMapping
-    @PreAuthorize("hasAuthority('log:modify')")
-    public ResponseBody modifyLog(@RequestBody Log log) {
-        boolean b = logService.updateById(log);
-        return b == true ? ResponseUtils.buildSuccess("修改日志信息成功")
-                : ResponseUtils.buildFail("修改失败");
-    }
-
     @DeleteMapping
-    @PreAuthorize("hasAuthority('log:delete')")
-    public ResponseBody deleteLogs(List<Integer> ids) {
+    @LogRecord("删除日志")
+    @PreAuthorize("hasAuthority('log:delete') or hasRole('admin')")
+    public ResponseBody deleteLogs(@RequestBody Set<Integer> ids) {
         boolean b = logService.removeByIds(ids);
         return b == true ? ResponseUtils.buildSuccess("删除日志信息成功")
                 : ResponseUtils.buildFail("删除日志失败");

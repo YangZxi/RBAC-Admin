@@ -38,7 +38,6 @@ public class User extends BaseEntity implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
-    @JsonIgnoreProperties(allowSetters = true)
     private String password;
     private String nickname;
     private String email;
@@ -77,6 +76,7 @@ public class User extends BaseEntity implements Serializable {
         return this;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

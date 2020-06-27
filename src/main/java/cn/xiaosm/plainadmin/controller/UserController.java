@@ -10,9 +10,11 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
+import cn.xiaosm.plainadmin.annotation.LogRecord;
 import cn.xiaosm.plainadmin.config.security.service.TokenService;
 import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.entity.enums.StatusEnum;
 import cn.xiaosm.plainadmin.entity.vo.UserVO;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
@@ -62,18 +64,18 @@ public class UserController {
         return ResponseUtils.buildSuccess(tokenService.getLoginUser(request));
     }
 
-    @GetMapping("")
+    @GetMapping
     @PreAuthorize("hasAuthority('user:query') or hasRole('admin')")
     public ResponseBody queryUsers(Page<User> page, UserVO userVO) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
 
         // 不查询已删除的用户
         wrapper.ne("status", StatusEnum.DELETED.getCode());
-        Page<User> list = userService.page(page, wrapper);
-        return ResponseUtils.buildSuccess("获取了用户列表", list);
+        return ResponseUtils.buildSuccess("获取了用户列表", userService.page(page, wrapper));
     }
 
     @PutMapping
+    @LogRecord("添加用户")
     @PreAuthorize("(hasAuthority('user:add') and hasAuthority('role:query')) or hasRole('admin')")
     public ResponseBody saveUser(@RequestBody UserVO userVO) {
         boolean b = userService.addEntity(userVO);
@@ -82,6 +84,7 @@ public class UserController {
     }
 
     @PostMapping
+    @LogRecord("修改用户")
     @PreAuthorize("hasAuthority('user:modify') or hasRole('admin')")
     public ResponseBody modifyUser(@RequestBody UserVO userVO) {
         if (userVO.getId() == 1) throw new SQLOperateException("系统保留数据，请勿操作");
@@ -91,6 +94,7 @@ public class UserController {
     }
 
     @DeleteMapping
+    @LogRecord("删除用户")
     @PreAuthorize("hasAuthority('user:delete') or hasRole('admin')")
     public ResponseBody deleteUsers(@RequestBody Set<Integer> ids) {
         if (ids.stream().filter(el -> el == 1).count() == 1) {

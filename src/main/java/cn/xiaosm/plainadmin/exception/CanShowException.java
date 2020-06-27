@@ -1,27 +1,26 @@
 /**
  * Copyright: 2019-2020
- * FileName: logRecord
+ * FileName: CanShowException
  * Author:   Young
- * Date:     2020/6/21 9:51
+ * Date:     2020/6/27 12:10
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
  * Young         修改时间           版本号             描述
  */
-package cn.xiaosm.plainadmin.annotation;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
+package cn.xiaosm.plainadmin.exception;
 
 /**
  * 〈一句话功能简述〉
  * 〈〉
  *
  * @author Young
- * @create 2020/6/21
+ * @create 2020/6/27
  * @since 1.0.0
  */
-@Target(ElementType.METHOD)
-public @interface logRecord {
+public class CanShowException extends RuntimeException {
 
+    public CanShowException(String message) {
+        super(message);
+    }
 }
