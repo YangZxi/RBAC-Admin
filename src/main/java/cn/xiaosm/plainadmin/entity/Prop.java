@@ -10,6 +10,16 @@
  */
 package cn.xiaosm.plainadmin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.util.Date;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -18,6 +28,17 @@ package cn.xiaosm.plainadmin.entity;
  * @create 2020/6/18
  * @since 1.0.0
  */
+@Data
+@Accessors(chain = true)
+@TableName("properties")
 public class Prop {
+
+    @TableId(type = IdType.AUTO)
+    private Integer id;
+    private String propKey;
+    private String propValue;
+    private String type;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GTM+8")
+    private Date createTime;
 
 }

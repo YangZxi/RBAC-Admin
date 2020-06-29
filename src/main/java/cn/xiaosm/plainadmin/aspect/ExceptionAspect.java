@@ -43,14 +43,18 @@ public class ExceptionAspect {
     public void after(JoinPoint joinPoint) {
         Log log = new Log();
 
-        log.setContent(this.getStackTrace((Exception) joinPoint.getArgs()[0]));
-        log.setTitle("运行异常");
+        log.setError(this.getStackTrace((Exception) joinPoint.getArgs()[0]));
+        log.setTitle(this.getFirstLine((Exception) joinPoint.getArgs()[0]));
         log.setType("ERROR");
 
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         log.setIp(ServletUtil.getClientIP(request));
         logService.addEntity(log);
+    }
+
+    public String getFirstLine(Exception e) {
+        return e.getMessage();
     }
 
     public String getStackTrace(Exception e) {

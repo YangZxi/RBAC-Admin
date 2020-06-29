@@ -43,7 +43,7 @@ public class LogAspect {
     @Around("logPointCut()")
     public Object around(ProceedingJoinPoint joinPoint) {
         Long start = System.currentTimeMillis();
-        System.out.println("环绕。。。。。");
+        // System.out.println("环绕。。。。。");
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         //保存日志
@@ -84,7 +84,7 @@ public class LogAspect {
     //切面 后置通知
     @AfterReturning("logPointCut()")
     public void after(JoinPoint joinPoint) {
-        System.out.println("后置。。。。。");
+        // System.out.println("后置。。。。。");
         //保存日志
 
     }

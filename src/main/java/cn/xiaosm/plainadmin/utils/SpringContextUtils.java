@@ -19,7 +19,11 @@ public class SpringContextUtils implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
- 
+
+    public static Class createClass(String className) throws ClassNotFoundException {
+        return Class.forName(className);
+    }
+
     /**
      * 获取applicationContext
      * @return

@@ -10,6 +10,12 @@
  */
 package cn.xiaosm.plainadmin.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -18,6 +24,19 @@ package cn.xiaosm.plainadmin.entity;
  * @create 2020/6/18
  * @since 1.0.0
  */
-public class Task {
+@Data
+@Accessors(chain = true)
+public class Task extends BaseEntity {
+
+    @TableId(type = IdType.AUTO)
+    private Integer id;
+    private String name;
+    private String cron;
+    @TableField(value = "`desc`")
+    private String desc;
+    private String className;
+    private String methodName;
+    private Integer userId;
+    private Integer status;
 
 }

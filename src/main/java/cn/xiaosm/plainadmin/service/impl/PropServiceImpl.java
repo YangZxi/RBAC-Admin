@@ -15,8 +15,10 @@ import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.mapper.PropMapper;
 import cn.xiaosm.plainadmin.service.PropService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,6 +31,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PropServiceImpl extends ServiceImpl<PropMapper, Prop> implements PropService {
+
+    @Autowired
+    PropMapper propMapper;
 
     @Override
     public ResponseBody getById(Integer id) {
@@ -47,7 +52,15 @@ public class PropServiceImpl extends ServiceImpl<PropMapper, Prop> implements Pr
 
     @Override
     public boolean modifyEntity(Prop prop) {
-        return false;
+        boolean update = this.update(prop, new UpdateWrapper<Prop>()
+                .eq("id", prop.getId())
+                .eq("prop_key", prop.getPropKey()));
+        // 如果更新没有成功则进行插入操作
+        if (!update) {
+            prop.setId(null);
+            update = this.save(prop);
+        }
+        return update;
     }
 
     @Override

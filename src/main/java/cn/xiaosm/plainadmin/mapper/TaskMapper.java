@@ -13,6 +13,7 @@ package cn.xiaosm.plainadmin.mapper;
 import cn.xiaosm.plainadmin.entity.Log;
 import cn.xiaosm.plainadmin.entity.Task;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,5 +26,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TaskMapper extends BaseMapper<Task> {
+
+    /**
+     * 逻辑删除
+     * @param id
+     * @return
+     */
+    @Update("UPDATE `task` SET `status` = '2' WHERE `id` = #{id}")
+    int updateStatusById(Integer id);
 
 }

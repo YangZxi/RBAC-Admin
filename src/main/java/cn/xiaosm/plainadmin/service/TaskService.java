@@ -12,6 +12,9 @@ package cn.xiaosm.plainadmin.service;
 
 import cn.xiaosm.plainadmin.entity.Log;
 import cn.xiaosm.plainadmin.entity.Task;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.util.Set;
 
 /**
  * 〈一句话功能简述〉
@@ -23,4 +26,13 @@ import cn.xiaosm.plainadmin.entity.Task;
  */
 public interface TaskService extends BaseService<Task> {
 
+    Page<Task> listOfPage(Page<Task> page, Task task);
+
+    int removeByIds(Set<Integer> ids);
+
+    int removeById(Integer id);
+
+    int startAllTask();
+
+    int shutAllTask();
 }
