@@ -13,6 +13,7 @@ package cn.xiaosm.plainadmin.entity.vo;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
 
 import java.util.Set;
 
@@ -24,8 +25,15 @@ import java.util.Set;
  * @create 2020/6/21
  * @since 1.0.0
  */
+@Data
 public class UserVO extends User {
 
+    @TableField(exist = false)
+    private Boolean isReset;
+    @TableField(exist = false)
+    private String newPwd;
+    @TableField(exist = false)
+    private String confirmPwd;
     // 角色id
     @TableField(exist = false)
     private Set<Integer> roleIds;
@@ -39,13 +47,5 @@ public class UserVO extends User {
         return this;
     }
 
-    @Override
-    public User setId(Integer id) {
-        return super.setId(id);
-    }
 
-    @Override
-    public User setPassword(String password) {
-        return super.setPassword(password);
-    }
 }

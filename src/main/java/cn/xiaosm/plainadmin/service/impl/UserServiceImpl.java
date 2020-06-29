@@ -12,6 +12,7 @@ package cn.xiaosm.plainadmin.service.impl;
 
 import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.entity.UserLoginTrack;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.entity.vo.UserVO;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
@@ -21,10 +22,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -152,4 +157,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.selectPage(page, queryWrapper);
     }
 
+    @Override
+    public List<UserLoginTrack> listOfTrack(Integer userId, Integer size) {
+        // 不进行 count sql 优化，解决 MP 无法自动优化 SQL 问题，这时候你需要自己查询 count 部分
+        // page.setOptimizeCountSql(false);
+        // 当 total 为小于 0 或者设置 setSearchCount(false) 分页插件不会进行 count 查询
+        // 要点!! 分页返回的对象与传入的对象是同一个
+        return userMapper.selectUserTrack(userId, size);
+    }
+
+    @Override
+    public boolean addLoginTrack(Integer userId, String ip) {
+        UserLoginTrack track = new UserLoginTrack();
+        track.setUserId(userId);
+        track.setLoginIp(ip);
+        track.setLoginTime(new Date());
+        return userMapper.insertUserTrack(track) == 1 ? true : false;
+        // return userMapper.insertUserTrack(userId, ip, new Date()) == 1 ? true : false;
+    }
 }

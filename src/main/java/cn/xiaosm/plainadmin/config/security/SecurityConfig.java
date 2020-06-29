@@ -144,6 +144,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/login").anonymous()
                 // 静态资源
                 .mvcMatchers(HttpMethod.GET,
+                        "/upload/**",
                         "/*.html",
                         "/**/*.html",
                         "/**/*.css",

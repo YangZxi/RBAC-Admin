@@ -12,8 +12,10 @@ package cn.xiaosm.plainadmin.service;
 
 import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.entity.UserLoginTrack;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,4 +38,7 @@ public interface UserService extends BaseService<User> {
 
     User login(User user);
 
+    List<UserLoginTrack> listOfTrack(Integer userId, Integer size);
+
+    boolean addLoginTrack(Integer userId, String ip);
 }

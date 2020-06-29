@@ -10,7 +10,14 @@
  */
 package cn.xiaosm.plainadmin.config.security.service;
 
+import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.utils.SecurityUtils;
+import cn.xiaosm.plainadmin.utils.ServletUtils;
+import cn.xiaosm.plainadmin.utils.SpringContextUtils;
+import jdk.nashorn.internal.parser.Token;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
+import org.springframework.stereotype.Service;
 
 /**
  * 〈一句话功能简述〉
@@ -20,7 +27,29 @@ import org.springframework.security.core.parameters.P;
  * @create 2020/6/16
  * @since 1.0.0
  */
-
+@Service(value = "ok")
 public class PermissionService {
+
+    @Autowired
+    private TokenService tokenService;
+
+    /**
+     * 判断是否修改自己的个人信息
+     * @param id
+     * @return
+     */
+    public boolean isMe(String id) {
+        if (SecurityUtils.getUserDetails().getId() == Integer.valueOf(id)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean check(String ...permission) {
+        for (String s : permission) {
+
+        }
+        return false;
+    }
 
 }

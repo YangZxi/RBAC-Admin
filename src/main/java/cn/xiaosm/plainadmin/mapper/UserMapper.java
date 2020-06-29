@@ -17,6 +17,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -86,4 +89,13 @@ public interface UserMapper extends BaseMapper<User> {
      */
     @Insert("INSERT INTO `user_role`(`user_id`, `role_id`) VALUES (#{userId}, #{roleId})")
     int insertUserRole(Integer userId, Integer roleId);
+
+    @Select("SELECT * FROM `user_login_track` WHERE `user_id` = #{userId} ORDER BY `login_time` DESC LIMIT 0,#{size}")
+    List<UserLoginTrack> selectUserTrack(Integer userId, Integer size);
+
+    @Insert("INSERT INTO `user_login_track`(`user_id`, `login_ip`, `login_time`) VALUES (#{userId}, #{loginIp}, #{loginTime})")
+    int insertUserTrack(UserLoginTrack track);
+
+    // @Insert("INSERT INTO `user_login_track`(`user_id`, `login_ip`, `login_time`) VALUES (#{userId}, #{ip}, #{date})")
+    // int insertUserTrack(Integer userId, String ip, String date);
 }

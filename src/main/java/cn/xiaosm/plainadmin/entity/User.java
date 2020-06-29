@@ -38,8 +38,10 @@ public class User extends BaseEntity implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
+    @JsonIgnoreProperties(allowGetters = true)
     private String password;
     private String nickname;
+    private String avatar;
     private String email;
     private String gender;
     private Integer age;
@@ -76,7 +78,7 @@ public class User extends BaseEntity implements Serializable {
         return this;
     }
 
-    @JsonIgnore
+    // @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -133,5 +135,13 @@ public class User extends BaseEntity implements Serializable {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

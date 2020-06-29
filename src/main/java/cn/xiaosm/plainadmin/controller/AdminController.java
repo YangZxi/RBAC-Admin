@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.controller;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import cn.xiaosm.plainadmin.config.security.service.TokenService;
 import cn.xiaosm.plainadmin.entity.LoginUser;
 import cn.xiaosm.plainadmin.entity.User;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -49,7 +51,7 @@ public class AdminController {
     TokenService tokenService;
 
     @RequestMapping("/login")
-    public void login(@RequestBody LoginUserVO user, HttpServletResponse response) {
+    public void login(@RequestBody LoginUserVO user, HttpServletRequest request, HttpServletResponse response) {
         // userService.
         // String token = "";
         // token = JWT.create()
@@ -70,6 +72,8 @@ public class AdminController {
                 .getObject().authenticate(authenticationToken);
 
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        // 记录登录足迹
+        userService.addLoginTrack(loginUser.getId(), ServletUtil.getClientIP(request));
         // 根据认证创建 Token
         String token = tokenService.createToken(loginUser);
         // 发送token
