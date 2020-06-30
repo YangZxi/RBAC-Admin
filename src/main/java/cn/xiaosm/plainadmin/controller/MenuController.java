@@ -35,7 +35,6 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/api/menu")
-@PreAuthorize("hasRole('admin')")
 public class MenuController {
 
     @Autowired

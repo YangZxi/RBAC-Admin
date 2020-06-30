@@ -136,8 +136,10 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:modify') or hasRole('admin')")
     public ResponseBody modifyUser(@RequestBody UserVO userVO) {
         if (userVO.getId() == 1) throw new SQLOperateException("系统保留数据，请勿操作");
-        if (!Objects.isNull(userVO.getIsReset() && userVO.getIsReset())) {
-            userVO.setPassword("123456");
+        if (!Objects.isNull(userVO.getIsReset())) {
+            if ( userVO.getIsReset() ) {
+                userVO.setPassword("123456");
+            }
         }
         boolean b = userService.modifyEntity(userVO);
         return b == true ? ResponseUtils.buildSuccess("修改用户信息成功")
