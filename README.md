@@ -5,6 +5,9 @@ http://47.110.125.56/plain-admin
 #### 介绍
 基于springboot、spring security、mybatis-plus、JWT、Vue、Element-UI的后台管理系统
 
+本项目的界面是参照el-admin的界面进行设计
+本项目适合springboot和spring security的入门学习
+
 #### 软件架构
 软件架构说明
 
