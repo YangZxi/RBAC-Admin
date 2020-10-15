@@ -40,6 +40,7 @@ public class MailConfig extends MailProperties {
 
     @Autowired
     PropService propService;
+    JavaMailSenderImpl sender = null;
 
     @Bean
     public MailAccount createMailAccount() {
@@ -49,7 +50,7 @@ public class MailConfig extends MailProperties {
 
     @Bean
     public JavaMailSenderImpl createJavaMailSender() {
-        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender = new JavaMailSenderImpl();
         return sender;
     }
 
@@ -60,7 +61,6 @@ public class MailConfig extends MailProperties {
             map.put(prop.getPropKey(), prop.getPropValue());
         }
         // Springboot
-        JavaMailSenderImpl sender = (JavaMailSenderImpl) SpringContextUtils.getBean(JavaMailSender.class);
         sender.setUsername(map.get("email_username"));
         sender.setPassword(map.get("email_password"));
         sender.setHost(map.get("email_server_host"));
@@ -71,12 +71,12 @@ public class MailConfig extends MailProperties {
         MailUtils.setFromName(map.get("email_send_name"));
 
         // Hutool
-        MailAccount mailAccount = SpringContextUtils.getBean(MailAccount.class);
-        mailAccount.setUser(map.get("email_username"));
-        mailAccount.setPass(map.get("email_password"));
-        mailAccount.setHost(map.get("email_server_host"));
-        mailAccount.setPort(Integer.valueOf(map.get("email_server_port")));
-        mailAccount.setFrom(map.get("email_send_name"));
+        // MailAccount mailAccount = SpringContextUtils.getBean(MailAccount.class);
+        // mailAccount.setUser(map.get("email_username"));
+        // mailAccount.setPass(map.get("email_password"));
+        // mailAccount.setHost(map.get("email_server_host"));
+        // mailAccount.setPort(Integer.valueOf(map.get("email_server_port")));
+        // mailAccount.setFrom(map.get("email_send_name"));
 
         // MailUtil.send(mailAccount, "yangzx1282@qq.com", "test", "test", false, null);
     }

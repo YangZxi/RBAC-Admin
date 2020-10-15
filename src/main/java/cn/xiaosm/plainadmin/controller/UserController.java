@@ -26,6 +26,7 @@ import cn.xiaosm.plainadmin.utils.ResponseUtils;
 import cn.xiaosm.plainadmin.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -117,6 +118,20 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:query') or hasRole('admin')")
     public ResponseBody queryUsers(Page<User> page, UserVO userVO) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
+        if (Objects.nonNull(userVO.getStartTime())) {
+            wrapper.gt("create_time", userVO.getStartTime());
+        }
+        if (Objects.nonNull(userVO.getEndTime())) {
+            wrapper.lt("create_time", userVO.getEndTime());
+        }
+        if (StrUtil.isNotBlank(userVO.getUsername())) {
+            wrapper.like("username", userVO.getUsername());
+        }
+        if (Objects.nonNull(userVO.getStatus())) {
+            if (userVO.getStatus() != -1) {
+                wrapper.eq("status", userVO.getStatus());
+            }
+        }
         // 不查询已删除的用户
         wrapper.ne("status", StatusEnum.DELETED.getCode());
         return ResponseUtils.buildSuccess("获取了用户列表", userService.page(page, wrapper));

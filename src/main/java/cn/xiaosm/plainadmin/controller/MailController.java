@@ -12,16 +12,22 @@ package cn.xiaosm.plainadmin.controller;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.plainadmin.annotation.LogRecord;
+import cn.xiaosm.plainadmin.config.MailConfig;
+import cn.xiaosm.plainadmin.entity.Prop;
 import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.vo.MailVO;
+import cn.xiaosm.plainadmin.service.PropService;
 import cn.xiaosm.plainadmin.utils.MailUtils;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -36,8 +42,26 @@ import java.util.Objects;
 @RequestMapping("/api/mail")
 public class MailController {
 
+    @Autowired
+    PropService propService;
+    @Autowired
+    MailConfig mailConfig;
 
     @PostMapping
+    @LogRecord("邮箱配置修改")
+    @PreAuthorize("hasAuthority('email:modify') or hasRole('admin')")
+    public ResponseBody modifyTask(@RequestBody List<Prop> props) {
+        boolean b = true;
+        for (Prop prop : props) {
+            b = propService.modifyEntity(prop);
+        }
+        // 更新邮箱配置
+        mailConfig.updateMail();
+        return b ? ResponseUtils.buildSuccess("保存成功")
+                : ResponseUtils.buildFail("修改失败");
+    }
+
+    @PostMapping("/send")
     @LogRecord("邮件发送")
     @PreAuthorize("hasAuthority('email:send') or hasRole('admin')")
     public ResponseBody sendMail(MailVO mailVO) throws IOException {

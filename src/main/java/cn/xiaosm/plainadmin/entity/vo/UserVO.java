@@ -13,8 +13,12 @@ package cn.xiaosm.plainadmin.entity.vo;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,6 +32,12 @@ import java.util.Set;
 @Data
 public class UserVO extends User {
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
     @TableField(exist = false)
     private Boolean isReset;
     @TableField(exist = false)

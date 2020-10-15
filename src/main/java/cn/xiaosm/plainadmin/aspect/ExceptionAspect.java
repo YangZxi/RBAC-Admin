@@ -54,7 +54,8 @@ public class ExceptionAspect {
     }
 
     public String getFirstLine(Exception e) {
-        return e.getMessage();
+        return e.getMessage().length() > 30 ?
+                e.getMessage().substring(0, 30) : e.getMessage();
     }
 
     public String getStackTrace(Exception e) {

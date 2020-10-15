@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100vh;
+            font-family: "Open Sans", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #cecece;
+        }
+
+        .container.dwo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            position: absolute;
+            height: 350px;
+            width: 100%;
+            max-width: 850px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 25px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .card .inner_part {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0 0 30px;
+            height: 350px;
+            position: absolute;
+        }
+
+        #slideImg:checked ~ .inner_part {
+            padding: 0;
+            transition: 0.1s ease-in;
+        }
+
+        .inner_part .img {
+            height: 260px;
+            width: 260px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        #slideImg:checked ~ .inner_part .img {
+            height: 350px;
+            width: 850px;
+            z-index: 99;
+            transition: 0.3s 0.2s ease-in;
+        }
+
+        .img img {
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.6s;
+        }
+
+        #slide_1:checked ~ .inner_part .img_1 {
+            opacity: 1;
+            transition-delay: 0.2s;
+        }
+
+        .content {
+            padding: 0 20px 0 35px;
+            width: 530px;
+            margin-left: 50px;
+            opacity: 0;
+            transition: 0.6s;
+        }
+
+        #slideImg:checked ~ .inner_part .content {
+            display: none;
+        }
+
+        #slide_1:checked ~ .inner_part .content_1 {
+            opacity: 1;
+            margin-left: 0;
+            z-index: 100;
+            transition-delay: 0.3s;
+        }
+
+        .content .title {
+            font-size: 30px;
+            font-weight: 700;
+            color: #0d0925;
+            margin: 0 0 20px 0;
+        }
+
+        .content .text {
+            font-size: 19px;
+            color: #4e4a67;
+            margin: 0 auto 30px auto;
+            line-height: 1.5em;
+            text-align: justify;
+        }
+
+        .content a {
+            padding: 15px 20px;
+            border: none;
+            font-size: 16px;
+            color: #fff0e6;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            cursor: pointer;
+            outline: none;
+            background: #000000;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.2);
+            float: right;
+            text-decoration: none;
+        }
+
+        .slider {
+            position: absolute;
+            bottom: 25px;
+            left: 55%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        input {
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container dwo">
+    <div class="card">
+        <input type="radio" name="select" id="slide_1" checked>
+        <input type="checkbox" id="slideImg">
+
+        <div class="slider">
+            <label for="slide_1" class="slide slide_1"></label>
+        </div>
+
+        <div class="inner_part">
+            <label for="slideImg" class="img">
+                <img class="img_1" src="https://img1.dowebok.com/5160.png">
+            </label>
+            <div class="content content_1">
+                <div class="title">美味的端午节粽子和香茶矢量素材</div>
+                <div class="text">这是一款美味的端午节粽子和香茶矢量素材，提供了 AI 和 EPS 两种格式，含 JPG 预览图。</div>
+                <a href="https://www.xiaosm.cn/" target="_blank">查看详情</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+
+</html>

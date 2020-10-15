@@ -10,7 +10,9 @@
  */
 package cn.xiaosm.plainadmin.utils;
 
+import cn.xiaosm.plainadmin.config.MailConfig;
 import cn.xiaosm.plainadmin.exception.CanShowException;
+import com.sun.mail.util.MailConnectException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -74,6 +76,10 @@ public class MailUtils {
             throw new CanShowException("邮件发送出现错误###详情请查看异常日志信息");
             // ResponseUtils.sendError();
         }
+    }
+
+    public static void updateMail() {
+
     }
 
     public static void setFromAddress(String fromAddress) {

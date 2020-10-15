@@ -1,12 +1,9 @@
 package cn.xiaosm.plainadmin;
 
 import cn.xiaosm.plainadmin.entity.Menu;
-import cn.xiaosm.plainadmin.entity.ResponseEntity;
-import cn.xiaosm.plainadmin.entity.Role;
 import cn.xiaosm.plainadmin.entity.User;
 import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.mapper.MenuMapper;
-import cn.xiaosm.plainadmin.mapper.RoleMapper;
 import cn.xiaosm.plainadmin.mapper.UserMapper;
 import cn.xiaosm.plainadmin.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,8 +50,7 @@ class PlainAdminApplicationTests {
             user.setUsername("ceshi-" + i);
             user.setNickname("测试用户-" + i);
             user.setPassword("21232f297a57a5a743894a0e4a801fc3");
-            user.setRoleId(1);
-            ResponseEntity responseEntity = userService.saveEntity(user);
+            boolean responseEntity = userService.addEntity(user);
             try {
                 System.out.println(new ObjectMapper().writeValueAsString(responseEntity));
             } catch (JsonProcessingException e) {
@@ -71,12 +67,12 @@ class PlainAdminApplicationTests {
         User ex = new User();
         ex.setUsername("ceshi");
         ex.setPassword("123456");
-        UserDTO userDTO = userMapper.findByUsernameAndPassword(ex);
+        UserDTO userDTO = userMapper.selectByUsernameAndPassword(ex);
         System.out.println(new ObjectMapper()
                 .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .writeValueAsString(userDTO));
 
-        List<Menu> menus = menuMapper.findAllByRoleId(2);
+        List<Menu> menus = menuMapper.selectAllByRoleIdOfTree(Integer.toString(2));
         System.out.println(new ObjectMapper()
                 .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .writeValueAsString(menus));
