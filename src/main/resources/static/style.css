@@ -1,0 +1,68 @@
+.no-padding {padding: 0 !important;}
+		
+.web-gray *{
+    -webkit-filter: grayscale(100%); /* webkit */
+    -moz-filter: grayscale(100%); /*firefox*/
+    -ms-filter: grayscale(100%); /*ie9*/
+    -o-filter: grayscale(100%); /*opera*/
+    filter: grayscale(100%);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); 
+    filter: gray; /*ie9- */
+}
+
+.upload-xsm .el-upload-dragger {
+    width: 50rem !important;
+}
+
+
+
+.el-row--flex {
+    flex-wrap: wrap;
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+.padding-10-h {
+    padding: 10px 0;
+}
+
+
+.el-table--scrollable-x {
+  
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar
+{
+	width: 5px;
+	height: 5px;
+	background-color: #F5F5F5;
+}
+ 
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	/* /* border-radius: 10px; */ */
+	background-color: #F5F5F5;
+}
+ 
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); */
+	background-color: #555;
+}
+
+
+/* 设置Tab选项卡固定 */
+.content-body > .el-tabs__header {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    box-shadow: #b0b0b0 0px -1px 10px;
+    border-bottom: 2px #EEE solid;
+}
