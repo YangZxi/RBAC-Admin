@@ -1,31 +1,31 @@
 .no-padding {padding: 0 !important;}
 		
 .web-gray *{
-    -webkit-filter: grayscale(100%); /* webkit */
-    -moz-filter: grayscale(100%); /*firefox*/
-    -ms-filter: grayscale(100%); /*ie9*/
-    -o-filter: grayscale(100%); /*opera*/
-    filter: grayscale(100%);
-    filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); 
-    filter: gray; /*ie9- */
+  -webkit-filter: grayscale(100%); /* webkit */
+  -moz-filter: grayscale(100%); /*firefox*/
+  -ms-filter: grayscale(100%); /*ie9*/
+  -o-filter: grayscale(100%); /*opera*/
+  filter: grayscale(100%);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); 
+  filter: gray; /*ie9- */
 }
 
 .upload-xsm .el-upload-dragger {
-    width: 50rem !important;
+  width: 50rem !important;
 }
 
 
 
 .el-row--flex {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .padding-10 {
-    padding: 10px;
+  /* padding: 10px; */
 }
 
 .padding-10-h {
-    padding: 10px 0;
+  padding: 10px 0;
 }
 
 
