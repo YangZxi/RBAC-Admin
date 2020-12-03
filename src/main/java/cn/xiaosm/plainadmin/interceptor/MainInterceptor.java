@@ -59,7 +59,7 @@ public class MainInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 //        System.out.println(1);
-        if ("/eroor".equals(request.getRequestURI())) {
+        if ("/error".equals(request.getRequestURI())) {
             // logger.info("客户端IP=[{}]，请求地址=[{}]，请求类型=[{}]",
             //         ServletUtil.getClientIP(request),
             //         request.getRequestURI(), request.getMethod());

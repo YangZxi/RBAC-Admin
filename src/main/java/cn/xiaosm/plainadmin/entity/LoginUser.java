@@ -27,12 +27,12 @@ import java.util.List;
  * @create 2020/6/16
  * @since 1.0.0
  */
-public class LoginUser extends User implements Serializable, UserDetails {
+public class LoginUser extends User implements UserDetails {
 
     @JsonIgnore
     private String password;
     private String roleIds;
-    private List<String> roles;
+    private List<Role> roles;
     private List<Menu> menus;
     private List<UserLoginTrack> userLoginTracks;
     private Collection<? extends GrantedAuthority> authorities;
@@ -82,11 +82,11 @@ public class LoginUser extends User implements Serializable, UserDetails {
         return this;
     }
 
-    public List<String> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public LoginUser setRoles(List<String> roles) {
+    public LoginUser setRoles(List<Role> roles) {
         this.roles = roles;
         return this;
     }

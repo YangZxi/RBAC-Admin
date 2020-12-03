@@ -16,7 +16,7 @@ import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.mapper.MenuMapper;
 import cn.xiaosm.plainadmin.service.MenuService;
-import cn.xiaosm.plainadmin.utils.MemoryUtils;
+import cn.xiaosm.plainadmin.utils.CacheUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -127,7 +126,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public void refreshMenus() {
-        MemoryUtils.saveObject("MenuList", this.list());
+        CacheUtils.saveObject("MenuList", this.list());
     }
 
     /**
@@ -257,13 +256,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public List<Menu> getAll(boolean includeButton) {
-        List<Menu> list = (List<Menu>) MemoryUtils.getObject("MenuList");
+        List<Menu> list = (List<Menu>) CacheUtils.getObject("MenuList");
         if (Objects.isNull(list)) {
             list = this.list();
-            MemoryUtils.saveObject("MenuList", list);
+            CacheUtils.saveObject("MenuList", list);
         }
         // 按照规则取出菜单
-        list = list.stream()
+        List<Menu> list1 = list.stream()
                 .filter(el -> includeButton ? el.getType() <= 3 : el.getType() != 3)
                 .collect(Collectors.toList());
         return list;

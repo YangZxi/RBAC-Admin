@@ -16,17 +16,14 @@ import cn.xiaosm.plainadmin.config.security.service.TokenService;
 import cn.xiaosm.plainadmin.entity.LoginUser;
 import cn.xiaosm.plainadmin.entity.ResponseBody;
 import cn.xiaosm.plainadmin.entity.User;
-import cn.xiaosm.plainadmin.entity.dto.UserDTO;
 import cn.xiaosm.plainadmin.entity.enums.StatusEnum;
 import cn.xiaosm.plainadmin.entity.vo.UserVO;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import cn.xiaosm.plainadmin.service.UserService;
-import cn.xiaosm.plainadmin.utils.MemoryUtils;
+import cn.xiaosm.plainadmin.utils.CacheUtils;
 import cn.xiaosm.plainadmin.utils.ResponseUtils;
-import cn.xiaosm.plainadmin.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -96,7 +93,7 @@ public class UserController {
         if (userService.updateById(userVO)) {
             // 更新内存的对象
             BeanUtils.copyProperties(userVO, loginUser);
-            MemoryUtils.saveObject(loginUser.getUuid(), loginUser);
+            CacheUtils.saveObject(loginUser.getUuid(), loginUser);
             return ResponseUtils.buildSuccess("个人资料修改成功");
         } else {
             return ResponseUtils.buildFail("修改失败");

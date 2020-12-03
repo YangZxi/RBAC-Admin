@@ -47,7 +47,7 @@ public interface RoleMapper extends BaseMapper<Role> {
             " LEFT JOIN user_role ur ON ur.role_id = r.id" +
             " LEFT JOIN `user` u ON ur.user_id = u.id" +
             " WHERE u.id = #{userId}")
-    List<Role> selectByUserIdForName(Integer userId);
+    List<Role> selectIdAndNameByUserId(Integer userId);
 
     @Select("SELECT * FROM `role` WHERE `role`.user_id = #{userId}")
     // @Results(id = "menus", value = {

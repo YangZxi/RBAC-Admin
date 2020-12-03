@@ -48,8 +48,10 @@ public interface UserMapper extends BaseMapper<User> {
             // @Result(property = "role.nameZh", column = "r.name_zh"),
             // @Result(property = "role.desc", column = "r.desc"),
             // @Result(property = "role.status", column = "r.status"),
+            // 查询角色信息
             @Result(property = "roles", column = "id",
-                    many = @Many(select = "cn.xiaosm.plainadmin.mapper.RoleMapper.selectByUserIdForName")),
+                    many = @Many(select = "cn.xiaosm.plainadmin.mapper.RoleMapper.selectIdAndNameByUserId")),
+            // 查询用户登录足迹
             @Result(property = "userLoginTracks", column = "id",
                     many = @Many(select = "cn.xiaosm.plainadmin.mapper.UserMapper.selectUserTrackByUserId"))
     })
@@ -61,6 +63,12 @@ public interface UserMapper extends BaseMapper<User> {
     @ResultMap(value = "userRoleMap")
     UserDTO selectByUsername(String username);
 
+    @Select("SELECT u.* " +
+            " FROM `user` u " +
+            " WHERE u.${source} = #{openId}")
+    @ResultMap(value = "userRoleMap")
+    UserDTO selectByOpenId(@Param("openId") String openId,@Param("source") String source);
+
     /**
      * 查询用户最近 1 条登录记录
      * @param userId 用户id
@@ -70,7 +78,7 @@ public interface UserMapper extends BaseMapper<User> {
     // @SelectProvider(value = UserProvider.class, method = "sqlFindUserTrack")
     UserLoginTrack selectUserTrackByUserId(@Param("userId") Integer userId);
 
-    @Update("UPDATE `plain_admin`.`user` SET `status` = 2 WHERE `id` = #{userId}")
+    @Update("UPDATE `user` SET `status` = 2 WHERE `id` = #{userId}")
     int updateUserIsDeleted(Integer userId);
 
     /**

@@ -28,7 +28,9 @@ import java.util.List;
  * @since 1.0.0
  */
 @TableName("menu")
-public class Menu extends BaseEntity {
+public class Menu extends BaseEntity implements Cloneable {
+
+
 
     @TableId(type = IdType.AUTO)
     private Integer id;

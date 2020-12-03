@@ -10,10 +10,14 @@
  */
 package cn.xiaosm.plainadmin.config.security.service;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import cn.xiaosm.plainadmin.entity.LoginUser;
 import cn.xiaosm.plainadmin.entity.User;
+import cn.xiaosm.plainadmin.exception.CanShowException;
 import cn.xiaosm.plainadmin.service.UserService;
-import cn.xiaosm.plainadmin.utils.MemoryUtils;
+import cn.xiaosm.plainadmin.utils.CacheUtils;
+import cn.xiaosm.plainadmin.utils.SecurityUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -23,12 +27,11 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -84,11 +87,8 @@ public class TokenService {
      * @return
      */
     public String createToken(LoginUser loginUser) {
-        // String authorities = authentication.getAuthorities().stream()
-        //         .map(GrantedAuthority::getAuthority)
-        //         .collect(Collectors.joining(","));
         // 先通过旧的UUID删除内存中的登录信息
-        MemoryUtils.removeObject(loginUser.getUuid());
+        CacheUtils.removeObject(loginUser.getUuid());
         String uuid = UUID.randomUUID().toString();
         loginUser.setUuid(uuid);
         String token = JWT.create()
@@ -100,7 +100,7 @@ public class TokenService {
         // 更新数据库中的 UUID
         userService.updateById(new User(loginUser.getId(), uuid));
         // 保存登录信息到内存
-        MemoryUtils.saveObject(uuid, loginUser);
+        CacheUtils.saveObject(uuid, loginUser);
         return token;
     }
 
@@ -110,13 +110,15 @@ public class TokenService {
      * @return
      */
     public String getToken(HttpServletRequest request) {
+        String token = "";
         try {
-            return request.getHeader(AUTH_HEADER)
-                    .replaceFirst(TOKEN_PREFIX, "")
-                    .trim();
+            token = request.getHeader(AUTH_HEADER);
+            if (Objects.isNull(token)) token = ServletUtil.getParamMap(request).get(AUTH_HEADER);
+            if (Objects.isNull(token)) token = ServletUtil.getParamMap(request).get("_token");
         } catch (NullPointerException e) {
             return "";
         }
+        return Objects.isNull(token) ? "" : token.replace(TOKEN_PREFIX, "").trim();
     }
 
     /**
@@ -129,11 +131,11 @@ public class TokenService {
             verifier.verify(token);
             return true;
         } catch (TokenExpiredException e) {
-            MemoryUtils.removeObject(this.getUUID(token));
-            e.printStackTrace();
+            CacheUtils.removeObject(this.getUUID(token));
+            // e.printStackTrace();
             log.error("Token已过期，请重新登录 >>> {}", e.getMessage());
+            throw new CanShowException("Token已过期，请重新登录");
         }
-        return false;
     }
 
     public String getUUID(String token) {
@@ -157,6 +159,6 @@ public class TokenService {
             return null;
         }
 
-        return (LoginUser) MemoryUtils.getObject(this.getUUID(token));
+        return (LoginUser) CacheUtils.getObject(this.getUUID(token));
     }
 }

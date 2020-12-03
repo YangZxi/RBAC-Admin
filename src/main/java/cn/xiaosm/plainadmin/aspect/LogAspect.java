@@ -41,7 +41,7 @@ public class LogAspect {
 
     //切面 后置通知
     @Around("logPointCut()")
-    public Object around(ProceedingJoinPoint joinPoint) {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Long start = System.currentTimeMillis();
         // System.out.println("环绕。。。。。");
         HttpServletRequest request =
@@ -72,12 +72,12 @@ public class LogAspect {
             log.setType("ERROR");
             log.setError(this.getStackTrace(throwable));
             throwable.printStackTrace();
+            throw throwable;
         } finally {
             // 设置请求耗时
             log.setTime((int) (System.currentTimeMillis() - start));
             logService.addEntity(log);
         }
-
         return proceed;
     }
 

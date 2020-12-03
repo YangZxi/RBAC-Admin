@@ -25,7 +25,8 @@ public enum ResponseStatus {
     ERROR(400, "请求出现错误"),
     AUTHENTICATION_EXPIRE(401, "身份认证过期，请重新登录"),
     AUTHORITIES_DENIED(403, "权限不足"),
-    DATA_NULL(404, "查询数据空");
+    DATA_NULL(404, "查询数据空"),
+    OAUTH_UNBIND(4000, "快捷登录失败");
 
     private int code;
     private String msg;

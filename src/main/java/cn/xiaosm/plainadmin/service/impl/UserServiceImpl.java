@@ -131,6 +131,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.selectByUsername(username);
     }
 
+    /**
+     * 通过快捷方式登录
+     * @param openId
+     * @param source
+     * @return
+     */
+    @Override
+    public UserDTO getByUsername(String openId, String source) {
+        return userMapper.selectByOpenId(openId, source);
+    }
+
     @Override
     @Deprecated
     public User login(User user) {

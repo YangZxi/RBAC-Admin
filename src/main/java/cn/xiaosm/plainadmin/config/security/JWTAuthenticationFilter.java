@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.config.security;
 
+import cn.hutool.extra.servlet.ServletUtil;
 import cn.xiaosm.plainadmin.config.security.service.TokenService;
 import cn.xiaosm.plainadmin.entity.LoginUser;
 import lombok.extern.log4j.Log4j2;
@@ -60,7 +61,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             /* ******  很重要的代码  ****** */
         } else {
-            log.info("未授权，请先登录 => {}", request.getRequestURI());
+            log.info("{}未授权，请先登录 => {}", ServletUtil.getClientIP(request), request.getRequestURI());
         }
         chain.doFilter(request, response);
     }

@@ -36,8 +36,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
-    public void catchException(Throwable e) {
+    public ResponseBody catchException(Throwable e) {
         log.error(e.getMessage());
+        return ResponseUtils.buildError("请求出错，详情请查看后台日志");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

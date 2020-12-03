@@ -41,4 +41,5 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
                 authException == null ? "Unauthorized" : "请先通过认证在进行操作",
                 HttpServletResponse.SC_UNAUTHORIZED);
     }
+
 }

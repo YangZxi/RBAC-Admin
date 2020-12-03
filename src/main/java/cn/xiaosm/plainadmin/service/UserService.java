@@ -36,6 +36,8 @@ public interface UserService extends BaseService<User> {
 
     UserDTO getByUsername(String username);
 
+    UserDTO getByUsername(String openId, String source);
+
     User login(User user);
 
     List<UserLoginTrack> listOfTrack(Integer userId, Integer size);

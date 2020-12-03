@@ -65,7 +65,7 @@ public class MenuController {
         boolean b = false;
         b = menuService.addEntity(menu);
         // 重新获取最新的菜单表到内存
-        if (b) menuService.refreshMenus();
+        this.refresh(b);
         return b == true ? ResponseUtils.buildSuccess("新增菜单信息成功")
                 : ResponseUtils.buildFail("新增失败");
     }
@@ -79,8 +79,7 @@ public class MenuController {
         }
         menu.setUpdateTime(new Date());
         boolean b = menuService.updateById(menu);
-        // 重新获取最新的菜单表到内存
-        if (b) menuService.refreshMenus();
+        this.refresh(b);
         return b == true ? ResponseUtils.buildSuccess("修改菜单信息成功")
                 : ResponseUtils.buildFail("修改失败");
     }
@@ -93,7 +92,19 @@ public class MenuController {
             throw new SQLOperateException("系统保留数据，请勿操作");
         }
         int b = menuService.removeByIds(ids);
+        this.refresh(b > 0);
         return ResponseUtils.buildSuccess("删除菜单信息成功，本次删除" + b + "条菜单");
+    }
+
+    /**
+     * 刷新菜单状态
+     * @param b
+     * @return
+     */
+    public boolean refresh(boolean b) {
+        // 重新获取最新的菜单表到内存
+        if (b) menuService.refreshMenus();
+        return true;
     }
 
 }

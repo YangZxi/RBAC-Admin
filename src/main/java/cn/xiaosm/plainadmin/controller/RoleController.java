@@ -67,6 +67,7 @@ public class RoleController {
     @LogRecord("角色添加")
     @PreAuthorize("hasAuthority('role:add') or hasRole('admin')")
     public ResponseBody saveRole(@RequestBody Role role) {
+        role.setNamePrefix();
         boolean b = roleService.save(role);
         return b == true ? ResponseUtils.buildSuccess("新增角色信息成功")
                 : ResponseUtils.buildFail("保存失败");
@@ -79,6 +80,7 @@ public class RoleController {
         if (roleVO.getId() == 1) {
             throw new SQLOperateException("系统保留数据，请勿操作");
         }
+        roleVO.setNamePrefix();
         boolean b = roleService.modifyEntity(roleVO);
         if (b == Objects.nonNull(roleVO.getMenuIds())) {
             return ResponseUtils.buildSuccess("修改角色权限成功");

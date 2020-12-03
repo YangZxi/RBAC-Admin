@@ -29,7 +29,7 @@ import java.util.Date;
  * @since 1.0.0
  */
 @KeySequence
-public class BaseEntity {
+public class BaseEntity implements Cloneable, Serializable {
 
     // @TableId(type = IdType.AUTO)
     // private Integer id;
@@ -58,5 +58,14 @@ public class BaseEntity {
     public BaseEntity setCreateTime(Date createTime) {
         this.createTime = createTime;
         return this;
+    }
+
+    @Override
+    protected Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

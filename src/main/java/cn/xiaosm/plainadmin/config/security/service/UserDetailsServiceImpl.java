@@ -53,15 +53,35 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        // 获取 user 信息
-        UserDTO user = userService.getByUsername(username);
+        // 获取 userDTO 信息
+        UserDTO userDTO = userService.getByUsername(username);
         // 验证用户状态
-        this.validateUser(user);
+        this.validateUser(userDTO);
+        // 转变为 UserDetails 类型
+        LoginUser loginUser = new LoginUser();
+        BeanUtils.copyProperties(userDTO, loginUser, "");
 
+        return loginUser;
+    }
+
+    public UserDetails loadUserByOpenId(String openId, String source) {
+        UserDTO userDTO = null;
+        if ("qq".equals(source)) {
+            userDTO = userService.getByUsername(openId, "qq_id");
+        }
+        if (Objects.isNull(userDTO)) return null;
+        // 验证用户状态
+        this.validateUser(userDTO);// 转变为 UserDetails 类型
+        LoginUser loginUser = new LoginUser();
+        BeanUtils.copyProperties(userDTO, loginUser, "");
+        return loginUser;
+    }
+
+    public void loadUserInfo(LoginUser loginUser) {
         // 是否管理员
         AtomicBoolean isAdmin = new AtomicBoolean(false);
         // 设置用户id（字符串，以英文逗号分隔）
-        user.setRoleIds(ArrayUtil.join(user.getRoles()
+        loginUser.setRoleIds(ArrayUtil.join(loginUser.getRoles()
                 .stream()
                 .map(el -> {
                     // 如果是管理员则查出所有的菜单
@@ -71,30 +91,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .toArray(), ","));
         // 通过roleIds 字符串添加用户所拥有的菜单<注意，这里还只是链表结构>
         if (isAdmin.get() == true) {
-            user.setMenus(menuService.getAll(true));
+            loginUser.setMenus(menuService.getAll(true));
         } else {
-            user.setMenus(menuService.getByRoleIds(user.getRoleIds()));
+            loginUser.setMenus(menuService.getByRoleIds(loginUser.getRoleIds()));
         }
 
-
-        // 转变为 UserDetails 类型
-        LoginUser loginUser = new LoginUser();
-        BeanUtils.copyProperties(user, loginUser, "roles");
-
         // 设置登录用户的角色
-        loginUser.setRoles(user.getRoles().stream()
-                .map(Role::getName)
-                .collect(Collectors.toList()));
+        // loginUser.setRoles(user.getRoles().stream()
+        //         .map(Role::getName)
+        //         .collect(Collectors.toList()));
 
         // 从菜单中获取并设置登录用户的权限
+        // 设置菜单权限
         Collection<SimpleGrantedAuthority> authorities =
                 loginUser.getMenus().stream()
                         .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
                         .map(Menu::getPermission)
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
+        // 设置角色权限
         authorities.addAll(
-                user.getRoles().stream()
+                loginUser.getRoles().stream()
                         .map(Role::getName)
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList())
@@ -102,8 +119,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         loginUser.setAuthorities(authorities);
         // 构建登录用户菜单树
         loginUser.setMenus(menuService.buildTree(loginUser.getMenus(), 0));
-
-        return loginUser;
     }
 
     private void validateUser(UserDTO user) {

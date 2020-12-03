@@ -10,12 +10,14 @@
  */
 package cn.xiaosm.plainadmin.entity;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.xiaosm.plainadmin.exception.SQLOperateException;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -41,6 +43,12 @@ public class Role extends BaseEntity {
 
     public Role setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public Role setNamePrefix() {
+        if (ObjectUtil.isNotNull(this.name) &&
+                !this.name.startsWith("ROLE_")) this.name = "ROLE_" + this.name;
         return this;
     }
 }

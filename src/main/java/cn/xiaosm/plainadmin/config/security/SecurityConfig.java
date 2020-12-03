@@ -86,17 +86,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // web.ignoring().antMatchers("/login");
-        // web.ignoring().antMatchers("/");
+        web.ignoring().antMatchers("/static/**");
+        web.ignoring().antMatchers("/oauth/**");
         super.configure(web);
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
         // 配置自定义service
-        auth.userDetailsService(userDetailsService)
+        builder.userDetailsService(userDetailsService)
                 // 配置加密方式
                 .passwordEncoder(bCryptPasswordEncoder());
-        super.configure(auth);
+        super.configure(builder);
     }
 
     @Override
@@ -111,6 +112,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
             }
         }
+        String[] staticPath = new String[]{
+                "/upload/**", "/*.html", "/**/*.html",
+                "/**/*.css", "/**/*.js", "/**/*.map",
+                "/**/*.woff", "/**/*.ttf",
+                "/**/*.png", "/**/*.jpg", "/**/*.ico",
+                "/**/*.gif", "/**/*.svg"
+        };
 
         // 禁用 CSRF 因为我需要 session 鸭
         security.csrf().disable()
@@ -143,17 +151,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security.authorizeRequests()
                 .antMatchers("/api/login").anonymous()
                 // 静态资源
-                .mvcMatchers(HttpMethod.GET,
-                        "/upload/**",
-                        "/*.html",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
-                        "/**/*.ico",
-                        "/**/*.map",
-                        "/**/*.woff",
-                        "/**/*.ttf"
-                ).permitAll()
+                .mvcMatchers(HttpMethod.GET, staticPath).permitAll()
                 // 阿里巴巴 druid/
                 .antMatchers("/druid/**").anonymous()
                 .antMatchers("/", "/index").anonymous()

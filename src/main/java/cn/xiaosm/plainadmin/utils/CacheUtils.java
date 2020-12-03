@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.plainadmin.utils;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @create 2020/6/16
  * @since 1.0.0
  */
-public class MemoryUtils {
+public class CacheUtils {
 
     private static Map<String, Object> map = new ConcurrentHashMap<>();
 
@@ -40,16 +41,13 @@ public class MemoryUtils {
     }
 
     public static Object getObject(String key) {
-        return map.get(key);
+        return ObjectUtil.clone(map.get(key));
     }
 
     public static<T> Object getObject(String key, Class clazz) {
         if (map.containsKey(key)) {
-            try {
-                return new ObjectMapper().readValue(JSONUtil.toJsonStr(map.get(key)), clazz);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            // return new ObjectMapper().readValue(JSONUtil.toJsonStr(map.get(key)), clazz);
+            return ObjectUtil.cloneByStream(map.get(key));
         } else {
 
         }
