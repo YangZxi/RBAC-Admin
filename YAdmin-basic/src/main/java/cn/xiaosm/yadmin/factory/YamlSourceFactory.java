@@ -8,6 +8,9 @@ import org.springframework.core.io.support.EncodedResource;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * yaml文件注入到实体类
+ */
 public class YamlSourceFactory extends DefaultPropertySourceFactory {
     @Override
     public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
