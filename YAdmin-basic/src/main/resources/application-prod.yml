@@ -4,8 +4,7 @@ spring:
   #数据库连接配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql.xiaosm.cn:3306/padmin?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
-    #    url: jdbc:mysql://mysql.xiaosm.cn:3306/plain_admin?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/padmin?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: padmin
     password: 123123
     # 连接池类型
