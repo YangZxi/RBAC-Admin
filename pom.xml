@@ -13,6 +13,7 @@
     <version>1.0</version>
     <name>YAdmin</name>
     <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
 
     <!-- 子模块-->
     <modules>
