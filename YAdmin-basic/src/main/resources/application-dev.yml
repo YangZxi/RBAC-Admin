@@ -4,7 +4,7 @@ spring:
   #数据库连接配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/padmin?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/yadmin?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: root
     password: 123456
     # 连接池类型
@@ -31,9 +31,8 @@ mybatis-plus:
   type-aliases-package: cn.xiaosm.yadmin.entity
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
-
-
+#    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   #  config: classpath:log4j.properties
