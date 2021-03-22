@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : PAdmin
+ Source Server         : localhost
  Source Server Type    : MySQL
- Source Server Version : 50729
- Source Host           : mysql.xiaosm.cn:3306
+ Source Server Version : 80021
+ Source Host           : localhost:3306
  Source Schema         : padmin
 
  Target Server Type    : MySQL
- Target Server Version : 50729
+ Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 05/02/2021 10:19:21
+ Date: 22/03/2021 22:20:57
 */
 
 SET NAMES utf8mb4;
@@ -22,9 +22,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `ban`;
 CREATE TABLE `ban`  (
-  `user_id` int(11) NOT NULL,
-  `role_id` int(11) NULL DEFAULT NULL,
-  `menu_id` int(11) NULL DEFAULT NULL,
+  `user_id` int NOT NULL,
+  `role_id` int NULL DEFAULT NULL,
+  `menu_id` int NULL DEFAULT NULL,
   PRIMARY KEY (`user_id`) USING BTREE,
   INDEX `ban_role_id_fk`(`role_id`) USING BTREE,
   INDEX `ban_menu_id_fk`(`menu_id`) USING BTREE,
@@ -42,14 +42,14 @@ CREATE TABLE `ban`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '日志标题',
   `error` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '日志内容',
   `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '日志类型',
   `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '方法名称',
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户id',
-  `time` int(11) NULL DEFAULT NULL,
+  `user_id` int NULL DEFAULT NULL COMMENT '用户id',
+  `time` int NULL DEFAULT NULL,
   `ip` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求地址',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
@@ -74,18 +74,19 @@ INSERT INTO `log` VALUES (516, '菜单修改', NULL, '[{\"id\":41,\"status\":0}]
 INSERT INTO `log` VALUES (517, '菜单修改', NULL, '[{\"id\":42,\"status\":0}]', 'INFO', 'cn.xiaosm.yadmin.controller.MenuController.modifyMenu', 1, 115, '127.0.0.1', '2021-01-25 13:33:35');
 INSERT INTO `log` VALUES (518, '修改用户', NULL, '[{\"id\":115,\"status\":1}]', 'INFO', 'cn.xiaosm.yadmin.controller.UserController.modifyUser', 1, 195, '127.0.0.1', '2021-01-25 13:42:49');
 INSERT INTO `log` VALUES (519, '修改用户', NULL, '[{\"id\":115,\"status\":0}]', 'INFO', 'cn.xiaosm.yadmin.controller.UserController.modifyUser', 1, 190, '127.0.0.1', '2021-01-25 13:42:54');
+INSERT INTO `log` VALUES (520, '修改用户', 'java.lang.NullPointerException\r\n	at cn.xiaosm.yadmin.controller.UserController.modifyUser(UserController.java:138)\r\n	at cn.xiaosm.yadmin.controller.UserController$$FastClassBySpringCGLIB$$1e0b8053.invoke(<generated>)\r\n	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)\r\n	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:769)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)\r\n	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)\r\n	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:88)\r\n	at cn.xiaosm.yadmin.aspect.LogAspect.around(LogAspect.java:60)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:644)\r\n	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:633)\r\n	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)\r\n	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)\r\n	at org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke(AfterReturningAdviceInterceptor.java:55)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)\r\n	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)\r\n	at org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor.invoke(MethodSecurityInterceptor.java:69)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)\r\n	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)\r\n	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:93)\r\n	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)\r\n	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:747)\r\n	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:689)\r\n	at cn.xiaosm.yadmin.controller.UserController$$EnhancerBySpringCGLIB$$eb3d3c1e.modifyUser(<generated>)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190)\r\n	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138)\r\n	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106)\r\n	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:888)\r\n	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:793)\r\n	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)\r\n	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040)\r\n	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943)\r\n	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)\r\n	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)\r\n	at javax.servlet.http.HttpServlet.service(HttpServlet.java:660)\r\n	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)\r\n	at javax.servlet.http.HttpServlet.service(HttpServlet.java:741)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:113)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:113)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:124)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:320)\r\n	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:126)\r\n	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:90)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:118)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:137)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:111)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:158)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:200)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at cn.xiaosm.yadmin.config.security.JWTAuthenticationFilter.doFilterInternal(JWTAuthenticationFilter.java:66)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:92)\r\n	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:77)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\r\n	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334)\r\n	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215)\r\n	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178)\r\n	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:358)\r\n	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:271)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)\r\n	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\r\n	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)\r\n	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)\r\n	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)\r\n	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)\r\n	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:526)\r\n	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)\r\n	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)\r\n	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)\r\n	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)\r\n	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:367)\r\n	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)\r\n	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:860)\r\n	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1591)\r\n	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)\r\n	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\r\n	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\r\n	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)\r\n	at java.lang.Thread.run(Thread.java:748)\r\n', '[{\"isReset\":true}]', 'ERROR', 'cn.xiaosm.yadmin.controller.UserController.modifyUser', 1, 15, '127.0.0.1', '2021-03-13 12:53:51');
 
 -- ----------------------------
 -- Table structure for menu
 -- ----------------------------
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
   `type` tinyint(1) NULL DEFAULT 1 COMMENT '菜单类型',
-  `parent_menu` int(11) NULL DEFAULT 0 COMMENT '父级菜单，如果为0则表示为顶级菜单',
+  `parent_menu` int NULL DEFAULT 0 COMMENT '父级菜单，如果为0则表示为顶级菜单',
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '前端图标',
-  `order` tinyint(4) NULL DEFAULT NULL COMMENT '排序',
+  `order` tinyint NULL DEFAULT NULL COMMENT '排序',
   `path` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件路径',
   `component` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件名称（文件名）',
   `permission` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '权限名',
@@ -134,7 +135,7 @@ INSERT INTO `menu` VALUES (42, '测试目录', 1, 1, 'fa fa-user', 3, '/test', N
 -- ----------------------------
 DROP TABLE IF EXISTS `properties`;
 CREATE TABLE `properties`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `prop_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '配置名',
   `prop_value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '配置值',
   `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '配置类型',
@@ -146,9 +147,9 @@ CREATE TABLE `properties`  (
 -- ----------------------------
 -- Records of properties
 -- ----------------------------
-INSERT INTO `properties` VALUES (13, 'email_username', 'service@xiaosm.cn', 'email', '2020-06-28 19:43:56');
+INSERT INTO `properties` VALUES (13, 'email_username', '', 'email', '2020-06-28 19:43:56');
 INSERT INTO `properties` VALUES (14, 'email_password', '', 'email', '2020-06-28 19:43:56');
-INSERT INTO `properties` VALUES (15, 'email_send_name', 'Plain-admin', 'email', '2020-06-28 19:43:56');
+INSERT INTO `properties` VALUES (15, 'email_send_name', 'YAdmin', 'email', '2020-06-28 19:43:56');
 INSERT INTO `properties` VALUES (16, 'email_server_host', 'smtp.ym.163.com', 'email', '2020-06-28 19:43:56');
 INSERT INTO `properties` VALUES (17, 'email_server_port', '994', 'email', '2020-06-28 19:43:56');
 INSERT INTO `properties` VALUES (18, 'email_ssl', 'false', 'email', '2020-06-28 19:43:56');
@@ -158,7 +159,7 @@ INSERT INTO `properties` VALUES (18, 'email_ssl', 'false', 'email', '2020-06-28 
 -- ----------------------------
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色名称',
   `name_zh` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '角色中文名称',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
@@ -181,8 +182,8 @@ INSERT INTO `role` VALUES (4, 'test', 'test', NULL, 0, '2020-06-30 15:46:32', NU
 -- ----------------------------
 DROP TABLE IF EXISTS `role_menu`;
 CREATE TABLE `role_menu`  (
-  `role_id` int(11) NULL DEFAULT NULL COMMENT '角色id',
-  `menu_id` int(11) NULL DEFAULT NULL COMMENT '菜单id',
+  `role_id` int NULL DEFAULT NULL COMMENT '角色id',
+  `menu_id` int NULL DEFAULT NULL COMMENT '菜单id',
   INDEX `role_fk`(`role_id`) USING BTREE,
   INDEX `menu_fk`(`menu_id`) USING BTREE,
   CONSTRAINT `menu_fk` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -198,13 +199,13 @@ CREATE TABLE `role_menu`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `task`;
 CREATE TABLE `task`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务名称',
   `cron` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '任务描述',
   `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '全限定类名',
   `method_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '方法名',
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '创建用户的id',
+  `user_id` int NULL DEFAULT NULL COMMENT '创建用户的id',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
   `update_time` datetime(0) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
@@ -224,16 +225,16 @@ INSERT INTO `task` VALUES (2, '测试任务', '0/1 * * * * ?', NULL, 'cn.xiaosm.
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户名',
   `nickname` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '昵称或姓名',
   `password` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '密码',
   `email` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱',
   `gender` char(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别',
-  `age` tinyint(4) NULL DEFAULT NULL COMMENT '年龄',
-  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `age` tinyint NULL DEFAULT NULL COMMENT '年龄',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像地址',
   `status` tinyint(1) NULL DEFAULT 1 COMMENT '用户状态',
-  `uuid` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '',
+  `uuid` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '每次登录的uuid',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
@@ -243,7 +244,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', '不是木易杨', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', '111@qq.com', '男', 18, 'https://q1.qlogo.cn/g?b=qq&nk=1282381264&s=640', 1, 'e5358d3d-ad21-4d85-aeb2-87e98c739dfe', '2021-01-25 06:46:46', '2020-06-13 16:29:03');
+INSERT INTO `user` VALUES (1, 'admin', '不是木易杨', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', '111@qq.com', '男', 18, 'https://q1.qlogo.cn/g?b=qq&nk=1282381264&s=640', 1, 'e93d6b88-48bd-4017-9c4e-00ec7d885f33', NULL, '2020-06-13 16:29:03');
 INSERT INTO `user` VALUES (2, 'test1', '测试用户-啦啦啦', '$2a$10$3KSvYFhSsCQjX4zJLN35Y.M5mIrDDRmcceRk1P9LnLcLq2MVPj2t.', '111@qq.com', '男', 19, '/upload/8431fde2-568e-471d-b576-1f0ac4709914.jpeg', 2, '6fdf2078-5e89-4a90-a833-be2f3c916b8f', '2020-06-30 07:47:45', '2020-06-12 16:42:13');
 INSERT INTO `user` VALUES (3, 'ceshi-1', '测试用户-1', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2020-06-21 08:18:09', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (4, 'ceshi-2', '测试用户-2', '$2a$10$8drJJLfChPHNIQx76aGuGOkuK8KBbTVAnXLQin0ij1eLn9ECc3BVK', '111@qq.com', '女', 12, NULL, 2, ' ', '2020-06-29 13:59:21', '2020-06-13 04:42:13');
@@ -355,14 +356,14 @@ INSERT INTO `user` VALUES (117, 'zezezeze', '泽泽泽泽', '$2a$10$9ZxEtgNrzyJI
 -- ----------------------------
 DROP TABLE IF EXISTS `user_login_track`;
 CREATE TABLE `user_login_track`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL COMMENT '用户id',
   `login_ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录ip',
   `login_time` datetime(0) NULL DEFAULT NULL COMMENT '登录时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `track_user_id_fk`(`user_id`) USING BTREE,
   CONSTRAINT `track_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 126 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 136 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_login_track
@@ -381,15 +382,25 @@ INSERT INTO `user_login_track` VALUES (122, 1, '127.0.0.1', '2021-01-25 13:05:22
 INSERT INTO `user_login_track` VALUES (123, 1, '127.0.0.1', '2021-01-25 13:11:02');
 INSERT INTO `user_login_track` VALUES (124, 1, '127.0.0.1', '2021-01-25 13:25:56');
 INSERT INTO `user_login_track` VALUES (125, 1, '127.0.0.1', '2021-01-25 14:46:45');
+INSERT INTO `user_login_track` VALUES (126, 1, '127.0.0.1', '2021-03-13 12:53:12');
+INSERT INTO `user_login_track` VALUES (127, 1, '127.0.0.1', '2021-03-17 10:52:42');
+INSERT INTO `user_login_track` VALUES (128, 1, '127.0.0.1', '2021-03-17 10:57:32');
+INSERT INTO `user_login_track` VALUES (129, 1, '127.0.0.1', '2021-03-17 11:16:51');
+INSERT INTO `user_login_track` VALUES (130, 1, '127.0.0.1', '2021-03-19 16:24:13');
+INSERT INTO `user_login_track` VALUES (131, 1, '127.0.0.1', '2021-03-22 15:10:16');
+INSERT INTO `user_login_track` VALUES (132, 1, '127.0.0.1', '2021-03-22 17:55:16');
+INSERT INTO `user_login_track` VALUES (133, 1, '127.0.0.1', '2021-03-22 19:08:04');
+INSERT INTO `user_login_track` VALUES (134, 1, '127.0.0.1', '2021-03-22 19:46:45');
+INSERT INTO `user_login_track` VALUES (135, 1, '127.0.0.1', '2021-03-22 21:56:55');
 
 -- ----------------------------
 -- Table structure for user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户id',
-  `role_id` int(11) NULL DEFAULT NULL COMMENT '角色id',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL COMMENT '用户id',
+  `role_id` int NOT NULL COMMENT '角色id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `user_id_fk`(`user_id`) USING BTREE,
   INDEX `role_id_fk`(`role_id`) USING BTREE,
