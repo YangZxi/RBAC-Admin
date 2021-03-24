@@ -13,7 +13,7 @@
     <version>1.0</version>
     <name>YAdmin</name>
     <description>Demo project for Spring Boot</description>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <!-- 子模块-->
     <modules>
@@ -25,7 +25,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <mybatis.version>2.1.1</mybatis.version>
         <mybatis-plus.version>3.3.2</mybatis-plus.version>
         <mysql.version>8.0.17</mysql.version>
         <ali-pool.version>1.1.22</ali-pool.version>
@@ -39,20 +38,15 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <!-- springboot mvc -->
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- springboot security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
         <!-- springboot aop -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!-- springboot actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- springboot email -->
         <dependency>
@@ -89,23 +83,6 @@
         <!--    <artifactId>mail</artifactId>-->
         <!--    <version>1.4.7</version>-->
         <!--</dependency>-->
-
-        <!-- 获取系统状态的jar -->
-        <dependency>
-            <groupId>com.github.oshi</groupId>
-            <artifactId>oshi-core</artifactId>
-            <version>3.12.2</version>
-        </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>5.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna-platform</artifactId>
-            <version>5.2.0</version>
-        </dependency>
 
         <!-- mybatis-plus -->
         <dependency>
