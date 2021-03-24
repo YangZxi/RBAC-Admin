@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author Young
  */
 @EnableAsync // 启用异步方法调用
-@MapperScan("cn.xiaosm.yadmin.basic.mapper")
+@MapperScan("cn.xiaosm.yadmin.**.mapper")
 // @PropertySource("classpath:application.properties")
 @EnableConfigurationProperties // 开启配置文件注入到实体类/属性
 @EnableTransactionManagement
