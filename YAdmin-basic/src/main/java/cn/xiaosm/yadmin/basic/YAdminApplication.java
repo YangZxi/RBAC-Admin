@@ -1,6 +1,6 @@
 package cn.xiaosm.yadmin.basic;
 
-import cn.xiaosm.yadmin.basic.config.MailConfig;
+import cn.xiaosm.yadmin.basic.util.mail.MailConfig;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.service.TaskService;
 import cn.xiaosm.yadmin.basic.util.CacheUtils;
@@ -52,7 +52,6 @@ public class YAdminApplication {
      */
     public static void loadMail() {
         MailConfig mailConfig = SpringContextUtils.getBean(MailConfig.class);
-        mailConfig.updateMail();
         // MailUtils.sendSimpleMailMessage("yangzx1282@qq.com", "test", "test");
     }
 }

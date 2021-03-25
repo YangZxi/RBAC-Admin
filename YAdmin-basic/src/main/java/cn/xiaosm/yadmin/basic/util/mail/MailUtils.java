@@ -1,6 +1,9 @@
-package cn.xiaosm.yadmin.basic.util;
+package cn.xiaosm.yadmin.basic.util.mail;
 
+import cn.xiaosm.yadmin.basic.entity.Prop;
 import cn.xiaosm.yadmin.basic.exception.CanShowException;
+import cn.xiaosm.yadmin.basic.service.PropService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,6 +14,9 @@ import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 邮件发送工具类
@@ -26,11 +32,14 @@ public class MailUtils {
     private static String FROM_ADDRESS = "";
     private static String FROM_NAME = "YAdmin";
 
-    private static JavaMailSender javaMailSender;
+    private static JavaMailSenderImpl javaMailSender;
+    private static MailConfig mailConfig;
 
     @Autowired
-    public MailUtils(JavaMailSenderImpl javaMailSender) {
+    public MailUtils(JavaMailSenderImpl javaMailSender, MailConfig mailConfig) {
         this.javaMailSender = javaMailSender;
+        this.mailConfig = mailConfig;
+        updateMail();
     }
 
     public static void sendMail(String to, String subject, String content) {
@@ -54,7 +63,7 @@ public class MailUtils {
             helper.setSubject(subject);
             helper.setText(content, isHtml);
             javaMailSender.send(message);
-            log.info("邮件发送成功，接受方=>[{}]", to);
+            log.info("邮件发送成功，接收方=>[{}]", to);
         } catch (MessagingException | UnsupportedEncodingException e) {
             log.error("发送简单邮件时出现异常!", e);
             throw new CanShowException("邮件发送出现错误###详情请查看异常日志信息");
@@ -63,7 +72,16 @@ public class MailUtils {
     }
 
     public static void updateMail() {
+        mailConfig.updateMail();
+    }
 
+    public static void testConnection() {
+        try {
+            javaMailSender.testConnection();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            log.error("邮箱连接失败，请检查配置是否正确");
+        }
     }
 
     public static void setFromAddress(String fromAddress) {

@@ -12,13 +12,14 @@ package cn.xiaosm.yadmin.basic.controller;
 
 import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.annotation.LogRecord;
-import cn.xiaosm.yadmin.basic.config.MailConfig;
+import cn.xiaosm.yadmin.basic.util.mail.MailConfig;
 import cn.xiaosm.yadmin.basic.entity.Prop;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.vo.MailVO;
 import cn.xiaosm.yadmin.basic.service.PropService;
-import cn.xiaosm.yadmin.basic.util.MailUtils;
+import cn.xiaosm.yadmin.basic.util.mail.MailUtils;
 import cn.xiaosm.yadmin.basic.util.ResponseUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
 import java.io.*;
 import java.util.List;
 
@@ -37,14 +40,13 @@ import java.util.List;
  * @create 2020/6/29
  * @since 1.0.0
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/mail")
 public class MailController {
 
     @Autowired
     PropService propService;
-    @Autowired
-    MailConfig mailConfig;
 
     @PostMapping
     @LogRecord("邮箱配置修改")
@@ -55,9 +57,15 @@ public class MailController {
             b = propService.modifyEntity(prop);
         }
         // 更新邮箱配置
-        mailConfig.updateMail();
+        MailUtils.updateMail();
+        try {
+            MailUtils.testConnection();
+        } catch (Exception e) {
+            b = false;
+            log.error("邮箱连接失败");
+        }
         return b ? ResponseUtils.buildSuccess("保存成功")
-                : ResponseUtils.buildFail("修改失败");
+            : ResponseUtils.buildError("测试连接失败###请检查配置是否都正确");
     }
 
     @PostMapping("/send")
@@ -74,11 +82,10 @@ public class MailController {
                 while ((length = in.read(size)) != -1) {
                     ps.write(size, 0, length);
                 }
-                System.out.println(out.toString());
                 mailVO.setContent(out.toString());
                 mailVO.setIsHtml(true);
             } catch (IOException e) {
-
+                log.error("读取模板出现错误");
             } finally {
                 ps.close();
                 out.close();
