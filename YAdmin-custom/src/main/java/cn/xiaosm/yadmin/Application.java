@@ -1,10 +1,11 @@
 package cn.xiaosm.yadmin;
 
-import cn.xiaosm.yadmin.basic.config.MailConfig;
+import cn.xiaosm.yadmin.basic.util.mail.MailConfig;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.service.TaskService;
 import cn.xiaosm.yadmin.basic.util.CacheUtils;
 import cn.xiaosm.yadmin.basic.util.SpringContextUtils;
+import cn.xiaosm.yadmin.basic.util.mail.MailUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,7 +31,6 @@ public class Application {
         SpringApplication.run(Application.class, args);
         loadMenu();
         loadTask();
-        loadMail();
     }
 
     /**
@@ -52,12 +52,4 @@ public class Application {
         taskService.startAllTask();
     }
 
-    /**
-     * 加载邮件配置
-     */
-    public static void loadMail() {
-        MailConfig mailConfig = SpringContextUtils.getBean(MailConfig.class);
-        mailConfig.updateMail();
-        // MailUtils.sendSimpleMailMessage("yangzx1282@qq.com", "test", "test");
-    }
 }
