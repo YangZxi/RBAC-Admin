@@ -69,7 +69,6 @@ public interface UserMapper extends BaseMapper<User> {
      * @return
      */
     @Select("SELECT * FROM user_login_track WHERE user_id = #{userId} ORDER BY login_time DESC LIMIT 1")
-    // @SelectProvider(value = UserProvider.class, method = "sqlFindUserTrack")
     UserLoginTrack selectUserTrackByUserId(@Param("userId") Integer userId);
 
     /**

@@ -43,7 +43,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param parentId 父级 id，0表示顶级菜单
      * @return
      */
-    @Select("SELECT * FROM meun WHERE parent_menu = ${parentId}")
+    @Select("SELECT * FROM meun WHERE parent_menu_id = ${parentId}")
     List<Menu> selectAllByParentId(Integer parentId);
 
     /**

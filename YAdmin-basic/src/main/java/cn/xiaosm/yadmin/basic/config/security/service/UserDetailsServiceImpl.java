@@ -104,20 +104,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .toArray(), ","));
         // 通过roleIds 字符串添加用户所拥有的菜单<注意，这里还只是链表结构>
         if (isAdmin.get() == true) {
-            loginUser.setMenus(menuService.getAll(true));
+            loginUser.setMenusOriginal(menuService.getAll(true));
         } else {
-            loginUser.setMenus(menuService.getByRoleIds(loginUser.getRoleIds()));
+            loginUser.setMenusOriginal(menuService.getByRoleIds(loginUser.getRoleIds()));
         }
-
-        // 设置登录用户的角色
-        // loginUser.setRoles(user.getRoles().stream()
-        //         .map(Role::getName)
-        //         .collect(Collectors.toList()));
 
         // 从菜单中获取并设置登录用户的权限
         // 设置菜单权限
         Collection<SimpleGrantedAuthority> authorities =
-                loginUser.getMenus().stream()
+                loginUser.getMenusOriginalOfList().stream()
                     // 取出权限字段（permission）不为空的值
                     .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
                     .map(Menu::getPermission)
@@ -132,8 +127,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .collect(Collectors.toList())
         );
         loginUser.setAuthorities(authorities);
-        // 构建登录用户菜单树
-        loginUser.setMenus(menuService.buildTree(loginUser.getMenus(), 1));
+        // 构建登录用户菜单树，在首页展示导航栏需要用到
+        loginUser.setMenus(menuService.buildTree(loginUser.getMenusOriginalOfList()));
     }
 
     private void validateUser(UserDTO user) {

@@ -13,6 +13,7 @@ package cn.xiaosm.yadmin.basic.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.entity.Menu;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
+import cn.xiaosm.yadmin.basic.entity.enums.MenuType;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.mapper.MenuMapper;
 import cn.xiaosm.yadmin.basic.service.MenuService;
@@ -37,6 +38,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+
+    private static final Integer ROOT_ID = 1;
 
     @Autowired
     MenuMapper menuMapper;
@@ -141,14 +144,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         if (recursive) {
             // 获取第一级子菜单
             List<Menu> reList = menuList.stream()
-                    .filter(el -> el.getParentMenu() == parentMenu)
+                    .filter(el -> el.getParentMenuId() == parentMenu)
                     .collect(Collectors.toList());
             for (Menu menu : reList) {
 
             }
             return null;
         } else {
-            return menuList.stream().filter(el -> el.getParentMenu() == parentMenu).collect(Collectors.toList());
+            return menuList.stream().filter(el -> el.getParentMenuId() == parentMenu).collect(Collectors.toList());
         }
     }
 
@@ -159,7 +162,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     @Override
     public List<Menu> getByParentIdOfTree(Integer parentId, boolean includeButton) {
-        parentId = parentId == null || parentId < 0 ? 0 : parentId;
+        parentId = parentId == null || parentId < ROOT_ID ? ROOT_ID : parentId;
         return this.buildTree(this.getAll(includeButton), parentId);
     }
 
@@ -179,7 +182,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * 根据角色id查询菜单
      * (查询不包括 根目录)
      *
-     * @param roleIds
+     * @param roleIds 1,2,3
      * @return
      */
     @Override
@@ -188,14 +191,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     /**
-     * 构建菜单树
-     * 这里参数的菜单集合是不包括父菜单的
+     * 构建菜单树 （默认不包含父级菜单）
      * @param menuList
      * @return
      */
     @Override
     public List<Menu> buildTree(List<Menu> menuList) {
-        return this.buildTree(menuList, 1, false);
+        return this.buildTree(menuList, ROOT_ID, false);
     }
 
     /**
@@ -221,7 +223,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<Menu> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent) {
         List<Menu> menuTree = menuList.stream()
-                .filter(el -> includeParent ? el.getId() == parentId : el.getParentMenu() == parentId)
+                .filter(el -> includeParent ? el.getId() == parentId : el.getParentMenuId() == parentId)
                 // 过滤非启用状态的菜单
                 .filter(el-> el.getStatus() == 1)
                 .collect(Collectors.toList());
@@ -241,12 +243,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         Menu next;
         for (Menu menu : menuTree) {
             // 如果是按钮，将不会继续找它的子级菜单
-            if (menu.getType() == 3) continue;
+            if (menu.getType() == MenuType.BUTTON.getType()) continue;
             else {
                 it = menuList.iterator();
                 while (it.hasNext()) {
                     next = it.next();
-                    if (next.getParentMenu() == menu.getId()) {
+                    if (next.getParentMenuId() == menu.getId()) {
+                        next.setParent(menu);
                         temp.add(next);
                         it.remove();
                     }
@@ -261,20 +264,22 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     /**
      * 获取所有的菜单
-     * @param includeButton 是否包含按钮
+     * @param includePermission 是否包含权限
      * @return
      */
     @Override
-    public List<Menu> getAll(boolean includeButton) {
+    public List<Menu> getAll(boolean includePermission) {
         List<Menu> list = (List<Menu>) CacheUtils.getObject("MenuList");
         if (Objects.isNull(list)) {
-            list = this.list();
+            list = menuMapper.selectList(new QueryWrapper<Menu>().eq("status", 1));
             CacheUtils.saveObject("MenuList", list);
         }
         // 按照规则取出菜单
-        List<Menu> list1 = list.stream()
-                .filter(el -> includeButton ? el.getType() <= 3 : el.getType() != 3)
+        if (!includePermission) {
+            list = list.stream()
+                .filter(el -> el.getType() != MenuType.BUTTON.getType())
                 .collect(Collectors.toList());
+        }
         return list;
     }
 }

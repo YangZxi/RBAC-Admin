@@ -62,12 +62,7 @@ public class RoleController {
             );
         } else {
             QueryWrapper<Role> wrapper = new QueryWrapper();
-            WrapperUtils.bindSearch(wrapper, pager);
-            if (StrUtil.isNotBlank(pager.getWord())) {
-                wrapper.like("name", pager.getWord())
-                    .or().like("name_zh", pager.getWord())
-                    .or().like("`desc`", pager.getWord());
-            }
+            WrapperUtils.bindSearch(wrapper, pager, "name", "name_zh", "`desc`");
             return ResponseUtils.buildSuccess("获取了角色列表",
                     roleService.page(pager, wrapper));
         }

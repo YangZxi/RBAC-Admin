@@ -1,9 +1,14 @@
 package cn.xiaosm.yadmin.basic.util.mail;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.resource.ResourceUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.entity.Prop;
+import cn.xiaosm.yadmin.basic.entity.vo.MailVO;
 import cn.xiaosm.yadmin.basic.exception.CanShowException;
 import cn.xiaosm.yadmin.basic.service.PropService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +45,16 @@ public class MailUtils {
         this.javaMailSender = javaMailSender;
         this.mailConfig = mailConfig;
         updateMail();
+    }
+
+    public static void sendMail(MailVO mailVO) {
+        if (StrUtil.isNotBlank(mailVO.getTemplate())) {
+            String content = ResourceUtil.readUtf8Str("/template/" + mailVO.getTemplate());
+            mailVO.setContent(content);
+            mailVO.setIsHtml(true);
+            log.error("读取模板出现错误");
+        }
+        MailUtils.sendMail(mailVO.getTo(), mailVO.getSubject(), mailVO.getContent(), mailVO.getIsHtml());
     }
 
     public static void sendMail(String to, String subject, String content) {

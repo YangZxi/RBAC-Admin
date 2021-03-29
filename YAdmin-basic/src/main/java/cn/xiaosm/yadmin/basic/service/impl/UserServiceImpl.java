@@ -1,5 +1,6 @@
 package cn.xiaosm.yadmin.basic.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.UserLoginTrack;
@@ -8,6 +9,7 @@ import cn.xiaosm.yadmin.basic.entity.vo.UserVO;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.mapper.UserMapper;
 import cn.xiaosm.yadmin.basic.service.UserService;
+import cn.xiaosm.yadmin.basic.util.ResponseUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -35,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     UserMapper userMapper;
 
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public ResponseBody getById(Integer id) {
@@ -50,9 +52,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public boolean modifyEntity(User user) {
-        if (Objects.nonNull(user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
         user.setUpdateTime(new Date());
         userMapper.updateById(user);
         if (Objects.nonNull( ((UserVO) user).getRoleIds() )) {
@@ -69,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public boolean addEntity(User user) {
         user.setCreateTime(new Date()).setUpdateTime(new Date());
         // 设置默认密码
-        user.setPassword(passwordEncoder.encode("123456"));
+        user.setPassword(bCryptPasswordEncoder.encode("123456"));
         userMapper.insert(user);
         this.addUserRoles(user.getId(), ((UserVO) user).getRoleIds());
         return true;
@@ -152,7 +151,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User login(User user) {
         User condition = new User();
         condition.setUsername(user.getUsername());
-        condition.setPassword(passwordEncoder.encode(user.getPassword()));
+        condition.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         QueryWrapper<User> queryWrapper = new QueryWrapper<>(condition);
         User re = this.getOne(queryWrapper);
         if (Objects.isNull(re)) return null;

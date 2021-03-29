@@ -10,12 +10,13 @@
  */
 package cn.xiaosm.yadmin.basic.entity;
 
+import cn.hutool.core.map.MapUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 〈一句话功能简述〉
@@ -31,7 +32,8 @@ public class LoginUser extends User implements UserDetails {
     private String password;
     private String roleIds;
     private List<Role> roles;
-    private List<Menu> menus;
+    private List<Menu> menus; // 树结构的菜单列表
+    private Map<Integer, Menu> menusOriginal; // 源菜单列表
     private List<UserLoginTrack> userLoginTracks;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -96,6 +98,23 @@ public class LoginUser extends User implements UserDetails {
     public LoginUser setMenus(List<Menu> menus) {
         this.menus = menus;
         return this;
+    }
+
+    public Map<Integer, Menu> getMenusOriginal() {
+        return menusOriginal;
+    }
+    @JsonIgnore
+    public List<Menu> getMenusOriginalOfList() {
+        List<Menu> menus = new ArrayList<>();
+        menusOriginal.forEach((id, menu) -> menus.add(menu));
+        return menus;
+    }
+
+    public void setMenusOriginal(List<Menu> menusOriginal) {
+        if (this.menusOriginal == null) this.menusOriginal = new HashMap<>();
+        for (Menu menu : menusOriginal) {
+            this.menusOriginal.put(menu.getId(), menu);
+        }
     }
 
     public List<UserLoginTrack> getUserLoginTracks() {

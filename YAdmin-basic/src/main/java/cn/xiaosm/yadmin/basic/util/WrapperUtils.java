@@ -1,8 +1,11 @@
 package cn.xiaosm.yadmin.basic.util;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -21,6 +24,15 @@ public class WrapperUtils {
      * @return
      */
     public static QueryWrapper bindSearch(QueryWrapper wrapper, Pager pager) {
+        return bindSearch(wrapper, pager, null);
+    }
+    /**
+     * 生成用于搜索功能通用的 wrapper 对象
+     * @param wrapper
+     * @param pager
+     * @return
+     */
+    public static QueryWrapper bindSearch(QueryWrapper<?> wrapper, Pager pager, String... columns) {
         if (Objects.nonNull(pager.getStartTime())) {
             wrapper.ge("create_time", pager.getStartTime());
         }
@@ -33,7 +45,12 @@ public class WrapperUtils {
             // 如果没传将只查询 启用 和 禁用
             // wrapper.lt("status", StatusEnum.DELETED.getCode());
         }
+        if (StrUtil.isNotBlank(pager.getWord()) && ArrayUtil.isNotEmpty(columns)) {
+            for (int i = 0; i < columns.length; i++) {
+                if (i > 0) wrapper.or();
+                wrapper.like(columns[i], pager.getWord());
+            }
+        }
         return wrapper;
     }
-
 }

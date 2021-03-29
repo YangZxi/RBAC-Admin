@@ -27,8 +27,12 @@ public class MenuVO extends Menu {
     private String showType; // 数据展示格式默认为 链表
     private boolean includeButton; // 是否包含按钮
 
-    public MenuVO setParentMenu(Integer parentMenu) {
-        super.setParentMenu(parentMenu == null || parentMenu <= 0 ? 1 : parentMenu);
+    public MenuVO(Integer id, String name) {
+        super(id, name);
+    }
+
+    public MenuVO setParentMenuId(Integer parentMenuId) {
+        super.setParentMenuId(parentMenuId == null || parentMenuId <= 0 ? 1 : parentMenuId);
         return this;
     }
 

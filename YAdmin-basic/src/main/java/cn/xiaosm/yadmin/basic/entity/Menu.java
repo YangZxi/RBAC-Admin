@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -28,13 +29,11 @@ import java.util.List;
 @TableName("menu")
 public class Menu extends BaseEntity implements Cloneable {
 
-
-
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name; // 菜单名称
     private Integer type; // 菜单类型
-    private Integer parentMenu; // 上级菜单
+    private Integer parentMenuId; // 上级菜单
     private String icon; // 菜单图标
     @TableField(value = "`order`")
     private Integer order; // 排序
@@ -43,7 +42,15 @@ public class Menu extends BaseEntity implements Cloneable {
     private String permission; // 权限许可
     private Integer status; // 状态
     @TableField(exist = false)
+    @JsonIgnore
+    private Menu parent; // 子菜单
+    @TableField(exist = false)
     private List<Menu> children; // 子菜单
+
+    public Menu(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;
@@ -72,12 +79,12 @@ public class Menu extends BaseEntity implements Cloneable {
         return this;
     }
 
-    public Integer getParentMenu() {
-        return parentMenu;
+    public Integer getParentMenuId() {
+        return parentMenuId;
     }
 
-    public Menu setParentMenu(Integer parentMenu) {
-        this.parentMenu = parentMenu;
+    public Menu setParentMenuId(Integer parentMenuId) {
+        this.parentMenuId = parentMenuId;
         return this;
     }
 
@@ -133,6 +140,14 @@ public class Menu extends BaseEntity implements Cloneable {
     public Menu setStatus(Integer status) {
         this.status = status;
         return this;
+    }
+
+    public Menu getParent() {
+        return parent;
+    }
+
+    public void setParent(Menu parent) {
+        this.parent = parent;
     }
 
     public List<Menu> getChildren() {

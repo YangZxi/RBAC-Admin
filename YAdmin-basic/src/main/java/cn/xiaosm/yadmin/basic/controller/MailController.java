@@ -58,40 +58,15 @@ public class MailController {
         }
         // 更新邮箱配置
         MailUtils.updateMail();
-        try {
-            MailUtils.testConnection();
-        } catch (Exception e) {
-            b = false;
-            log.error("邮箱连接失败");
-        }
         return b ? ResponseUtils.buildSuccess("保存成功")
-            : ResponseUtils.buildError("测试连接失败###请检查配置是否都正确");
+            : ResponseUtils.buildError("保存失败");
     }
 
     @PostMapping("/send")
     @LogRecord("邮件发送")
     @PreAuthorize("hasAuthority('email:send') or hasRole('admin')")
     public ResponseBody sendMail(MailVO mailVO) throws IOException {
-        if (StrUtil.isNotBlank(mailVO.getTemplate())) {
-            InputStream in = this.getClass().getResourceAsStream("/template/" + mailVO.getTemplate());
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            PrintStream ps = new PrintStream(out);
-            byte[] size = new byte[2048];
-            int length = 0;
-            try {
-                while ((length = in.read(size)) != -1) {
-                    ps.write(size, 0, length);
-                }
-                mailVO.setContent(out.toString());
-                mailVO.setIsHtml(true);
-            } catch (IOException e) {
-                log.error("读取模板出现错误");
-            } finally {
-                ps.close();
-                out.close();
-            }
-        }
-        MailUtils.sendMail(mailVO.getTo(), mailVO.getSubject(), mailVO.getContent(), mailVO.getIsHtml());
+        MailUtils.sendMail(mailVO);
         return ResponseUtils.buildSuccess("邮件发送成功，请查看收件箱");
     }
 

@@ -41,16 +41,15 @@ public class MenuController {
     MenuService menuService;
 
     @GetMapping("")
-    // @LogRecord("菜单查询")
     @PreAuthorize("hasAuthority('menu:query') or hasRole('admin')")
     public ResponseBody queryMenus(Page<Menu> page, MenuVO menu) {
         if ("tree".equals(menu.getShowType())) {
             // 默认父级菜单为0，不包含按钮
             return ResponseUtils.buildSuccess("成功获取菜单列表",
-                    menuService.getByParentIdOfTree(menu.getParentMenu(), menu.isIncludeButton()));
+                    menuService.getByParentIdOfTree(menu.getParentMenuId(), menu.isIncludeButton()));
         } else {
             QueryWrapper<Menu> wrapper = new QueryWrapper<Menu>();
-            wrapper.eq("parent_menu", menu.getParentMenu());
+            wrapper.eq("parent_menu_id", menu.getParentMenuId());
             if (Objects.nonNull(menu.getStatus())) wrapper.eq("status", menu.getStatus());
             return ResponseUtils.buildSuccess("获取了菜单列表",
                     menuService.page(page, wrapper));

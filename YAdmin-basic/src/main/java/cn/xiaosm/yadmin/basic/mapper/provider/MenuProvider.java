@@ -58,13 +58,13 @@ public class MenuProvider {
             .WHERE("r.id IN (${roleId})")
             .WHERE("m.status = 1");
         if (Objects.isNull(parentId)) {
-            sql.WHERE("NOT ISNULL(parent_menu)");
+            sql.WHERE("NOT ISNULL(parent_menu_id)");
         } else if (parentId == 1) {
             // 由于调用此方法的 Mapper 函数只有(给)了一个参数，
             // 所以如果使用占位符代替会出现值和第一个参数值相同
-            sql.WHERE("m.parent_menu = 1");
+            sql.WHERE("m.parent_menu_id = 1");
         } else {
-            sql.WHERE("m.parent_menu = #{parentId}");
+            sql.WHERE("m.parent_menu_id = #{parentId}");
         }
         sql.GROUP_BY("m.id");
         return sql.toString();
