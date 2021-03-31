@@ -57,8 +57,14 @@ public interface RoleMapper extends BaseMapper<Role> {
     @Select("SELECT * FROM `role` WHERE `role`.user_id = #{userId}")
     RoleDTO findIncludeMenuByUserId(Integer userId);
 
+    /**
+     * 清除角色权限
+     *
+     * @param roleId
+     * @return
+     */
     @Delete("DELETE FROM `role_menu` WHERE `role_id` = #{roleId}")
-    int deleteAllRoleMenu(Integer roleId);
+    int clearRoleMenu(Integer roleId);
 
     @Insert("INSERT INTO `role_menu`(`role_id`, `menu_id`) VALUES (#{roleId}, #{menuId})")
     int insertRoleMenu(Integer roleId, Integer menuId);

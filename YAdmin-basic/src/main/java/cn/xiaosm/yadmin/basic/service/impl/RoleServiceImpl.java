@@ -65,7 +65,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         // 如果本次修改中有权限的修改
         if (Objects.nonNull( ((RoleVO) role).getMenuIds() )) {
             // 先清除所有的角色信息
-            this.removeAllRoleMenu(role.getId());
+            this.clearRoleMenu(role.getId());
             // 在进行新的插入
             this.addUserRoles(role.getId(), ((RoleVO) role).getMenuIds());
         }
@@ -73,11 +73,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     /**
-     * 删除所有权限
+     * 清除角色所有权限
      * @param roleId 角色id
      */
-    public void removeAllRoleMenu(Integer roleId) {
-        roleMapper.deleteAllRoleMenu(roleId);
+    public void clearRoleMenu(Integer roleId) {
+        roleMapper.clearRoleMenu(roleId);
     }
 
     /**
@@ -91,7 +91,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             try {
                 int i = roleMapper.insertRoleMenu(roleId, menuId);
             } catch (Exception e) {
-                throw new SQLOperateException("保存失败###选择菜单不存在");
+                throw new SQLOperateException("保存失败###选择的菜单不存在");
             }
         }
         return 1;
