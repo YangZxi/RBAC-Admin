@@ -16,6 +16,16 @@
     <packaging>jar</packaging>
     <properties>
         <java.version>1.8</java.version>
+        <mybatis-plus.version>3.3.2</mybatis-plus.version>
+        <mysql.version>8.0.17</mysql.version>
+        <ali-pool.version>1.1.22</ali-pool.version>
+        <quartz.version>2.3.0</quartz.version>
+        <jackson.version>2.10.1</jackson.version>
+        <jwt.version>3.8.0</jwt.version>
+        <hutool.version>5.5.1</hutool.version>
+        <justauth.version>1.15.6</justauth.version>
+        <poi.version>4.1.2</poi.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -27,6 +37,42 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- mybatis-plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+
+        <!-- alibaba connection pool -->
+        <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${ali-pool.version}</version>
+        </dependency>
+        <!-- alibaba END -->
+
+        <!-- 开启jwt支持 -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+        <!-- jwt END -->
+
+        <!-- 集成快捷登录插件 -->
+        <dependency>
+            <groupId>me.zhyd.oauth</groupId>
+            <artifactId>JustAuth</artifactId>
+            <version>${justauth.version}</version>
         </dependency>
 
         <!-- 获取系统状态的jar -->

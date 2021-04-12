@@ -14,6 +14,7 @@ import cn.xiaosm.yadmin.basic.annotation.LogRecord;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.Menu;
 import cn.xiaosm.yadmin.basic.entity.vo.MenuVO;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.util.ResponseUtils;
@@ -42,7 +43,7 @@ public class MenuController {
 
     @GetMapping("")
     @PreAuthorize("hasAuthority('menu:query') or hasRole('admin')")
-    public ResponseBody queryMenus(Page<Menu> page, MenuVO menu) {
+    public ResponseBody queryMenus(Pager<Menu> page, MenuVO menu) {
         if ("tree".equals(menu.getShowType())) {
             // 默认父级菜单为0，不包含按钮
             return ResponseUtils.buildSuccess("成功获取菜单列表",

@@ -13,7 +13,9 @@ package cn.xiaosm.yadmin.basic.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.entity.Menu;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
+import cn.xiaosm.yadmin.basic.entity.dto.MenuDTO;
 import cn.xiaosm.yadmin.basic.entity.enums.MenuType;
+import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.mapper.MenuMapper;
 import cn.xiaosm.yadmin.basic.service.MenuService;
@@ -21,6 +23,7 @@ import cn.xiaosm.yadmin.basic.util.CacheUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,7 +100,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public Page<Menu> listOfPage(Page<Menu> page, QueryWrapper<Menu> queryWrapper) {
-        return null;
+        Page<Menu> menuPage = menuMapper.selectPage(page, queryWrapper);
+
+        return menuPage;
     }
 
     @Override
@@ -111,14 +116,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      */
     // @SneakyThrows
     public void clearAttr(Menu menu) {
-        if (menu.getType() == 1) {
+        if (menu.getType() == MenuType.LEVEL_1.value()) {
             menu.setComponent(null);
-        } else if (menu.getType() == 2) {
+        } else if (menu.getType() == MenuType.LEVEL_2.value()) {
 
         } else {
-            if (Objects.nonNull(menuMapper.selectOne(new QueryWrapper<Menu>(menu, "permission")))) {
-
-            }
             menu.setComponent(null);
             menu.setPath(null);
         }
@@ -146,9 +148,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             List<Menu> reList = menuList.stream()
                     .filter(el -> el.getParentMenuId() == parentMenu)
                     .collect(Collectors.toList());
-            for (Menu menu : reList) {
-
-            }
             return null;
         } else {
             return menuList.stream().filter(el -> el.getParentMenuId() == parentMenu).collect(Collectors.toList());
@@ -161,7 +160,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return
      */
     @Override
-    public List<Menu> getByParentIdOfTree(Integer parentId, boolean includeButton) {
+    public List<MenuDTO> getByParentIdOfTree(Integer parentId, boolean includeButton) {
         parentId = parentId == null || parentId < ROOT_ID ? ROOT_ID : parentId;
         return this.buildTree(this.getAll(includeButton), parentId);
     }
@@ -196,7 +195,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return
      */
     @Override
-    public List<Menu> buildTree(List<Menu> menuList) {
+    public List<MenuDTO> buildTree(List<Menu> menuList) {
         return this.buildTree(menuList, ROOT_ID, false);
     }
 
@@ -208,7 +207,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return
      */
     @Override
-    public List<Menu> buildTree(List<Menu> menuList, Integer parentId) {
+    public List<MenuDTO> buildTree(List<Menu> menuList, Integer parentId) {
         return this.buildTree(menuList, parentId, false);
     }
 
@@ -221,13 +220,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @return
      */
     @Override
-    public List<Menu> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent) {
-        List<Menu> menuTree = menuList.stream()
-                .filter(el -> includeParent ? el.getId() == parentId : el.getParentMenuId() == parentId)
-                // 过滤非启用状态的菜单
-                .filter(el-> el.getStatus() == 1)
-                .collect(Collectors.toList());
-        return this.buildTree(menuTree, menuList);
+    public List<MenuDTO> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent) {
+        // 转换为子类
+        List<MenuDTO> menuList2 = menuList.stream()
+            .map(menu -> {
+                MenuDTO menuDTO = new MenuDTO();
+                BeanUtils.copyProperties(menu, menuDTO);
+                return menuDTO;
+            }).collect(Collectors.toList());
+        List<MenuDTO> menuTree = menuList2.stream()
+            .filter(el -> includeParent ? el.getId() == parentId : el.getParentMenuId() == parentId)
+            // 过滤非启用状态的菜单
+            .filter(el-> el.getStatus() == StatusEnum.ENABLED.code())
+            .collect(Collectors.toList());
+        return this.buildTree(menuTree, menuList2);
     }
 
     /**
@@ -236,26 +242,26 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
      * @param menuList 链表菜单，通过遍历此菜单构建树（未整理的菜单）
      * @return
      */
-    private List<Menu> buildTree(List<Menu> menuTree, List<Menu> menuList) {
+    private List<MenuDTO> buildTree(List<MenuDTO> menuTree, List<MenuDTO> menuList) {
         if (menuList.isEmpty() || menuTree.isEmpty()) return menuTree;
-        List<Menu> temp = new LinkedList<>();
-        Iterator<Menu> it = null;
-        Menu next;
-        for (Menu menu : menuTree) {
+        List<MenuDTO> children = new LinkedList<>();
+        Iterator<MenuDTO> it;
+        MenuDTO next;
+        for (MenuDTO menu : menuTree) {
             // 如果是按钮，将不会继续找它的子级菜单
-            if (menu.getType() == MenuType.BUTTON.getType()) continue;
+            if (menu.getType() == MenuType.BUTTON.value()) continue;
             else {
                 it = menuList.iterator();
                 while (it.hasNext()) {
                     next = it.next();
                     if (next.getParentMenuId() == menu.getId()) {
-                        next.setParent(menu);
-                        temp.add(next);
+                        // next.setParent(menuDTO);
+                        children.add(next);
                         it.remove();
                     }
                 }
-                menu.setChildren(temp);
-                temp = new LinkedList<>();
+                menu.setChildren(children);
+                children = new LinkedList<>();
                 buildTree(menu.getChildren(), menuList);
             }
         }
@@ -271,13 +277,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<Menu> getAll(boolean includePermission) {
         List<Menu> list = (List<Menu>) CacheUtils.getObject("MenuList");
         if (Objects.isNull(list)) {
-            list = menuMapper.selectList(new QueryWrapper<Menu>().eq("status", 1));
+            list = menuMapper.selectList(new QueryWrapper<Menu>().eq("status", StatusEnum.ENABLED.code()));
             CacheUtils.saveObject("MenuList", list);
         }
         // 按照规则取出菜单
         if (!includePermission) {
             list = list.stream()
-                .filter(el -> el.getType() != MenuType.BUTTON.getType())
+                .filter(el -> el.getType() != MenuType.BUTTON.value())
                 .collect(Collectors.toList());
         }
         return list;

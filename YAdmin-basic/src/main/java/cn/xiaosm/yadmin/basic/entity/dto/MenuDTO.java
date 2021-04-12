@@ -10,7 +10,12 @@
  */
 package cn.xiaosm.yadmin.basic.entity.dto;
 
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.xiaosm.yadmin.basic.entity.Menu;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 
@@ -25,7 +30,11 @@ import java.util.List;
 public class MenuDTO extends Menu {
 
     private boolean hasChildren = true;
-    private List<Menu> children; // 子菜单
+    @JsonIgnore
+    private Menu parent; // 父菜单
+    private List<MenuDTO> children; // 子菜单
+
+    public MenuDTO() {}
 
     public MenuDTO(Integer id, String name) {
         super(id, name);
@@ -35,19 +44,23 @@ public class MenuDTO extends Menu {
         return hasChildren;
     }
 
-    public MenuDTO setHasChildren(boolean hasChildren) {
-        this.hasChildren = hasChildren;
+    public Menu getParent() {
+        return parent;
+    }
+
+    public MenuDTO setParent(Menu parent) {
+        this.parent = parent;
         return this;
     }
 
-    @Override
-    public List<Menu> getChildren() {
+    public List<MenuDTO> getChildren() {
         return children;
     }
 
-    @Override
-    public MenuDTO setChildren(List<Menu> children) {
+    public MenuDTO setChildren(List<MenuDTO> children) {
         this.children = children;
+        // 设置是否包含子菜单
+        this.hasChildren = !children.isEmpty();
         return this;
     }
 }

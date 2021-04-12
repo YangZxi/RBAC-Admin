@@ -41,11 +41,8 @@ public class Menu extends BaseEntity implements Cloneable {
     private String component; // 组件名称
     private String permission; // 权限许可
     private Integer status; // 状态
-    @TableField(exist = false)
-    @JsonIgnore
-    private Menu parent; // 子菜单
-    @TableField(exist = false)
-    private List<Menu> children; // 子菜单
+
+    public Menu() { }
 
     public Menu(Integer id, String name) {
         this.id = id;
@@ -142,20 +139,4 @@ public class Menu extends BaseEntity implements Cloneable {
         return this;
     }
 
-    public Menu getParent() {
-        return parent;
-    }
-
-    public void setParent(Menu parent) {
-        this.parent = parent;
-    }
-
-    public List<Menu> getChildren() {
-        return children;
-    }
-
-    public Menu setChildren(List<Menu> children) {
-        this.children = children;
-        return this;
-    }
 }

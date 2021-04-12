@@ -51,7 +51,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Override
     public boolean addEntity(Task task) {
         // 新建的任务默认是禁用状态
-        task.setStatus(StatusEnum.DISABLED.getCode());
+        task.setStatus(StatusEnum.DISABLED.code());
         task.setCreateTime(new Date());
         task.setUpdateTime(new Date());
         return this.save(task);
@@ -61,7 +61,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     public boolean removeEntity(Task task) {
         this.shutTask(task);
         task.setUpdateTime(new Date());
-        task.setStatus(StatusEnum.DELETED.getCode());
+        task.setStatus(StatusEnum.DELETED.code());
         return taskMapper.updateById(task) == 1 ? true : false;
     }
 

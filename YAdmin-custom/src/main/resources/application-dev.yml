@@ -10,8 +10,8 @@ spring:
     # 连接池类型
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
-  #    druid:
-  #      filters: stat
+    druid:
+      filters: stat,wall
   resources:
     # 静态资源地址，多个以逗号分割
     # static-locations: classpath:static/,file:static/

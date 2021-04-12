@@ -32,7 +32,7 @@ public class LoginUser extends User implements UserDetails {
     private String password;
     private String roleIds;
     private List<Role> roles;
-    private List<Menu> menus; // 树结构的菜单列表
+    private List<? extends Menu> menus; // 树结构的菜单列表
     private Map<Integer, Menu> menusOriginal; // 源菜单列表
     private List<UserLoginTrack> userLoginTracks;
     private Collection<? extends GrantedAuthority> authorities;
@@ -91,11 +91,11 @@ public class LoginUser extends User implements UserDetails {
         return this;
     }
 
-    public List<Menu> getMenus() {
+    public List<? extends Menu> getMenus() {
         return menus;
     }
 
-    public LoginUser setMenus(List<Menu> menus) {
+    public LoginUser setMenus(List<? extends Menu> menus) {
         this.menus = menus;
         return this;
     }

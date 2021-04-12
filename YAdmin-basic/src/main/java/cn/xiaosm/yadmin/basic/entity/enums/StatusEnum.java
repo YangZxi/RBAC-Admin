@@ -32,7 +32,7 @@ public enum StatusEnum {
         this.label = label;
     }
 
-    public int getCode() {
+    public int code() {
         return code;
     }
 
@@ -41,7 +41,7 @@ public enum StatusEnum {
         return this;
     }
 
-    public String getLabel() {
+    public String label() {
         return label;
     }
 

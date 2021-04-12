@@ -8,23 +8,23 @@ package cn.xiaosm.yadmin.basic.entity.enums;
  * @since 1.0.0
  */
 public enum MenuType {
-    LEVEL_1(1, "一级菜单"),
-    LEVEL_2(2, "二级菜单"),
-    BUTTON(3, "权限操作")
+    LEVEL_1(1, "一级菜单")
+    ,LEVEL_2(2, "二级菜单")
+    ,BUTTON(3, "权限操作")
     ;
 
-    private Integer type;
-    private String value;
+    private Integer value;
+    private String label;
 
-    MenuType(Integer type, String value) {
-        this.type = type;
+    MenuType(Integer value, String label) {
         this.value = value;
+        this.label = label;
     }
 
-    public Integer getType() {
-        return type;
-    }
-    public String getValue() {
+    public Integer value() {
         return value;
+    }
+    public String label() {
+        return label;
     }
 }

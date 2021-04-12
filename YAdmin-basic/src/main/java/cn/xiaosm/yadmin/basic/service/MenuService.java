@@ -11,6 +11,7 @@
 package cn.xiaosm.yadmin.basic.service;
 
 import cn.xiaosm.yadmin.basic.entity.Menu;
+import cn.xiaosm.yadmin.basic.entity.dto.MenuDTO;
 
 import java.util.List;
 import java.util.Set;
@@ -35,17 +36,17 @@ public interface MenuService extends BaseService<Menu> {
 
     List<Menu> getByParentId(Integer parentId, boolean getChild);
 
-    List<Menu> getByParentIdOfTree(Integer parentId, boolean includeButton);
+    List<MenuDTO> getByParentIdOfTree(Integer parentId, boolean includeButton);
 
     List<Menu> getByRoleId(Integer roleId);
 
     List<Menu> getByRoleIds(String roleId);
 
-    List<Menu> buildTree(List<Menu> menuList);
+    List<MenuDTO> buildTree(List<Menu> menuList);
 
-    List<Menu> buildTree(List<Menu> menuList, Integer parentId);
+    List<MenuDTO> buildTree(List<Menu> menuList, Integer parentId);
 
-    List<Menu> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent);
+    List<MenuDTO> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent);
 
     List<Menu> getAll(boolean includeButton);
 }
