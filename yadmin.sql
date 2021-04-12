@@ -84,7 +84,7 @@ CREATE TABLE `menu`  (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
   `type` tinyint(1) NULL DEFAULT 1 COMMENT '菜单类型',
-  `parent_menu` int NULL DEFAULT 0 COMMENT '父级菜单，如果为0则表示为顶级菜单',
+  `parent_menu_id` int NULL DEFAULT 0 COMMENT '父级菜单，如果为0则表示为顶级菜单',
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '前端图标',
   `order` tinyint NULL DEFAULT NULL COMMENT '排序',
   `path` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '组件路径',
@@ -95,8 +95,8 @@ CREATE TABLE `menu`  (
   `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `permission_unique`(`permission`) USING BTREE,
-  INDEX `parent_menu_fk`(`parent_menu`) USING BTREE,
-  CONSTRAINT `self_parent_menu` FOREIGN KEY (`parent_menu`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  INDEX `parent_menu_id_fk`(`parent_menu_id`) USING BTREE,
+  CONSTRAINT `self_parent_menu_id` FOREIGN KEY (`parent_menu_id`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------

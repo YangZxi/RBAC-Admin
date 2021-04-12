@@ -10,26 +10,14 @@
   filter: gray; /*ie9- */
 }
 
-.upload-xsm .el-upload-dragger {
-  width: 50rem !important;
-}
-
-
-.el-row--flex {
-  flex-wrap: wrap;
-}
-
 .padding-10 {
-   padding: 10px;
+  padding: 10px;
 }
-
 .padding-10-h {
-  padding: 10px 0;
+  padding: 0 10px;
 }
-
-
-.el-table--scrollable-x {
-  
+.padding-10-v {
+  padding: 10px 0;
 }
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
@@ -44,6 +32,7 @@
 ::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	/* /* border-radius: 10px; */ */
 	background-color: #F5F5F5;
 }
  
@@ -55,6 +44,23 @@
 	background-color: #555;
 }
 
+
+
+/*  */
+.upload-xsm .el-upload-dragger {
+  width: 50rem !important;
+}
+
+.el-row--flex {
+  flex-wrap: wrap;
+}
+.el-select.el-select--small {
+  width: 100%; /* 解决下拉框不能等宽问题 */
+}
+
+.el-table--scrollable-x {
+  
+}
 
 /* 设置Tab选项卡固定 */
 .content-body > .el-tabs__header {

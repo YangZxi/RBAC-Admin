@@ -73,7 +73,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     @Transactional
     public int removeById(Integer id) {
-        List<Menu> list = this.list(new QueryWrapper<Menu>().eq("parent_menu", id));
+        List<Menu> list = this.list(new QueryWrapper<Menu>().eq("parent_menu_id", id));
         if (!list.isEmpty()) {
             throw new SQLOperateException(
                     StrUtil.format("删除失败###{}此菜单下含有子菜单，本次删除操作已被取消")

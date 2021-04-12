@@ -1,76 +1,60 @@
 <!DOCTYPE html>
 <html lang=zh-CN>
 <head>
-    <meta charset=utf-8>
-    <meta http-equiv=X-UA-Compatible content="IE=edge">
-    <meta name=viewport content="width=device-width,initial-scale=1">
-    <link rel=icon href=./favicon.ico>
-    <title>简朴管理系统</title>
-    <netdna class=boots></netdna>
-    <link href=https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css rel=stylesheet>
-    <link rel=stylesheet href=https://unpkg.com/element-ui/lib/theme-chalk/index.css
-          onerror="javasript:this.href='./element/index.css'">
-    <link href=./style.css rel=stylesheet type=text/css>
-    <style type=text/css></style>
-    <link href=css/chunk-022fd673.c54076ea.css rel=prefetch>
-    <link href=css/chunk-065dbb4a.60c04dc5.css rel=prefetch>
-    <link href=css/chunk-09df4688.e89841e0.css rel=prefetch>
-    <link href=css/chunk-0b9a1e9f.c54076ea.css rel=prefetch>
-    <link href=css/chunk-175ae409.238e63ed.css rel=prefetch>
-    <link href=css/chunk-1b1f1727.238e63ed.css rel=prefetch>
-    <link href=css/chunk-275287e6.238e63ed.css rel=prefetch>
-    <link href=css/chunk-4705f87d.238e63ed.css rel=prefetch>
-    <link href=css/chunk-48ca516c.c54076ea.css rel=prefetch>
-    <link href=css/chunk-568caf38.238e63ed.css rel=prefetch>
-    <link href=css/chunk-5a4f704b.0b3a7cf0.css rel=prefetch>
-    <link href=css/chunk-61fe2827.7e9c846b.css rel=prefetch>
-    <link href=css/chunk-673fc239.238e63ed.css rel=prefetch>
-    <link href=css/chunk-6a757968.e2e1c395.css rel=prefetch>
-    <link href=css/chunk-6bec1fcb.2d147bc0.css rel=prefetch>
-    <link href=css/chunk-7eac61ca.11baffa5.css rel=prefetch>
-    <link href=css/chunk-e88f85b0.c54076ea.css rel=prefetch>
-    <link href=css/chunk-fd5d1a64.5f5478bb.css rel=prefetch>
-    <link href=js/chunk-022fd673.f9cccf06.js rel=prefetch>
-    <link href=js/chunk-065dbb4a.eca73726.js rel=prefetch>
-    <link href=js/chunk-09df4688.0d198bde.js rel=prefetch>
-    <link href=js/chunk-0b9a1e9f.53d34a62.js rel=prefetch>
-    <link href=js/chunk-175ae409.3b0435b5.js rel=prefetch>
-    <link href=js/chunk-1b1f1727.2d784174.js rel=prefetch>
-    <link href=js/chunk-275287e6.8ef7d3fb.js rel=prefetch>
-    <link href=js/chunk-2d0ae598.86898019.js rel=prefetch>
-    <link href=js/chunk-2d0b8eff.42c16e61.js rel=prefetch>
-    <link href=js/chunk-2d0d7dd6.bef7db59.js rel=prefetch>
-    <link href=js/chunk-2d0dd451.044b27e8.js rel=prefetch>
-    <link href=js/chunk-2d210bdd.5ed296aa.js rel=prefetch>
-    <link href=js/chunk-2d216660.06f69506.js rel=prefetch>
-    <link href=js/chunk-2d22269e.cd5a85dd.js rel=prefetch>
-    <link href=js/chunk-3ef296f4.e0babfda.js rel=prefetch>
-    <link href=js/chunk-4705f87d.da6b6055.js rel=prefetch>
-    <link href=js/chunk-48ca516c.12b04d6a.js rel=prefetch>
-    <link href=js/chunk-568caf38.d3b08fb1.js rel=prefetch>
-    <link href=js/chunk-5a4f704b.3ac8a1f0.js rel=prefetch>
-    <link href=js/chunk-61fe2827.bab85fbe.js rel=prefetch>
-    <link href=js/chunk-673fc239.4447e37c.js rel=prefetch>
-    <link href=js/chunk-6a757968.4ecc06d3.js rel=prefetch>
-    <link href=js/chunk-6bec1fcb.6ca018ef.js rel=prefetch>
-    <link href=js/chunk-7eac61ca.48ad6d6e.js rel=prefetch>
-    <link href=js/chunk-daf82a36.659bff43.js rel=prefetch>
-    <link href=js/chunk-e88f85b0.9b482177.js rel=prefetch>
-    <link href=js/chunk-f80123c0.e487ce67.js rel=prefetch>
-    <link href=js/chunk-fd5d1a64.27185800.js rel=prefetch>
-    <link href=css/app.7cbe1b86.css rel=preload as=style>
-    <link href=css/chunk-vendors.8a47258c.css rel=preload as=style>
-    <link href=js/app.eae98ec1.js rel=preload as=script>
-    <link href=js/chunk-vendors.62c1dfcf.js rel=preload as=script>
-    <link href=css/chunk-vendors.8a47258c.css rel=stylesheet>
-    <link href=css/app.7cbe1b86.css rel=stylesheet>
+  <meta charset=utf-8>
+  <meta http-equiv=X-UA-Compatible content="IE=edge">
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <link rel=icon href=./favicon.ico>
+  <title>YAdmin-易后台管理系统</title>
+  <netdna class=boots></netdna>
+  <link href=https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css rel=stylesheet>
+  <link rel=stylesheet href=https://unpkg.com/element-ui/lib/theme-chalk/index.css
+        onerror="javasript:this.href=./element/index.css">
+  <link href=./style.css rel=stylesheet type=text/css>
+  <style type=text/css></style>
+  <link href=css/chunk-1c54a8c8.238e63ed.css rel=prefetch>
+  <link href=css/chunk-2ac912ee.4c7b21f3.css rel=prefetch>
+  <link href=css/chunk-356f94ae.c54076ea.css rel=prefetch>
+  <link href=css/chunk-38dc79ae.2d147bc0.css rel=prefetch>
+  <link href=css/chunk-3b1fb108.0b3a7cf0.css rel=prefetch>
+  <link href=css/chunk-463ff1e7.e171bd32.css rel=prefetch>
+  <link href=css/chunk-5ddaea41.8dd08b87.css rel=prefetch>
+  <link href=css/chunk-656edc03.c54076ea.css rel=prefetch>
+  <link href=css/chunk-a80f119e.238e63ed.css rel=prefetch>
+  <link href=css/chunk-addaafa4.a15f8ce0.css rel=prefetch>
+  <link href=css/chunk-c91c33a2.238e63ed.css rel=prefetch>
+  <link href=css/chunk-dc330266.7e9c846b.css rel=prefetch>
+  <link href=js/chunk-1c54a8c8.cb1dd922.js rel=prefetch>
+  <link href=js/chunk-2ac912ee.f6a5ab21.js rel=prefetch>
+  <link href=js/chunk-2d0ab67b.4d298b01.js rel=prefetch>
+  <link href=js/chunk-2d0c4883.767e7878.js rel=prefetch>
+  <link href=js/chunk-2d0d3834.1c744bad.js rel=prefetch>
+  <link href=js/chunk-2d0d7dd6.ac878ecd.js rel=prefetch>
+  <link href=js/chunk-2d210bdd.39cca51a.js rel=prefetch>
+  <link href=js/chunk-2d2371b1.90dd17de.js rel=prefetch>
+  <link href=js/chunk-356f94ae.7705222e.js rel=prefetch>
+  <link href=js/chunk-38dc79ae.8221fd9d.js rel=prefetch>
+  <link href=js/chunk-3b1fb108.cf8f6c4b.js rel=prefetch>
+  <link href=js/chunk-463ff1e7.085bb145.js rel=prefetch>
+  <link href=js/chunk-5ddaea41.29d5d364.js rel=prefetch>
+  <link href=js/chunk-656edc03.5e77b2dc.js rel=prefetch>
+  <link href=js/chunk-a80f119e.d014e82a.js rel=prefetch>
+  <link href=js/chunk-addaafa4.91aea94a.js rel=prefetch>
+  <link href=js/chunk-c91c33a2.a4be5ba5.js rel=prefetch>
+  <link href=js/chunk-dc330266.eb395e3d.js rel=prefetch>
+  <link href=css/chunk-vendors.96751832.css rel=preload as=style>
+  <link href=css/index.74c76487.css rel=preload as=style>
+  <link href=js/chunk-vendors.f1cf6e0d.js rel=preload as=script>
+  <link href=js/index.f940e93f.js rel=preload as=script>
+  <link href=css/chunk-vendors.96751832.css rel=stylesheet>
+  <link href=css/index.74c76487.css rel=stylesheet>
 </head>
 <body>
 <noscript><strong>We're sorry but demo doesn't work properly without JavaScript enabled. Please enable it to
-    continue.</strong></noscript>
+  continue.</strong></noscript>
 <div id=app></div>
 <script></script>
-<script src=js/chunk-vendors.62c1dfcf.js></script>
-<script src=js/app.eae98ec1.js></script>
+<script src=js/chunk-vendors.f1cf6e0d.js></script>
+<script src=js/index.f940e93f.js></script>
 </body>
 </html>

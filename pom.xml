@@ -35,36 +35,10 @@
         <justauth.version>1.15.6</justauth.version>
         <poi.version>4.1.2</poi.version>
         <log4j.version>1.2.17</log4j.version>
+        <kotlin.version>1.4.31</kotlin.version>
     </properties>
 
     <dependencies>
-        <!-- springboot aop -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- springboot actuator -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <!-- springboot email -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-        <!-- hot deploy -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!-- enabled yml file prompt -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -78,24 +52,6 @@
             </exclusions>
         </dependency>
 
-        <!--<dependency>-->
-        <!--    <groupId>javax.mail</groupId>-->
-        <!--    <artifactId>mail</artifactId>-->
-        <!--    <version>1.4.7</version>-->
-        <!--</dependency>-->
-
-        <!-- mybatis-plus -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <version>${mybatis-plus.version}</version>
-        </dependency>
-
         <!-- mysql驱动 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -103,15 +59,6 @@
             <version>${mysql.version}</version>
         </dependency>
         <!-- mysql END -->
-
-        <!-- alibaba connection pool -->
-        <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${ali-pool.version}</version>
-        </dependency>
-        <!-- alibaba END -->
 
         <!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
         <dependency>
@@ -138,13 +85,7 @@
         </dependency>
         <!-- jackson END -->
 
-        <!-- 开启jwt支持 -->
-        <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>${jwt.version}</version>
-        </dependency>
-        <!-- jwt END -->
+
         <!-- 参数验证 -->
         <dependency>
             <groupId>javax.validation</groupId>
@@ -162,12 +103,7 @@
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
         </dependency>
-        <!-- 集成快捷登录插件 -->
-        <dependency>
-            <groupId>me.zhyd.oauth</groupId>
-            <artifactId>JustAuth</artifactId>
-            <version>${justauth.version}</version>
-        </dependency>
+
         <!-- 日志 -->
         <dependency>
             <groupId>log4j</groupId>
@@ -181,6 +117,11 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
+    <build>
+        <plugins>
+        </plugins>
+    </build>
 </project>

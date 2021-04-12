@@ -16,7 +16,7 @@ public class TestController {
 
     @RequestMapping("/1")
     public ResponseBody test1() {
-        return ResponseUtils.buildSuccess("ok");
+        return ResponseUtils.buildFail("ok");
     }
 
 }
