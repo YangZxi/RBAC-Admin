@@ -5,6 +5,7 @@ import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.UserLoginTrack;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
+import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
 import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.entity.vo.UserVO;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
@@ -135,8 +136,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return
      */
     @Override
-    public UserDTO getByUsername(String openId, String source) {
-        return userMapper.selectByOpenId(openId, source);
+    public UserDTO getByUsername(String openId, AuthLoginType loginType) {
+        return userMapper.selectByOpenId(openId, loginType);
     }
 
     /**

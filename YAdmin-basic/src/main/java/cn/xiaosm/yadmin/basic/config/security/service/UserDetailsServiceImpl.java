@@ -15,6 +15,7 @@ import cn.xiaosm.yadmin.basic.entity.LoginUser;
 import cn.xiaosm.yadmin.basic.entity.Menu;
 import cn.xiaosm.yadmin.basic.entity.Role;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
+import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
 import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.service.UserService;
@@ -77,7 +78,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByOpenId(String openId, String source) {
         UserDTO userDTO = null;
         if ("qq".equals(source)) {
-            userDTO = userService.getByUsername(openId, "qq_id");
+            userDTO = userService.getByUsername(openId, AuthLoginType.QQ);
         }
         if (Objects.isNull(userDTO)) return null;
         // 验证用户状态

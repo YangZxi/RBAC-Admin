@@ -14,6 +14,7 @@ import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.UserLoginTrack;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
+import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
 
 import java.util.List;
 import java.util.Set;
@@ -36,7 +37,7 @@ public interface UserService extends BaseService<User> {
 
     UserDTO getByUsername(String username);
 
-    UserDTO getByUsername(String openId, String source);
+    UserDTO getByUsername(String openId, AuthLoginType loginType);
 
     User login(User user);
 
