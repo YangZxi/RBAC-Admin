@@ -11,6 +11,7 @@
 package cn.xiaosm.yadmin.basic.service;
 
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -33,6 +34,10 @@ public interface BaseService<DOMAIN> extends IService<DOMAIN> {
 
     boolean modifyEntity(DOMAIN domain);
 
-    Page<DOMAIN> listOfPage(Page<DOMAIN> page, QueryWrapper<DOMAIN> queryWrapper);
+    // default <E extends DOMAIN> Page<DOMAIN> listOfPage(Page<DOMAIN> page, E e) {
+    //     return page;
+    // };
+
+    Pager<DOMAIN> listOfPage(Pager<DOMAIN> Pager, QueryWrapper<DOMAIN> wrapper);
 
 }

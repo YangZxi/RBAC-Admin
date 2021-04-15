@@ -105,7 +105,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:query') or hasRole('admin')")
     public ResponseBody queryUser(Pager<User> pager) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        WrapperUtils.bindSearch(wrapper, pager, "username");
+        WrapperUtils.bindSearch(wrapper, pager, "username", "nickname");
         return ResponseUtils.buildSuccess("获取了用户列表", userService.page(pager, wrapper));
     }
 

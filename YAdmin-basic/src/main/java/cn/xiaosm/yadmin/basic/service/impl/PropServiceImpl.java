@@ -12,6 +12,7 @@ package cn.xiaosm.yadmin.basic.service.impl;
 
 import cn.xiaosm.yadmin.basic.entity.Prop;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.mapper.PropMapper;
 import cn.xiaosm.yadmin.basic.service.PropService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -64,7 +65,7 @@ public class PropServiceImpl extends ServiceImpl<PropMapper, Prop> implements Pr
     }
 
     @Override
-    public Page<Prop> listOfPage(Page<Prop> page, QueryWrapper<Prop> queryWrapper) {
+    public Pager<Prop> listOfPage(Pager<Prop> pager, QueryWrapper<Prop> wrapper) {
         return null;
     }
 }

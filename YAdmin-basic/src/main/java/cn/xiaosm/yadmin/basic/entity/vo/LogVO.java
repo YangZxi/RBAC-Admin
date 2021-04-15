@@ -11,6 +11,7 @@
 package cn.xiaosm.yadmin.basic.entity.vo;
 
 import cn.hutool.core.util.StrUtil;
+import cn.xiaosm.yadmin.basic.entity.Log;
 
 /**
  * 〈一句话功能简述〉
@@ -28,7 +29,8 @@ public class LogVO {
         return type;
     }
 
-    public void setType(String type) {
+    public LogVO setType(String type) {
         this.type = StrUtil.isBlank(type.trim()) ? "INFO" : type;
+        return this;
     }
 }

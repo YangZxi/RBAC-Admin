@@ -11,6 +11,8 @@
 package cn.xiaosm.yadmin.basic.service;
 
 import cn.xiaosm.yadmin.basic.entity.Log;
+import cn.xiaosm.yadmin.basic.entity.vo.LogVO;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 
 /**
  * 〈一句话功能简述〉
@@ -22,4 +24,6 @@ import cn.xiaosm.yadmin.basic.entity.Log;
  */
 public interface LogService extends BaseService<Log> {
 
+
+    Pager<Log> listOfPage(Pager<Log> page, LogVO log);
 }

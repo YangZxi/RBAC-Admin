@@ -12,13 +12,17 @@ package cn.xiaosm.yadmin.basic.service.impl;
 
 import cn.xiaosm.yadmin.basic.entity.Log;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
+import cn.xiaosm.yadmin.basic.entity.vo.LogVO;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.mapper.LogMapper;
 import cn.xiaosm.yadmin.basic.service.LogService;
+import cn.xiaosm.yadmin.basic.util.WrapperUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -72,7 +76,17 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements LogSe
     }
 
     @Override
-    public Page<Log> listOfPage(Page<Log> page, QueryWrapper<Log> queryWrapper) {
-        return this.page(page, queryWrapper);
+    public Pager<Log> listOfPage(Pager<Log> pager, LogVO log) {
+        QueryWrapper<Log> wrapper = new QueryWrapper();
+        WrapperUtils.bindSearch(wrapper, pager, "title");
+        wrapper.eq("type", log.getType())
+            .orderByDesc("create_time");
+        return this.listOfPage(pager, wrapper);
     }
+
+    @Override
+    public Pager<Log> listOfPage(Pager<Log> pager, QueryWrapper<Log> wrapper) {
+        return this.page(pager, wrapper);
+    }
+
 }

@@ -45,14 +45,7 @@ public class LogController {
     @GetMapping
     @PreAuthorize("hasAuthority('log:query') or hasRole('admin')")
     public ResponseBody queryLogs(Pager<Log> pager, LogVO logVO) {
-        QueryWrapper<Log> wrapper = new QueryWrapper();
-        WrapperUtils.bindSearch(wrapper, pager);
-        if (StrUtil.isNotBlank(pager.getWord())) {
-            wrapper.like("title", pager.getWord());
-        }
-        wrapper.eq("type", logVO.getType())
-                .orderByDesc("create_time");
-        Page<Log> list = logService.page(pager, wrapper);
+        Page<Log> list = logService.listOfPage(pager, logVO);
         return ResponseUtils.buildSuccess("获取了日志列表", list);
     }
 

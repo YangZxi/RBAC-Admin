@@ -10,8 +10,8 @@ spring:
     # 连接池类型
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
-  #    druid:
-  #      filters: stat
+    druid:
+      filters: stat,wall
   resources:
     # 静态资源地址，多个以逗号分割
     # static-locations: classpath:static/,file:static/
@@ -28,12 +28,15 @@ spring:
 # 使用 mybatis-plus 配置
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
-  type-aliases-package: cn.xiaosm.yadmin.basic.entity
+  type-aliases-package: cn.xiaosm.yadmin.**.entity
+  # 支持统配符 * 或者 ; 分割
+  type-enums-package: cn.xiaosm.yadmin.**.entity.enums
   configuration:
+    # 下划线转驼峰命名
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
-
-
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 枚举类型处理器
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
 
 logging:
   #  config: classpath:log4j.properties

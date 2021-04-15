@@ -16,6 +16,7 @@ import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.dto.MenuDTO;
 import cn.xiaosm.yadmin.basic.entity.enums.MenuType;
 import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.mapper.MenuMapper;
 import cn.xiaosm.yadmin.basic.service.MenuService;
@@ -99,8 +100,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public Page<Menu> listOfPage(Page<Menu> page, QueryWrapper<Menu> queryWrapper) {
-        Page<Menu> menuPage = menuMapper.selectPage(page, queryWrapper);
+    public Pager<Menu> listOfPage(Pager<Menu> pager, QueryWrapper<Menu> queryWrapper) {
+        Pager<Menu> menuPage = menuMapper.selectPage(pager, queryWrapper);
         return menuPage;
     }
 

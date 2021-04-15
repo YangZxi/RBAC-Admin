@@ -80,14 +80,15 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     @Override
-    public Page<Task> listOfPage(Page<Task> page, QueryWrapper<Task> queryWrapper) {
+    public Pager<Task> listOfPage(Pager<Task> pager, QueryWrapper<Task> queryWrapper) {
         return null;
     }
 
     @Override
     public Page<Task> listOfPage(Page<Task> page, Task task) {
         QueryWrapper<Task> wrapper = new QueryWrapper<>();
-        WrapperUtils.bindSearch(wrapper,(Pager) page);
+        WrapperUtils.bindSearch(wrapper,(Pager) page, "name", "`desc`")
+            .orderByDesc("create_time");
         return this.page(page, wrapper);
     }
 
