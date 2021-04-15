@@ -13,6 +13,7 @@ package cn.xiaosm.yadmin.basic.controller;
 import cn.xiaosm.yadmin.basic.annotation.LogRecord;
 import cn.xiaosm.yadmin.basic.entity.Task;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.service.TaskService;
 import cn.xiaosm.yadmin.basic.util.ResponseUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -39,8 +40,8 @@ public class TaskController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('task:query') or hasRole('admin')")
-    public ResponseBody queryTasks(Page<Task> page, Task task) {
-        Page<Task> list = taskService.listOfPage(page, task);
+    public ResponseBody queryTasks(Pager<Task> pager, Task task) {
+        Page<Task> list = taskService.listOfPage(pager, task);
         return ResponseUtils.buildSuccess("获取了任务列表", list);
     }
 

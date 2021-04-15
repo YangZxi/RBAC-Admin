@@ -10,6 +10,9 @@
  */
 package cn.xiaosm.yadmin.basic.entity.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -18,21 +21,20 @@ package cn.xiaosm.yadmin.basic.entity.enums;
  * @create 2020/6/28
  * @since 1.0.0
  */
-public enum PropType {
+public enum PropType implements BaseEnum<String> {
 
-    EMAIL(0, "email");
+    EMAIL("email")
+    ;
 
-    private int order;
-    private String value;
+    @EnumValue
+    @JsonValue
+    private final String value;
 
-    PropType(int order, String value) {
-        this.order = order;
+    PropType(String value) {
         this.value = value;
     }
 
-    public int getOrder() {
-        return order;
-    }
+    @Override
     public String getValue() {
         return value;
     }

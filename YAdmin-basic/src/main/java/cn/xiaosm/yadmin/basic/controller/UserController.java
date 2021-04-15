@@ -103,12 +103,9 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('user:query') or hasRole('admin')")
-    public ResponseBody queryUser(Pager<User> pager, UserVO userVO) {
+    public ResponseBody queryUser(Pager<User> pager) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        WrapperUtils.bindSearch(wrapper, pager);
-        if (StrUtil.isNotBlank(pager.getWord())) {
-            wrapper.like("username", pager.getWord());
-        }
+        WrapperUtils.bindSearch(wrapper, pager, "username");
         return ResponseUtils.buildSuccess("获取了用户列表", userService.page(pager, wrapper));
     }
 

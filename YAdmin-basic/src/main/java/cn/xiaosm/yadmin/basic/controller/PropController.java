@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -41,8 +42,8 @@ public class PropController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('prop:query') or hasRole('admin')")
-    public ResponseBody queryTasks(Prop prop) {
-        if (StrUtil.isBlank(prop.getType())) {
+    public ResponseBody queryProps(Prop prop) {
+        if (Objects.isNull(prop.getType())) {
             return ResponseUtils.buildError("请求出错", null);
         }
         List<Prop> list = propService.list(new QueryWrapper<Prop>().eq("type", prop.getType()));
@@ -51,7 +52,7 @@ public class PropController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('prop:add') or hasRole('admin')")
-    public ResponseBody saveTask(@RequestBody List<Prop> props) {
+    public ResponseBody saveProp(@RequestBody List<Prop> props) {
         props.stream().forEach(el -> el.setCreateTime(new Date()));
         boolean b = propService.saveBatch(props);
         return b == true ? ResponseUtils.buildSuccess("保存成功")
@@ -60,7 +61,7 @@ public class PropController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('prop:modify') or hasRole('admin')")
-    public ResponseBody modifyTask(@RequestBody List<Prop> props) {
+    public ResponseBody modifyProp(@RequestBody List<Prop> props) {
         // boolean b = propService.modifyEntity(prop);
         // boolean b = propService.updateBatchById(props);
         boolean b = true;
@@ -73,7 +74,7 @@ public class PropController {
 
     @DeleteMapping
     @PreAuthorize("hasAuthority('prop:delete') or hasRole('admin')")
-    public ResponseBody deleteTasks(@RequestBody Set<Integer> ids) {
+    public ResponseBody deleteProps(@RequestBody Set<Integer> ids) {
         boolean b = propService.removeByIds(ids);
         return b ? ResponseUtils.buildSuccess("删除成功")
                 : ResponseUtils.buildFail("删除失败");

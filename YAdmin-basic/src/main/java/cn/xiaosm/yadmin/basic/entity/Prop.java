@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.yadmin.basic.entity;
 
+import cn.xiaosm.yadmin.basic.entity.enums.PropType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -36,7 +37,7 @@ public class Prop {
     private Integer id;
     private String propKey;
     private String propValue;
-    private String type;
+    private PropType type;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GTM+8")
     private Date createTime;
 

@@ -10,6 +10,8 @@
  */
 package cn.xiaosm.yadmin.basic.entity;
 
+import cn.xiaosm.yadmin.basic.entity.enums.MenuType;
+import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -32,7 +34,7 @@ public class Menu extends BaseEntity implements Cloneable {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name; // 菜单名称
-    private Integer type; // 菜单类型
+    private MenuType type; // 菜单类型
     private Integer parentMenuId; // 上级菜单
     private String icon; // 菜单图标
     @TableField(value = "`order`")
@@ -40,7 +42,7 @@ public class Menu extends BaseEntity implements Cloneable {
     private String path; // 组件路径
     private String component; // 组件名称
     private String permission; // 权限许可
-    private Integer status; // 状态
+    private StatusEnum status; // 状态
 
     public Menu() { }
 
@@ -67,11 +69,11 @@ public class Menu extends BaseEntity implements Cloneable {
         return this;
     }
 
-    public Integer getType() {
+    public MenuType getType() {
         return type;
     }
 
-    public Menu setType(Integer type) {
+    public Menu setType(MenuType type) {
         this.type = type;
         return this;
     }
@@ -130,11 +132,11 @@ public class Menu extends BaseEntity implements Cloneable {
         return this;
     }
 
-    public Integer getStatus() {
+    public StatusEnum getStatus() {
         return status;
     }
 
-    public Menu setStatus(Integer status) {
+    public Menu setStatus(StatusEnum status) {
         this.status = status;
         return this;
     }

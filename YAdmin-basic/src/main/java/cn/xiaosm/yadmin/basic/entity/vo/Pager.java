@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.yadmin.basic.entity.vo;
 
+import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -37,7 +38,7 @@ public class Pager<T> extends Page<T> {
     /**
      * 查询状态
      */
-    private Integer status;
+    private StatusEnum status;
 
     /**
      * 起始日期
@@ -72,8 +73,8 @@ public class Pager<T> extends Page<T> {
      * @param status
      * @return
      */
-    public Pager<T> setStatus(Integer status) {
-        this.status = status == -1 ? null : status;
+    public Pager<T> setStatus(StatusEnum status) {
+        this.status = status;
         return this;
     }
 }

@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.yadmin.basic.entity;
 
+import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -37,6 +38,6 @@ public class Task extends BaseEntity {
     private String className;
     private String methodName;
     private Integer userId;
-    private Integer status;
+    private StatusEnum status;
 
 }

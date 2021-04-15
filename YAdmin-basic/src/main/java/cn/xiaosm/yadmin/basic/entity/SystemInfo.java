@@ -13,6 +13,7 @@ package cn.xiaosm.yadmin.basic.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,16 +26,27 @@ import java.util.List;
  * @since 1.0.0
  */
 @Data
-public class SystemInfoMy {
+public class SystemInfo {
 
+    // 系统名称
     private String osName;
+    // 项目启动时间
     private Long runDateTime;
+    // 总内存
     private Double totalMemory;
+    // 已使用的内存
     private Double usedMemory;
-    private Long totalCpu;
-    private Double usedCpu;
+    // cpu空闲率
+    private Double freeCpu;
+    // cpu核心数
     private Integer cpuCount;
+    // 虚拟磁盘
     private List<Disk> disks;
+
+    public void addDisk(Disk disk) {
+        if (disks == null) disks = new ArrayList<Disk>();
+        disks.add(disk);
+    }
 
     public void setRunDateTime(long runDateTime) {
         this.runDateTime = new Date().getTime() - runDateTime;

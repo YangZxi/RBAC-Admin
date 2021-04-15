@@ -34,7 +34,7 @@ public class SystemController {
     @PreAuthorize("hasAuthority('systemInfo:query') or hasRole('admin')")
     public ResponseBody getSystemInfo() {
 
-        return ResponseUtils.buildSuccess("", SystemUtils.init());
+        return ResponseUtils.buildSuccess("", SystemUtils.info());
     }
 
 }

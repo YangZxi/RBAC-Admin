@@ -29,10 +29,14 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: cn.xiaosm.yadmin.**.entity
+  # 支持统配符 * 或者 ; 分割
+  type-enums-package: cn.xiaosm.yadmin.**.entity.enums
   configuration:
+    # 下划线转驼峰命名
     map-underscore-to-camel-case: true
-#    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 枚举类型处理器
+    default-enum-type-handler: com.baomidou.mybatisplus.extension.handlers.MybatisEnumTypeHandler
 
 logging:
   #  config: classpath:log4j.properties

@@ -10,43 +10,40 @@
  */
 package cn.xiaosm.yadmin.basic.entity.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
- * 〈一句话功能简述〉
+ * 状态枚举
  * 〈〉
  *
  * @author Young
  * @create 2020/6/21
  * @since 1.0.0
  */
-public enum StatusEnum {
+public enum StatusEnum implements BaseEnum<Integer> {
 
     DISABLED(0, "禁用"),
     ENABLED(1, "启用"),
     DELETED(2, "删除");
 
-    private int code;
-    private String label;
+    @EnumValue
+    @JsonValue
+    final int value;
+    final String label;
 
-    StatusEnum(int code, String label) {
-        this.code = code;
+    StatusEnum(int value, String label) {
+        this.value = value;
         this.label = label;
     }
 
-    public int code() {
-        return code;
+    @Override
+    public Integer getValue() {
+        return value;
     }
 
-    public StatusEnum setCode(int code) {
-        this.code = code;
-        return this;
-    }
-
-    public String label() {
+    public String getLabel() {
         return label;
     }
 
-    public StatusEnum setLabel(String label) {
-        this.label = label;
-        return this;
-    }
 }

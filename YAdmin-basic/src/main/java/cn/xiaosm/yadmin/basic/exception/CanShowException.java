@@ -10,6 +10,8 @@
  */
 package cn.xiaosm.yadmin.basic.exception;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -22,5 +24,9 @@ public class CanShowException extends RuntimeException {
 
     public CanShowException(String message) {
         super(message);
+    }
+
+    public CanShowException(String title, String message) {
+        super(StrUtil.join("###", title ,message));
     }
 }

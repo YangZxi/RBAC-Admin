@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.yadmin.basic.entity;
 
+import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -35,7 +36,8 @@ public class User extends BaseEntity {
     private String email;
     private String gender;
     private Integer age;
-    private Integer status;
+    // private Integer status;
+    private StatusEnum status;
     @JsonIgnore
     private String uuid;
 
@@ -113,11 +115,11 @@ public class User extends BaseEntity {
         return this;
     }
 
-    public Integer getStatus() {
+    public StatusEnum getStatus() {
         return status;
     }
 
-    public User setStatus(Integer status) {
+    public User setStatus(StatusEnum status) {
         this.status = status;
         return this;
     }

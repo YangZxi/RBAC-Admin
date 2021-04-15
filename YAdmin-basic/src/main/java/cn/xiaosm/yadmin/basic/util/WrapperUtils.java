@@ -26,6 +26,7 @@ public class WrapperUtils {
     public static QueryWrapper bindSearch(QueryWrapper wrapper, Pager pager) {
         return bindSearch(wrapper, pager, null);
     }
+
     /**
      * 生成用于搜索功能通用的 wrapper 对象
      * @param wrapper
@@ -41,9 +42,6 @@ public class WrapperUtils {
         }
         if (Objects.nonNull(pager.getStatus())) {
             wrapper.eq("status", pager.getStatus());
-        } else {
-            // 如果没传将只查询 启用 和 禁用
-            // wrapper.lt("status", StatusEnum.DELETED.getCode());
         }
         if (StrUtil.isNotBlank(pager.getWord()) && ArrayUtil.isNotEmpty(columns)) {
             for (int i = 0; i < columns.length; i++) {

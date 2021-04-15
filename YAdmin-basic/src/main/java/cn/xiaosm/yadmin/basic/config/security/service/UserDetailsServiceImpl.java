@@ -15,6 +15,7 @@ import cn.xiaosm.yadmin.basic.entity.LoginUser;
 import cn.xiaosm.yadmin.basic.entity.Menu;
 import cn.xiaosm.yadmin.basic.entity.Role;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
+import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.service.UserService;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -80,7 +81,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         if (Objects.isNull(userDTO)) return null;
         // 验证用户状态
-        this.validateUser(userDTO);// 转变为 UserDetails 类型
+        this.validateUser(userDTO);
         LoginUser loginUser = new LoginUser();
         BeanUtils.copyProperties(userDTO, loginUser, "");
         return loginUser;
@@ -105,7 +106,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .toArray(), ","));
         // 通过roleIds 字符串添加用户所拥有的菜单<注意，这里还只是链表结构>
         if (isAdmin.get() == true) {
-            loginUser.setMenusOriginal(menuService.getAll(true));
+            loginUser.setMenusOriginal(menuService.getAllEnable(true));
         } else {
             loginUser.setMenusOriginal(menuService.getByRoleIds(loginUser.getRoleIds()));
         }
@@ -134,10 +135,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private void validateUser(UserDTO user) {
         if (Objects.isNull(user)) {
-            throw new AuthenticationCredentialsNotFoundException("用户名输入错误");
-        } else if (user.getStatus() == 0){
-            throw new LockedException("用户已被禁用，请联系管理员");
-        } else if (user.getStatus() == 2) {
+            throw new AuthenticationCredentialsNotFoundException("用户名或密码输入错误");
+        } else if (user.getStatus() == StatusEnum.ENABLED) {
+            return;
+        } else if (user.getStatus() == StatusEnum.DISABLED){
+            throw new DisabledException("用户已被禁用，请联系管理员");
+        } else if (user.getStatus() == StatusEnum.DELETED) {
+            throw new DisabledException("用户已被删除，请联系管理员");
+        } else {
             throw new DisabledException("用户状态异常，请联系管理员");
         }
     }

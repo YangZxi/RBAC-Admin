@@ -11,6 +11,7 @@
 package cn.xiaosm.yadmin.basic.entity;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -35,7 +36,7 @@ public class Role extends BaseEntity {
     private String nameZh;
     @TableField(value = "`desc`")
     private String desc;
-    private Integer status;
+    private StatusEnum status;
 
     public Role setId(Integer id) {
         this.id = id;

@@ -10,6 +10,8 @@
  */
 package cn.xiaosm.yadmin.basic.entity.enums;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
+
 /**
  * 〈一句话功能简述〉
  * 〈〉
@@ -28,23 +30,16 @@ public enum ResponseStatus {
     DATA_EMPTY(404, "查询数据空"),
     OAUTH_UNBIND(4000, "快捷登录失败");
 
-    private int code;
-    private String msg;
+    @EnumValue
+    private final int code;
+    private final String msg;
 
     public int getCode() {
         return code;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     public String getMsg() {
         return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
     }
 
     ResponseStatus(int code, String msg) {

@@ -47,7 +47,7 @@ public class SchedulerService {
      * @Description: 添加一个定时任务
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public String addJob(Task task) {
+    public String addJob(Task task) throws ClassNotFoundException {
         try {
             Class jobClass = SpringContextUtils.createClass(task.getClassName());
             Scheduler sched = schedulerFactory.getScheduler();
@@ -83,8 +83,6 @@ public class SchedulerService {
                 logger.info("任务“{}”启动成功，CRON=[{}]", task.getName(), task.getCron());
                 return "任务“{}”启动成功，CRON=[{}]";
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SchedulerException e) {
             e.printStackTrace();
             logger.warn("ClassName: " + task.getClassName() + " is not found");

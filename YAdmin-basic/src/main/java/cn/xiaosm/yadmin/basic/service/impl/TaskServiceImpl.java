@@ -13,9 +13,12 @@ package cn.xiaosm.yadmin.basic.service.impl;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.Task;
 import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
+import cn.xiaosm.yadmin.basic.entity.vo.Pager;
+import cn.xiaosm.yadmin.basic.exception.CanShowException;
 import cn.xiaosm.yadmin.basic.mapper.TaskMapper;
 import cn.xiaosm.yadmin.basic.scheduler.SchedulerService;
 import cn.xiaosm.yadmin.basic.service.TaskService;
+import cn.xiaosm.yadmin.basic.util.WrapperUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -24,7 +27,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -51,31 +53,30 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Override
     public boolean addEntity(Task task) {
         // 新建的任务默认是禁用状态
-        task.setStatus(StatusEnum.DISABLED.code());
-        task.setCreateTime(new Date());
-        task.setUpdateTime(new Date());
-        return this.save(task);
+        task.setStatus(StatusEnum.DISABLED);
+        return taskMapper.insert(task) == 1;
     }
 
     @Override
     public boolean removeEntity(Task task) {
         this.shutTask(task);
         task.setUpdateTime(new Date());
-        task.setStatus(StatusEnum.DELETED.code());
-        return taskMapper.updateById(task) == 1 ? true : false;
+        task.setStatus(StatusEnum.DELETED);
+        return taskMapper.updateById(task) == 1;
     }
 
     @Override
     public boolean modifyEntity(Task task) {
-        if (task.getStatus() == 1) {
+        int n = taskMapper.updateById(task);
+        if (task.getStatus() == StatusEnum.ENABLED) {
             task = this.getOne(new QueryWrapper<Task>().eq("id", task.getId()));
-            // 如果状态为1开启任务
+            // 如果状态为开启则启动任务
             this.startTask(task);
-        } else if (task.getStatus() == 0) {
+        } else {
             task = this.getOne(new QueryWrapper<Task>().eq("id", task.getId()));
             this.shutTask(task);
         }
-        return this.updateById(task);
+        return n == 1;
     }
 
     @Override
@@ -86,11 +87,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Override
     public Page<Task> listOfPage(Page<Task> page, Task task) {
         QueryWrapper<Task> wrapper = new QueryWrapper<>();
-        if (Objects.isNull(task.getStatus()) || task.getStatus() < 0) {
-            wrapper.lt("status", 2);
-        } else {
-            wrapper.eq("status", task.getStatus());
-        }
+        WrapperUtils.bindSearch(wrapper,(Pager) page);
         return this.page(page, wrapper);
     }
 
@@ -108,9 +105,13 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         return removeEntity(new Task().setId(id)) ? 1 : 0;
     }
 
+    /**
+     * 启动所有任务
+     * @return
+     */
     @Override
     public int startAllTask() {
-        List<Task> tasks = this.list(new QueryWrapper<Task>().eq("status", 1));
+        List<Task> tasks = this.list(new QueryWrapper<Task>().eq("status", StatusEnum.ENABLED.getValue()));
         for (Task task : tasks) {
             this.startTask(task);
         }
@@ -124,7 +125,15 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     public boolean startTask(Task task) {
-        String s = schedulerService.addJob(task);
+        try {
+            String s = schedulerService.addJob(task);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new CanShowException("启动任务失败",  e.getMessage() + "不存在");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CanShowException("创建任务失败");
+        }
         return true;
     }
 

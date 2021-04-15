@@ -38,8 +38,13 @@ public class GlobalExceptionHandler {
     public ResponseBody catchException(Throwable e) {
         log.error(e.getMessage());
         return ResponseUtils.buildError("请求出错，详情请查看后台日志");
-}
+    }
 
+    /**
+     * 实体类参数验证错误
+     * @param e
+     * @return
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseBody catchValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage());

@@ -49,4 +49,6 @@ public interface MenuService extends BaseService<Menu> {
     List<MenuDTO> buildTree(List<Menu> menuList, Integer parentId, boolean includeParent);
 
     List<Menu> getAll(boolean includeButton);
+
+    List<Menu> getAllEnable(boolean includePermission);
 }
