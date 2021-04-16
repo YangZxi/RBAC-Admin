@@ -16,7 +16,7 @@ import cn.xiaosm.yadmin.basic.entity.Menu;
 import cn.xiaosm.yadmin.basic.entity.Role;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
-import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
+import cn.xiaosm.yadmin.basic.entity.enums.UserOpenType;
 import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.service.UserService;
@@ -26,14 +26,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -80,7 +78,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByOpenId(String openId, String source) {
         UserDTO userDTO = null;
         if ("qq".equals(source)) {
-            userDTO = userService.getByUsername(openId, AuthLoginType.QQ);
+            userDTO = userService.getByUsername(openId, UserOpenType.QQ);
         }
         if (Objects.isNull(userDTO)) return null;
         // 验证用户状态

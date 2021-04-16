@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.enums.IEnum;
  * @create 2021/4/15
  * @since 1.0.0
  */
-public enum AuthLoginType implements IEnum<String> {
+public enum UserOpenType implements IEnum<String> {
     QQ("QQ", "QQ快捷登录")
     ;
 
@@ -15,7 +15,7 @@ public enum AuthLoginType implements IEnum<String> {
     private final String type;
     private final String desc;
 
-    AuthLoginType(String type, String desc) {
+    UserOpenType(String type, String desc) {
         this.type = type;
         this.desc = desc;
     }

@@ -4,23 +4,25 @@ import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.UserLoginTrack;
+import cn.xiaosm.yadmin.basic.entity.UserOpen;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
-import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
+import cn.xiaosm.yadmin.basic.entity.dto.UserOpenDTO;
+import cn.xiaosm.yadmin.basic.entity.enums.UserOpenType;
 import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.entity.vo.UserVO;
+import cn.xiaosm.yadmin.basic.exception.CanShowException;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.mapper.UserMapper;
+import cn.xiaosm.yadmin.basic.mapper.UserOpenMapper;
 import cn.xiaosm.yadmin.basic.service.UserService;
-import cn.xiaosm.yadmin.basic.util.ResponseUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.bind.annotation.XmlType;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +40,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    UserOpenMapper userOpenMapper;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -57,6 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public boolean modifyEntity(User user) {
+        if (this.isExist(user)) throw new SQLOperateException("用户名" + user.getUsername() + "已存在");
         int i = userMapper.updateById(user);
         if (Objects.nonNull( ((UserVO) user).getRoleIds() )) {
             // 先清除所有的角色信息
@@ -70,11 +75,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public boolean addEntity(User user) {
+        if (this.isExist(user)) throw new SQLOperateException("用户名" + user.getUsername() + "已存在");
         // 设置默认密码
         this.defaultPass(user);
         userMapper.insert(user);
         this.addUserRoles(user.getId(), ((UserVO) user).getRoleIds());
         return true;
+    }
+
+    public boolean isExist(@NotNull User user) {
+        if (StrUtil.isBlank(user.getUsername())) return false;
+        return userMapper.selectOne(
+            new QueryWrapper<User>()
+                .eq("username", user.getUsername())
+        ) != null;
     }
 
     /**
@@ -198,7 +212,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return
      */
     @Override
-    public UserDTO getByUsername(String openId, AuthLoginType loginType) {
+    public UserDTO getByUsername(String openId, UserOpenType loginType) {
         return userMapper.selectByOpenId(openId, loginType);
     }
 
@@ -253,5 +267,59 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         track.setLoginTime(new Date());
         return userMapper.insertUserTrack(track) == 1 ? true : false;
         // return userMapper.insertUserTrack(userId, ip, new Date()) == 1 ? true : false;
+    }
+
+    @Override
+    public List<UserOpen> getUserOpenByUserId(Integer userId) {
+        return userOpenMapper.selectList(new QueryWrapper<UserOpen>().eq("user_id", userId));
+    }
+
+    @Override
+    public boolean addUserOpen(UserOpen userOpen) {
+        // 查询当前的UserOpen信息是否已经被绑定
+        if (!isUnbind(userOpen))
+            throw new CanShowException(StrUtil.format("当前{}账号已被绑定", userOpen.getType()));
+        // 根据平台类型查询当前用户是否有重复的信息
+        UserOpen userDB = userOpenMapper.selectOne(
+            new QueryWrapper<UserOpen>()
+                .eq("user_id", userOpen.getUserId())
+                .eq("type", userOpen.getType())
+        );
+        if (userDB != null) {
+            userOpen.setId(userDB.getId()).clearTime();
+            return userOpenMapper.updateById(userOpen) == 1;
+        }
+        return userOpenMapper.insert(userOpen) == 1;
+    }
+
+    /**
+     * 查询当前openId是否没有被绑定
+     *
+     * @param userOpen
+     * @return
+     */
+    public boolean isUnbind(UserOpen userOpen) {
+        UserOpen open = userOpenMapper.selectOne(new QueryWrapper<UserOpen>()
+            .eq("open_id", userOpen.getOpenId())
+            .eq("type", userOpen.getType()));
+        /**
+         * 数据库不存在
+         * 数据库已存在的用户Id与需要绑定的用户id相同
+         */
+        return open == null || open.getUserId() == userOpen.getUserId();
+    }
+
+    public boolean removeUserOpen(UserOpen userOpen) {
+        return userOpenMapper.deleteById(userOpen) == 1;
+    }
+
+    /**
+     * 删除用户的open信息
+     * @param userOpen
+     * @return
+     */
+    @Override
+    public boolean revokeUserOpen(UserOpen userOpen) {
+        return userOpenMapper.deleteById(userOpen) == 1;
     }
 }

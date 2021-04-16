@@ -70,4 +70,10 @@ public class BaseEntity implements Cloneable, Serializable {
             return null;
         }
     }
+
+    public BaseEntity clearTime() {
+        this.createTime = null;
+        this.updateTime = null;
+        return this;
+    }
 }

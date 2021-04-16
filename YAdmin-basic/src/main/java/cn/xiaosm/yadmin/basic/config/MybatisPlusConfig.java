@@ -51,6 +51,7 @@ public class MybatisPlusConfig {
 
 /**
  * mybatis-plus中 @TableField注解的 fill 属性的自动注入实现
+ * 注意：仅在值为空的时候才会进行注入
  */
 @Component
 class MyMetaObjectHandler implements MetaObjectHandler {

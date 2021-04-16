@@ -2,8 +2,9 @@ package cn.xiaosm.yadmin.basic.mapper;
 
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.UserLoginTrack;
+import cn.xiaosm.yadmin.basic.entity.UserOpen;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
-import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
+import cn.xiaosm.yadmin.basic.entity.enums.UserOpenType;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -60,7 +61,7 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("SELECT u.* FROM `user` u LEFT JOIN `user_open` o ON u.id = o.user_id" +
             " WHERE o.type = #{type} AND o.open_id = #{openId}")
     @ResultMap(value = "userRoleMap")
-    UserDTO selectByOpenId(@Param("openId") String openId, @Param("type") AuthLoginType type);
+    UserDTO selectByOpenId(@Param("openId") String openId, @Param("type") UserOpenType type);
 
     /**
      * 查询用户最近 1 条登录记录

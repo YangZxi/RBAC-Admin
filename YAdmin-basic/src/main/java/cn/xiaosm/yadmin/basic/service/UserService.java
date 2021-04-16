@@ -13,8 +13,9 @@ package cn.xiaosm.yadmin.basic.service;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.UserLoginTrack;
+import cn.xiaosm.yadmin.basic.entity.UserOpen;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
-import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
+import cn.xiaosm.yadmin.basic.entity.enums.UserOpenType;
 
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,10 @@ public interface UserService extends BaseService<User> {
 
     ResponseBody getById(Integer id);
 
+    List<UserOpen> getUserOpenByUserId(Integer userId);
+
+    boolean addUserOpen(UserOpen userOpen);
+
     boolean modPassword(User user);
 
     boolean modPassword(User user, String password);
@@ -45,11 +50,13 @@ public interface UserService extends BaseService<User> {
 
     UserDTO getByUsername(String username);
 
-    UserDTO getByUsername(String openId, AuthLoginType loginType);
+    UserDTO getByUsername(String openId, UserOpenType loginType);
 
     User login(User user);
 
     List<UserLoginTrack> listOfTrack(Integer userId, Integer size);
 
     boolean addLoginTrack(Integer userId, String ip);
+
+    boolean revokeUserOpen(UserOpen userOpen);
 }

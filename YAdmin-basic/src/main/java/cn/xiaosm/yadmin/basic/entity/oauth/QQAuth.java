@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.yadmin.basic.entity.oauth;
 
+import cn.xiaosm.yadmin.basic.entity.enums.UserOpenType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
@@ -32,6 +33,6 @@ public class QQAuth {
     private String appid;
     private String appkey;
     private String callback;
-
+    private UserOpenType type = UserOpenType.QQ;
 
 }

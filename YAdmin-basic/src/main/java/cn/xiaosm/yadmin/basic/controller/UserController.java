@@ -17,8 +17,8 @@ import cn.xiaosm.yadmin.basic.annotation.LogRecord;
 import cn.xiaosm.yadmin.basic.config.security.service.TokenService;
 import cn.xiaosm.yadmin.basic.entity.LoginUser;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
-import cn.xiaosm.yadmin.basic.entity.ResponseEntity;
 import cn.xiaosm.yadmin.basic.entity.User;
+import cn.xiaosm.yadmin.basic.entity.UserOpen;
 import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.entity.vo.UserVO;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
@@ -27,14 +27,13 @@ import cn.xiaosm.yadmin.basic.util.CacheUtils;
 import cn.xiaosm.yadmin.basic.util.ResponseUtils;
 import cn.xiaosm.yadmin.basic.util.WrapperUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -164,4 +163,15 @@ public class UserController {
         return ResponseUtils.buildSuccess("删除用户成功，本次删除" + b + "条用户");
     }
 
+    @GetMapping("/open")
+    public ResponseBody getUserOpen(HttpServletRequest request) {
+        List<UserOpen> opens = userService.getUserOpenByUserId(tokenService.getLoginUser(request).getId());
+        return ResponseUtils.buildSuccess(opens);
+    }
+
+    @DeleteMapping("/open")
+    public ResponseBody getUserOpen(@RequestBody UserOpen userOpen) {
+        return userService.revokeUserOpen(userOpen) ?
+            ResponseUtils.buildSuccess("解绑成功") : ResponseUtils.buildFail("解绑失败");
+    }
 }
