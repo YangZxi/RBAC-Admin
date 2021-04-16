@@ -10,10 +10,13 @@
  */
 package cn.xiaosm.yadmin.basic.entity;
 
+import cn.xiaosm.yadmin.basic.config.jackson.LocalDateTimeJsonSerializer;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -31,17 +34,14 @@ import java.util.Date;
 @KeySequence
 public class BaseEntity implements Cloneable, Serializable {
 
-    // @TableId(type = IdType.AUTO)
-    // private Integer id;
-
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateTimeJsonSerializer.class)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime updateTime;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateTimeJsonSerializer.class)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createTime;
 
     public LocalDateTime getUpdateTime() {

@@ -36,7 +36,6 @@ public class User extends BaseEntity {
     private String email;
     private String gender;
     private Integer age;
-    // private Integer status;
     private StatusEnum status;
     @JsonIgnore
     private String uuid;

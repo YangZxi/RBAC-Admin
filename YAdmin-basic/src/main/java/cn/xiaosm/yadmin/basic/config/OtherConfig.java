@@ -27,16 +27,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class OtherConfig {
 
     /**
-     * 解决 jackson 序列化报错问题
-     * error to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS
-     * @return
-     */
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-    }
-
-    /**
      * 密码加密处理器
      * @return
      */
