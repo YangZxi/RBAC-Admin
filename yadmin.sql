@@ -11,7 +11,7 @@
  Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 16/04/2021 14:58:37
+ Date: 16/04/2021 23:35:08
 */
 
 SET NAMES utf8mb4;
@@ -55,7 +55,7 @@ CREATE TABLE `log`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `log_user_Id_fk`(`user_id`) USING BTREE,
   CONSTRAINT `log_user_Id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 840 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 876 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of log
@@ -136,8 +136,8 @@ CREATE TABLE `properties`  (
 -- ----------------------------
 -- Records of properties
 -- ----------------------------
-INSERT INTO `properties` VALUES (13, 'email_username', '', 'email', '2020-06-28 19:43:56');
-INSERT INTO `properties` VALUES (14, 'email_password', '', 'email', '2020-06-28 19:43:56');
+INSERT INTO `properties` VALUES (13, 'email_username', 'service@xiaosm.cn', 'email', '2020-06-28 19:43:56');
+INSERT INTO `properties` VALUES (14, 'email_password', 'yangzxservice..', 'email', '2020-06-28 19:43:56');
 INSERT INTO `properties` VALUES (15, 'email_send_name', 'YAdmin-易后台管理系统', 'email', '2020-06-28 19:43:56');
 INSERT INTO `properties` VALUES (16, 'email_server_host', 'smtp.ym.163.com', 'email', '2020-06-28 19:43:56');
 INSERT INTO `properties` VALUES (17, 'email_server_port', '994', 'email', '2020-06-28 19:43:56');
@@ -156,16 +156,15 @@ CREATE TABLE `role`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
 INSERT INTO `role` VALUES (1, 'ROLE_admin', '管理员', '-', 1, '2020-06-18 04:07:18', '2020-06-13 16:19:41');
 INSERT INTO `role` VALUES (2, 'ROLE_manager', '经理', '-', 1, '2021-03-29 18:38:46', '2020-06-14 05:23:29');
-INSERT INTO `role` VALUES (3, 'employee', '员工', '企业员工', 0, '2021-01-25 13:16:40', NULL);
-INSERT INTO `role` VALUES (4, 'test', 'test', NULL, 0, '2020-06-30 15:46:32', NULL);
-INSERT INTO `role` VALUES (9, 'ROLE_1', '1', NULL, 1, NULL, NULL);
+INSERT INTO `role` VALUES (3, 'ROLE_employee', '员工', '企业员工', 0, '2021-04-16 15:26:52', NULL);
+INSERT INTO `role` VALUES (4, 'ROLE_test', 'test', '测试员工数据', 0, '2021-04-16 15:25:38', NULL);
 
 -- ----------------------------
 -- Table structure for role_menu
@@ -200,6 +199,9 @@ INSERT INTO `role_menu` VALUES (2, 12);
 INSERT INTO `role_menu` VALUES (2, 13);
 INSERT INTO `role_menu` VALUES (2, 16);
 INSERT INTO `role_menu` VALUES (2, 21);
+INSERT INTO `role_menu` VALUES (3, 16);
+INSERT INTO `role_menu` VALUES (3, 2);
+INSERT INTO `role_menu` VALUES (3, 3);
 
 -- ----------------------------
 -- Table structure for task
@@ -252,8 +254,8 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', '不是木易杨', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', '111@qq.com', '男', 18, 'https://q1.qlogo.cn/g?b=qq&nk=1282381264&s=640', 1, '3641918e-24be-4805-946d-51dbc86dd41c', '2021-04-16 14:52:22', '2020-06-01 08:00:00');
-INSERT INTO `user` VALUES (2, 'test1', '测试用户-啦啦啦', '$2a$10$3KSvYFhSsCQjX4zJLN35Y.M5mIrDDRmcceRk1P9LnLcLq2MVPj2t.', '111@qq.com', '男', 19, '/upload/8431fde2-568e-471d-b576-1f0ac4709914.jpeg', 0, '6fdf2078-5e89-4a90-a833-be2f3c916b8f', '2021-03-24 15:18:35', '2020-06-12 16:42:13');
+INSERT INTO `user` VALUES (1, 'admin', '不是木易杨', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', '111@qq.com', '男', 18, 'https://q1.qlogo.cn/g?b=qq&nk=1282381264&s=640', 1, '34f53267-c61a-45de-838e-8d0d7d92eb04', '2021-04-16 23:32:22', '2020-06-01 08:00:00');
+INSERT INTO `user` VALUES (2, 'test1', '测试用户-啦啦啦', '$2a$10$2JROkp9J1aCsAiMq4iPyiOLDzSbSPbiNtAGFFwWmd/O.G.mvLGCjO', '111@qq.com', '男', 19, '/upload/8431fde2-568e-471d-b576-1f0ac4709914.jpeg', 1, 'fa804ba9-c7da-4d35-87ce-75052e2ff5d9', '2021-04-16 23:31:33', '2020-06-12 16:42:13');
 INSERT INTO `user` VALUES (3, 'ceshi-1', '测试用户-1', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2020-06-21 08:18:09', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (4, 'ceshi-2', '测试用户-2', '$2a$10$8drJJLfChPHNIQx76aGuGOkuK8KBbTVAnXLQin0ij1eLn9ECc3BVK', '111@qq.com', '女', 12, NULL, 2, ' ', '2020-06-29 13:59:21', '2020-06-13 04:42:13');
 INSERT INTO `user` VALUES (5, 'ceshi-3', '测试用户-3', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2020-06-22 07:14:58', '2020-06-13 16:42:13');
@@ -280,15 +282,15 @@ INSERT INTO `user` VALUES (25, 'ceshi-23', '测试用户-23', '21232f297a57a5a74
 INSERT INTO `user` VALUES (26, 'ceshi-24', '测试用户-24', '$2a$10$x7QP0YofIx23LfiO5aZXQ.eGn2omtnX3iWrte4WtttgpHLHFbLrNC', '111@qq.com', '男', 1, NULL, 1, '5b6073f1-727e-4824-bde0-9487cf7e1ee0', '2021-04-16 14:18:50', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (27, 'ceshi-25', '测试用户-25', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (28, 'ceshi-26', '测试用户-26', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
-INSERT INTO `user` VALUES (29, 'ceshi-27', '测试用户-27', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
+INSERT INTO `user` VALUES (29, 'ceshi-27', '测试用户-27', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2021-04-16 15:27:15', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (30, 'ceshi-28', '测试用户-28', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2021-03-28 16:18:41', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (31, 'ceshi-29', '测试用户-29', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2021-03-28 16:18:41', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (32, 'ceshi-30', '测试用户-30', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (33, 'ceshi-31', '测试用户-31', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (34, 'ceshi-32', '测试用户-32', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (35, 'ceshi-33', '测试用户-33', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
-INSERT INTO `user` VALUES (36, 'ceshi-34', '测试用户-34', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
-INSERT INTO `user` VALUES (37, 'ceshi-35', '测试用户-35', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
+INSERT INTO `user` VALUES (36, 'ceshi-34', '测试用户-34', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
+INSERT INTO `user` VALUES (37, 'ceshi-35', '测试用户-35', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (38, 'ceshi-36', '测试用户-36', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (39, 'ceshi-37', '测试用户-37', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:57', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (40, 'ceshi-38', '测试用户-38', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:58', '2020-06-13 16:42:13');
@@ -353,7 +355,7 @@ INSERT INTO `user` VALUES (98, 'ceshi-96', '测试用户-96', '21232f297a57a5a74
 INSERT INTO `user` VALUES (99, 'ceshi-97', '测试用户-97', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:05:06', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (100, 'ceshi-98', '测试用户-98', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:05:06', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (101, 'ceshi-99', '测试用户-99', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:05:06', '2020-06-13 16:42:13');
-INSERT INTO `user` VALUES (110, 'testRole1', '啦啦啦', '$2a$10$qbjhcuK.isybBuKEH4H5/eSpYlLKwrES/.0AU.lsi6c8LcQbz46Pu', 'abc@qq.com', '男', 11, NULL, 1, '', '2020-06-21 13:53:18', '2020-06-21 09:42:42');
+INSERT INTO `user` VALUES (110, 'testRole1', '啦啦啦', '$2a$10$qbjhcuK.isybBuKEH4H5/eSpYlLKwrES/.0AU.lsi6c8LcQbz46Pu', 'abc@qq.com', '男', 11, NULL, 2, '', '2020-06-21 13:53:18', '2020-06-21 09:42:42');
 INSERT INTO `user` VALUES (114, 'ceshi-112', '测试用户-112', '$2a$10$jWfGFhGekiWhNg2qF.VcB.kazSGiE6VONRHM9OhV0QgWK9LmDESi2', 'abc@qq.com', '男', 1, NULL, 1, '', '2020-06-27 14:57:19', '2020-06-27 14:57:19');
 INSERT INTO `user` VALUES (115, 'tangzz', '泽泽泽泽', '$2a$10$iE5WIKdxR0Nu9JqbXOoPre1AZURkxKwXu.wgAHLuv6/BatxWrWlta', '2191408431@qq.com', '男', 18, '/upload/3a1580da-edc8-4bca-b316-8bbd3374968d.gif', 0, '8fc66dba-d1d0-42e4-88b9-464337575795', '2021-01-25 13:42:54', '2020-06-29 14:01:10');
 INSERT INTO `user` VALUES (116, 'zezeze', '泽泽泽泽泽', '$2a$10$K0rBjf1YmJbE3cibP6DVwOlm/YcxnlnhHBy2PKuUYmYHt3S/jwJFq', '2191408431@qq.com', '男', 18, '/upload/1bb26d1d-dae9-4d3d-b55c-0333f5f79626.jpg', 2, '2ef67cba-9bcb-498d-b459-0bb38e436bbb', '2020-06-30 05:21:28', '2020-06-30 02:01:52');
@@ -371,7 +373,7 @@ CREATE TABLE `user_login_track`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `track_user_id_fk`(`user_id`) USING BTREE,
   CONSTRAINT `track_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 270 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 302 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_login_track
@@ -383,18 +385,23 @@ CREATE TABLE `user_login_track`  (
 DROP TABLE IF EXISTS `user_open`;
 CREATE TABLE `user_open`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL COMMENT '用户id',
-  `open_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '快捷登录平台中的用户id',
+  `user_id` int NULL DEFAULT NULL COMMENT '用户id',
+  `open_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '快捷登录平台中的用户id',
   `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '快捷登录平台',
+  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名称',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户头像',
+  `status` tinyint NULL DEFAULT 1 COMMENT '状态',
+  `update_time` datetime(0) NULL DEFAULT NULL,
+  `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `open_userId_fk`(`user_id`) USING BTREE,
   CONSTRAINT `open_userId_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_open
 -- ----------------------------
-INSERT INTO `user_open` VALUES (1, 1, '', 'QQ');
+INSERT INTO `user_open` VALUES (1, 1, '', 'QQ', 'today', 'http://thirdqq.qlogo.cn/g?b=oidb&k=ZGIq18FHUJLrUSWo4HrO1w&s=100&t=1617554377', 1, '2021-04-16 23:32:30', '2021-04-16 23:32:30');
 
 -- ----------------------------
 -- Table structure for user_role
