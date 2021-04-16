@@ -60,7 +60,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Override
     public boolean removeEntity(Task task) {
         this.shutTask(task);
-        task.setUpdateTime(new Date());
         task.setStatus(StatusEnum.DELETED);
         return taskMapper.updateById(task) == 1;
     }
@@ -108,11 +107,11 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     /**
      * 启动所有任务
-     * @return
+     * @return 启用任务的条数
      */
     @Override
     public int startAllTask() {
-        List<Task> tasks = this.list(new QueryWrapper<Task>().eq("status", StatusEnum.ENABLED.getValue()));
+        List<Task> tasks = this.list(new QueryWrapper<Task>().eq("status", StatusEnum.ENABLED));
         for (Task task : tasks) {
             this.startTask(task);
         }
@@ -121,8 +120,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Override
     public int shutAllTask() {
-        schedulerService.shutdownJobs();
-        return 1;
+        return schedulerService.shutdownJobs();
     }
 
     public boolean startTask(Task task) {

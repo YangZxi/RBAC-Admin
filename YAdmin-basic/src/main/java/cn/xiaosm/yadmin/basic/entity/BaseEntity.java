@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -36,27 +37,27 @@ public class BaseEntity implements Cloneable, Serializable {
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date createTime;
+    private LocalDateTime createTime;
 
-    public Date getUpdateTime() {
+    public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
-    public BaseEntity setUpdateTime(Date updateTime) {
+    public BaseEntity setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
         return this;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public BaseEntity setCreateTime(Date createTime) {
+    public BaseEntity setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
         return this;
     }

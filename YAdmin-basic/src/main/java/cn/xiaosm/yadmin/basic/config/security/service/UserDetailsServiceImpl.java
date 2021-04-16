@@ -14,11 +14,13 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.xiaosm.yadmin.basic.entity.LoginUser;
 import cn.xiaosm.yadmin.basic.entity.Menu;
 import cn.xiaosm.yadmin.basic.entity.Role;
+import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.dto.UserDTO;
 import cn.xiaosm.yadmin.basic.entity.enums.AuthLoginType;
 import cn.xiaosm.yadmin.basic.entity.enums.StatusEnum;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,12 +62,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         // 获取 userDTO 信息
-        UserDTO userDTO = userService.getByUsername(username);
+        User user = userService.getOne(new QueryWrapper<User>().eq("username", username));
         // 验证用户状态
-        this.validateUser(userDTO);
+        this.validateUser(user);
         // 转变为 UserDetails 类型
         LoginUser loginUser = new LoginUser();
-        BeanUtils.copyProperties(userDTO, loginUser, "");
+        BeanUtils.copyProperties(user, loginUser, "");
         return loginUser;
     }
 
@@ -94,6 +96,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @param loginUser
      */
     public void loadUserInfo(LoginUser loginUser) {
+        // 获取当前用户的完整数据
+        UserDTO userDTO = userService.getByUsername(loginUser.getUsername());
+        BeanUtils.copyProperties(userDTO, loginUser, "");
         // 是否管理员
         AtomicBoolean isAdmin = new AtomicBoolean(false);
         // 设置用户id（字符串，以英文逗号分隔），并判断是否为管理员
@@ -134,7 +139,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         loginUser.setMenus(menuService.buildTree(loginUser.getMenusOriginalOfList()));
     }
 
-    private void validateUser(UserDTO user) {
+    private void validateUser(User user) {
         if (Objects.isNull(user)) {
             throw new AuthenticationCredentialsNotFoundException("用户名或密码输入错误");
         } else if (user.getStatus() == StatusEnum.ENABLED) {

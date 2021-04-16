@@ -61,7 +61,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public boolean modifyEntity(Role role) {
-        role.setUpdateTime(new Date());
         this.updateById(role);
         // 如果本次修改中有权限的修改
         if (Objects.nonNull( ((RoleVO) role).getMenuIds() )) {

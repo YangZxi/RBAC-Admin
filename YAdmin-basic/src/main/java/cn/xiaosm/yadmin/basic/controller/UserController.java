@@ -10,11 +10,14 @@
  */
 package cn.xiaosm.yadmin.basic.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.StrUtil;
 import cn.xiaosm.yadmin.basic.annotation.LogRecord;
 import cn.xiaosm.yadmin.basic.config.security.service.TokenService;
 import cn.xiaosm.yadmin.basic.entity.LoginUser;
 import cn.xiaosm.yadmin.basic.entity.ResponseBody;
+import cn.xiaosm.yadmin.basic.entity.ResponseEntity;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.entity.vo.UserVO;
@@ -30,6 +33,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
@@ -72,22 +76,37 @@ public class UserController {
     public ResponseBody userInfo(@RequestBody UserVO userVO, HttpServletRequest request) {
         LoginUser loginUser = tokenService.getLoginUser(request);
         if (userVO.getId() != loginUser.getId()) {
+            return ResponseUtils.buildFail("请求被拒绝");
+        }
+        // 用户更新
+        if (userService.updateById(userVO)) {
+            // 更新内存的对象
+            BeanUtil.copyProperties(userVO, loginUser, CopyOptions.create(User.class, true));
+            CacheUtils.saveObject(loginUser.getUuid(), loginUser);
+            return ResponseUtils.buildSuccess("个人资料修改成功");
+        } else {
             return ResponseUtils.buildFail("修改失败");
+        }
+    }
+
+    @PostMapping("/password")
+    public ResponseBody password(@RequestBody UserVO userVO, HttpServletRequest request) {
+        LoginUser loginUser = tokenService.getLoginUser(request);
+        if (userVO.getId() != loginUser.getId()) {
+            return ResponseUtils.buildFail("请求被拒绝");
         }
         if (StrUtil.isNotBlank(userVO.getPassword())) {
             if (!bCryptPasswordEncoder.matches(userVO.getPassword(), loginUser.getPassword())) {
                 return ResponseUtils.buildFail("原密码错误");
             }
-            userVO.setPassword(bCryptPasswordEncoder.encode(userVO.getNewPwd()));
-        }
-        // 用户更新
-        if (userService.updateById(userVO)) {
+            boolean b = userService.modPassword(userVO, userVO.getNewPwd(), true);
             // 更新内存的对象
-            BeanUtils.copyProperties(userVO, loginUser);
+            BeanUtil.copyProperties(userVO, loginUser, CopyOptions.create(User.class, true));
             CacheUtils.saveObject(loginUser.getUuid(), loginUser);
-            return ResponseUtils.buildSuccess("个人资料修改成功");
+            return b ? ResponseUtils.buildSuccess("密码修改成功")
+                : ResponseUtils.buildFail("修改失败");
         } else {
-            return ResponseUtils.buildFail("修改失败");
+            return ResponseUtils.buildFail("原密码不可以为空");
         }
     }
 
@@ -123,9 +142,14 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:modify') or hasRole('admin')")
     public ResponseBody modifyUser(@RequestBody UserVO userVO) {
         if (userVO.getId() == 1) throw new SQLOperateException("系统保留数据，请勿操作");
-        if (userVO.getIsReset()) userVO.setPassword("123456");
+        if (userVO.getIsReset()) {
+            userService.defaultPass(userVO);
+            boolean b = userService.updateById(userVO);
+            return b ? ResponseUtils.buildSuccess("密码重置成功###新密码为123456")
+                : ResponseUtils.buildFail("密码重置失败");
+        }
         boolean b = userService.modifyEntity(userVO);
-        return b == true ? ResponseUtils.buildSuccess("修改用户信息成功")
+        return b ? ResponseUtils.buildSuccess("修改用户信息成功")
                 : ResponseUtils.buildFail("修改失败");
     }
 

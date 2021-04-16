@@ -31,6 +31,14 @@ public interface UserService extends BaseService<User> {
 
     ResponseBody getById(Integer id);
 
+    boolean modPassword(User user);
+
+    boolean modPassword(User user, String password);
+
+    boolean modPassword(User user, String password, boolean keep);
+
+    void defaultPass(User user);
+
     int removeById(Integer id);
 
     int removeByIds(Set<Integer> ids);

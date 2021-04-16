@@ -55,8 +55,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public boolean addEntity(Menu menu) {
-        menu.setCreateTime(new Date());
-        menu.setUpdateTime(new Date());
         this.clearAttr(menu);
         try {
             return this.save(menu);
@@ -95,7 +93,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public boolean modifyEntity(Menu menu) {
-        menu.setUpdateTime(new Date());
         return this.updateById(menu);
     }
 

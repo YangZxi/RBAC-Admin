@@ -76,7 +76,6 @@ public class MenuController {
         if (menu.getId() <= 36) {
             throw new SQLOperateException("系统保留数据，请勿操作");
         }
-        menu.setUpdateTime(new Date());
         boolean b = menuService.updateById(menu);
         if (b) menuService.refreshMenus();
         return b == true ? ResponseUtils.buildSuccess("修改菜单信息成功")

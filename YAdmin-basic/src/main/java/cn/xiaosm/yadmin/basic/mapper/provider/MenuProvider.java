@@ -45,17 +45,17 @@ public class MenuProvider {
 
     /**
      * 通过角色 id 和父级菜单 id 查询菜单
-     * @param roleId
+     * @param roleIds
      * @param parentId
      * @return
      */
-    public String sqlSelectByRoleIdAndParentId(String roleId, Integer parentId) {
+    public String sqlSelectByRoleIdAndParentId(String roleIds, Integer parentId) {
         SQL sql = new SQL();
         sql.SELECT("m.*")
             .FROM("menu m")
             .LEFT_OUTER_JOIN("role_menu rm ON rm.menu_id = m.id")
             .LEFT_OUTER_JOIN("role r ON rm.role_id = r.id")
-            .WHERE("r.id IN (${roleId})")
+            .WHERE("r.id IN ('${roleIds}')")
             .WHERE("m.status = 1");
         if (Objects.isNull(parentId)) {
             sql.WHERE("NOT ISNULL(parent_menu_id)");

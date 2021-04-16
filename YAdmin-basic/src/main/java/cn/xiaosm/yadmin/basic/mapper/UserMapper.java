@@ -46,8 +46,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param username
      * @return
      */
-    @Select("SELECT u.* " +
-            " FROM `user` u " +
+    @Select("SELECT u.* FROM `user` u " +
             " WHERE u.username = #{username}")
     @ResultMap(value = "userRoleMap")
     UserDTO selectByUsername(String username);
@@ -55,7 +54,7 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * qq快捷登录
      * @param openId
-     * @param source
+     * @param type
      * @return
      */
     @Select("SELECT u.* FROM `user` u LEFT JOIN `user_open` o ON u.id = o.user_id" +

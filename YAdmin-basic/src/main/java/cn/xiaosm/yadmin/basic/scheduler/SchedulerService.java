@@ -195,15 +195,17 @@ public class SchedulerService {
     /**
      * @Description:停止所有定时任务
      */
-    public String shutdownJobs() {
+    public int shutdownJobs() {
         try {
             Scheduler sched = schedulerFactory.getScheduler();
             if (!sched.isShutdown()) {
                 sched.shutdown();
             }
-            return "暂停所有任务成功";
+            logger.info("暂停所有任务成功");
+            return 1;
         } catch (SchedulerException e) {
-            return "暂停所有任务成功";
+            logger.info("暂停所有任务成功");
+            return 0;
         }
     }
 

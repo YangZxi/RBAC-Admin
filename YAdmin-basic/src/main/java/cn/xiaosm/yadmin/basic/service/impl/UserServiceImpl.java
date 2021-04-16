@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.bind.annotation.XmlType;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +42,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public static final String DEFAULT_PASS = "123456";
+
     @Override
     public ResponseBody getById(Integer id) {
         return null;
@@ -54,26 +57,85 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public boolean modifyEntity(User user) {
-        user.setUpdateTime(new Date());
-        userMapper.updateById(user);
+        int i = userMapper.updateById(user);
         if (Objects.nonNull( ((UserVO) user).getRoleIds() )) {
             // 先清除所有的角色信息
             this.removeUserRoles(user.getId());
             // 在进行新的插入
             this.addUserRoles(user.getId(), ((UserVO) user).getRoleIds());
         }
-        return true;
+        return i == 1;
     }
 
     @Override
     @Transactional
     public boolean addEntity(User user) {
-        user.setCreateTime(new Date()).setUpdateTime(new Date());
         // 设置默认密码
-        user.setPassword(bCryptPasswordEncoder.encode("123456"));
+        this.defaultPass(user);
         userMapper.insert(user);
         this.addUserRoles(user.getId(), ((UserVO) user).getRoleIds());
         return true;
+    }
+
+    /**
+     * 修改密码，但是不进行数据库操作
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public boolean modPassword(User user) {
+        return this.modPassword(user, user.getPassword(), false);
+    }
+
+    /**
+     * 修改密码，但是不进行数据库操作
+     *
+     * @param user
+     * @param password
+     * @return
+     */
+    @Override
+    public boolean modPassword(User user, String password) {
+        return this.modPassword(user, password, false);
+    }
+
+    /**
+     * 修改密码，根据keep决定是否进行数据库操作
+     * @param user
+     * @param password
+     * @param keep
+     * @return
+     */
+    @Override
+    public boolean modPassword(User user, String password, boolean keep) {
+        User newU = new User();
+        newU.setId(user.getId());
+        this.encodePass(user, password);
+        if (keep) {
+            return userMapper.updateById(user) == 1;
+        }
+        return true;
+    }
+
+    /**
+     * 设置用户密码，这里使用默认密码
+     * @param user
+     */
+    @Override
+    public void defaultPass(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(DEFAULT_PASS));
+    }
+
+    /**
+     * 设置用户密码
+     * 会在user.password中覆盖原有的密码
+     * @param user
+     * @param password
+     */
+    public void encodePass(User user, String password) {
+        if (StrUtil.isNotBlank(password))
+            user.setPassword(bCryptPasswordEncoder.encode(password));
     }
 
     /**
@@ -132,7 +194,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 通过快捷方式登录
      * @param openId
-     * @param source
+     * @param loginType
      * @return
      */
     @Override

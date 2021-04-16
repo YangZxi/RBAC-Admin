@@ -29,6 +29,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -67,11 +68,8 @@ public class SecurityAdapter extends WebSecurityConfigurerAdapter {
     private JWTAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
     private ApplicationContext applicationContext;
-
-    @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * 如果某个地址无需拦截，在此进行放行
@@ -91,7 +89,7 @@ public class SecurityAdapter extends WebSecurityConfigurerAdapter {
         // 配置自定义service
         builder.userDetailsService(userDetailsService)
                 // 配置加密方式
-                .passwordEncoder(bCryptPasswordEncoder());
+                .passwordEncoder(bCryptPasswordEncoder);
         super.configure(builder);
     }
 

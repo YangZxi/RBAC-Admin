@@ -66,11 +66,11 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * 通过角色 id 查询所有菜单
      * 这里是直接查角色拥有的所有菜单，树结构的创建交给后端处理
      *
-     * @param roleId
+     * @param roleIds
      * @return
      */
     @SelectProvider(value = MenuProvider.class, method = "sqlSelectByRoleIds")
-    List<Menu> selectAllByRoleIds(String roleId);
+    List<Menu> selectAllByRoleIds(String roleIds);
 
     /**
      * 通过角色 id 和父级菜单 id 查询所有菜单

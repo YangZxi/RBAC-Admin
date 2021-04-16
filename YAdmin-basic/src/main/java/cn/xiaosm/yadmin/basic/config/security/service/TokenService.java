@@ -154,7 +154,6 @@ public class TokenService {
             // throw new NullPointerException("Token为空");
             return null;
         }
-
         return (LoginUser) CacheUtils.getObject(this.getUUID(token));
     }
 }

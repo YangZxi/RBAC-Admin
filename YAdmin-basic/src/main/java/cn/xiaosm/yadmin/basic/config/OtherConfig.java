@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * 〈其他配置〉
@@ -35,4 +36,12 @@ public class OtherConfig {
         return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
+    /**
+     * 密码加密处理器
+     * @return
+     */
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
