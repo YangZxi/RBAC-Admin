@@ -22,7 +22,6 @@ import cn.xiaosm.yadmin.basic.mapper.MenuMapper;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.util.CacheUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +114,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public void clearAttr(Menu menu) {
         if (menu.getType() == MenuType.LEVEL_1) {
             menu.setComponent(null);
-        } else if (menu.getType() == MenuType.LEVEL_2) {
+        } else if (menu.getType() == MenuType.PAGE) {
 
         } else {
             menu.setComponent(null);

@@ -29,8 +29,8 @@ public enum StatusEnum implements BaseEnum<Integer> {
 
     @EnumValue
     @JsonValue
-    final int value;
-    final String label;
+    private final int value;
+    private final String label;
 
     StatusEnum(int value, String label) {
         this.value = value;

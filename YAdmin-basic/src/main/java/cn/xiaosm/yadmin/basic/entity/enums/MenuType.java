@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum MenuType implements BaseEnum<Integer> {
     LEVEL_1(1, "一级菜单")
-    ,LEVEL_2(2, "二级菜单")
-    ,BUTTON(3, "按钮操作")
+    , PAGE(2, "页面")
+    , BUTTON(3, "按钮操作")
     ;
 
     @EnumValue
@@ -30,6 +30,7 @@ public enum MenuType implements BaseEnum<Integer> {
     public Integer getValue() {
         return value;
     }
+
     public String getLabel() {
         return label;
     }

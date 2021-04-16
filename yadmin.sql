@@ -11,7 +11,7 @@
  Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 16/04/2021 12:40:26
+ Date: 16/04/2021 14:58:37
 */
 
 SET NAMES utf8mb4;
@@ -55,7 +55,7 @@ CREATE TABLE `log`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `log_user_Id_fk`(`user_id`) USING BTREE,
   CONSTRAINT `log_user_Id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 829 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 840 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of log
@@ -68,7 +68,7 @@ DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu`  (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
-  `type` tinyint(1) NULL DEFAULT 1 COMMENT '菜单类型',
+  `type` tinyint NULL DEFAULT 1 COMMENT '菜单类型',
   `parent_menu_id` int NULL DEFAULT 0 COMMENT '父级菜单，如果为0则表示为顶级菜单',
   `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '前端图标',
   `order` tinyint NULL DEFAULT NULL COMMENT '排序',
@@ -152,7 +152,7 @@ CREATE TABLE `role`  (
   `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色名称',
   `name_zh` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '角色中文名称',
   `desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
-  `status` tinyint(1) NULL DEFAULT 1 COMMENT '状态',
+  `status` tinyint NULL DEFAULT 1 COMMENT '状态',
   `update_time` datetime(0) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -213,7 +213,7 @@ CREATE TABLE `task`  (
   `class_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '全限定类名',
   `method_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '方法名',
   `user_id` int NULL DEFAULT NULL COMMENT '创建用户的id',
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态',
   `update_time` datetime(0) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
@@ -224,9 +224,9 @@ CREATE TABLE `task`  (
 -- ----------------------------
 -- Records of task
 -- ----------------------------
-INSERT INTO `task` VALUES (1, '心跳监控', '0/10 * * * * ?', '监控系统状态', 'cn.xiaosm.yadmin.scheduler.EmailTask', NULL, 1, '0', '2020-06-30 15:47:24', '2020-06-28 11:27:34');
-INSERT INTO `task` VALUES (2, '测试任务', '0/1 * * * * ?', NULL, 'cn.xiaosm.yadmin.scheduler.EmailTask', NULL, NULL, '2', '2020-06-30 15:47:27', '2021-04-16 12:39:58');
-INSERT INTO `task` VALUES (5, '心跳监控2', '0/10 * * * * ?', NULL, 'cn.xiaosm.yadmin.basic.scheduler.HeartTask', NULL, NULL, '1', '2021-04-16 12:39:55', '2021-04-14 14:58:37');
+INSERT INTO `task` VALUES (1, '心跳监控', '0/10 * * * * ?', '监控系统状态', 'cn.xiaosm.yadmin.scheduler.EmailTask', NULL, 1, 0, '2020-06-30 15:47:24', '2020-06-28 11:27:34');
+INSERT INTO `task` VALUES (2, '测试任务', '0/1 * * * * ?', NULL, 'cn.xiaosm.yadmin.scheduler.EmailTask', NULL, 1, 2, '2020-06-30 15:47:27', '2021-04-16 12:40:07');
+INSERT INTO `task` VALUES (5, '心跳监控2', '0/10 * * * * ?', NULL, 'cn.xiaosm.yadmin.basic.scheduler.HeartTask', NULL, 1, 1, '2021-04-16 12:40:04', '2021-04-14 14:58:37');
 
 -- ----------------------------
 -- Table structure for user
@@ -252,7 +252,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', '不是木易杨', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', '111@qq.com', '男', 18, 'https://q1.qlogo.cn/g?b=qq&nk=1282381264&s=640', 1, '496c6b14-7316-4774-9b7d-6f0b5726c04d', '2021-04-16 00:01:41', '2020-06-01 08:00:00');
+INSERT INTO `user` VALUES (1, 'admin', '不是木易杨', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', '111@qq.com', '男', 18, 'https://q1.qlogo.cn/g?b=qq&nk=1282381264&s=640', 1, '3641918e-24be-4805-946d-51dbc86dd41c', '2021-04-16 14:52:22', '2020-06-01 08:00:00');
 INSERT INTO `user` VALUES (2, 'test1', '测试用户-啦啦啦', '$2a$10$3KSvYFhSsCQjX4zJLN35Y.M5mIrDDRmcceRk1P9LnLcLq2MVPj2t.', '111@qq.com', '男', 19, '/upload/8431fde2-568e-471d-b576-1f0ac4709914.jpeg', 0, '6fdf2078-5e89-4a90-a833-be2f3c916b8f', '2021-03-24 15:18:35', '2020-06-12 16:42:13');
 INSERT INTO `user` VALUES (3, 'ceshi-1', '测试用户-1', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 2, ' ', '2020-06-21 08:18:09', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (4, 'ceshi-2', '测试用户-2', '$2a$10$8drJJLfChPHNIQx76aGuGOkuK8KBbTVAnXLQin0ij1eLn9ECc3BVK', '111@qq.com', '女', 12, NULL, 2, ' ', '2020-06-29 13:59:21', '2020-06-13 04:42:13');
@@ -277,7 +277,7 @@ INSERT INTO `user` VALUES (22, 'ceshi-20', '测试用户-20', '21232f297a57a5a74
 INSERT INTO `user` VALUES (23, 'ceshi-21', '测试用户-21', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 0, ' ', '2020-06-30 15:57:42', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (24, 'ceshi-22', '测试用户-22', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 0, ' ', '2021-04-15 10:59:22', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (25, 'ceshi-23', '测试用户-23', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 0, ' ', '2021-04-15 11:01:05', '2020-06-13 16:42:13');
-INSERT INTO `user` VALUES (26, 'ceshi-24', '测试用户-24', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', '男', 1, NULL, 1, ' ', '2021-04-16 12:31:51', '2020-06-13 16:42:13');
+INSERT INTO `user` VALUES (26, 'ceshi-24', '测试用户-24', '$2a$10$x7QP0YofIx23LfiO5aZXQ.eGn2omtnX3iWrte4WtttgpHLHFbLrNC', '111@qq.com', '男', 1, NULL, 1, '5b6073f1-727e-4824-bde0-9487cf7e1ee0', '2021-04-16 14:18:50', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (27, 'ceshi-25', '测试用户-25', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (28, 'ceshi-26', '测试用户-26', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
 INSERT INTO `user` VALUES (29, 'ceshi-27', '测试用户-27', '21232f297a57a5a743894a0e4a801fc3', '111@qq.com', NULL, NULL, NULL, 1, ' ', '2020-06-17 14:04:56', '2020-06-13 16:42:13');
@@ -371,7 +371,7 @@ CREATE TABLE `user_login_track`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `track_user_id_fk`(`user_id`) USING BTREE,
   CONSTRAINT `track_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 251 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 270 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_login_track
