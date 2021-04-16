@@ -153,7 +153,7 @@ public class QQController implements AuthLoginHandler {
             body = new ResponseBody(ResponseStatus.OAUTH_UNBIND, "快捷登录失败，请联系管理员");
         } finally {
             String script = "<script>window.opener.postMessage('{}', '{}');window.close();</script>";
-            script = StrUtil.format(script, JSONUtil.toJsonStr(body), "http://localhost:8080");
+            script = StrUtil.format(script, JSONUtil.toJsonStr(body), "http://localhost:8999");
             return script;
         }
     }
