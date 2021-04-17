@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class MenuDTO extends Menu {
     private boolean hasChildren = true;
     @JsonIgnore
     private Menu parent; // 父菜单
-    private List<MenuDTO> children; // 子菜单
+    private List<MenuDTO> children = new ArrayList<>(); // 子菜单
 
     public MenuDTO() {}
 
@@ -58,7 +59,7 @@ public class MenuDTO extends Menu {
     }
 
     public MenuDTO setChildren(List<MenuDTO> children) {
-        this.children = children;
+        this.children = children == null ? new ArrayList<>() : children;
         // 设置是否包含子菜单
         this.hasChildren = !children.isEmpty();
         return this;

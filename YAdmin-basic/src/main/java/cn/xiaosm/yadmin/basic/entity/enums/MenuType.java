@@ -1,6 +1,7 @@
 package cn.xiaosm.yadmin.basic.entity.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -33,5 +34,15 @@ public enum MenuType implements BaseEnum<Integer> {
 
     public String getLabel() {
         return label;
+    }
+
+    @JsonCreator
+    public static MenuType of(Integer code) {
+        for (MenuType menuType : values()) {
+            if (code == menuType.value) {
+                return menuType;
+            }
+        }
+        return null;
     }
 }

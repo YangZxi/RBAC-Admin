@@ -1,6 +1,9 @@
 package cn.xiaosm.yadmin.basic.factory;
 
 /**
+ * spring的类型转换器 适用于除了json数据的请求
+ * 序列化时取数据
+ *
  * @author Young
  * @create 2021/4/15
  * @since 1.0.0
@@ -39,7 +42,6 @@ public class BaseEnumConverterFactory implements ConverterFactory<String, BaseEn
                 enumMap.put(String.valueOf(e.getValue()), e);
             }
         }
-
 
         @Override
         public T convert(String source) {
