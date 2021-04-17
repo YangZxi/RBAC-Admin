@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.yadmin.basic.mapper.provider;
 
+import cn.hutool.core.util.StrUtil;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.Objects;
@@ -30,8 +31,8 @@ public class MenuProvider {
      * @param roleId
      * @return
      */
-    public String sqlSelectByRoleIdAndRootMenu(String roleId) {
-        return this.sqlSelectByRoleIdAndParentId(roleId, 1);
+    public String sqlSelectByRoleIdAndRootMenu(String roleIds) {
+        return this.sqlSelectByRoleIdAndParentId(roleIds, 1);
     }
 
     /**
@@ -50,12 +51,13 @@ public class MenuProvider {
      * @return
      */
     public String sqlSelectByRoleIdAndParentId(String roleIds, Integer parentId) {
+        if (StrUtil.isBlank(roleIds)) roleIds = "";
         SQL sql = new SQL();
         sql.SELECT("m.*")
             .FROM("menu m")
             .LEFT_OUTER_JOIN("role_menu rm ON rm.menu_id = m.id")
             .LEFT_OUTER_JOIN("role r ON rm.role_id = r.id")
-            .WHERE("r.id IN ('${roleIds}')")
+            .WHERE("r.id IN (${roleIds})")
             .WHERE("m.status = 1");
         if (Objects.isNull(parentId)) {
             sql.WHERE("NOT ISNULL(parent_menu_id)");
