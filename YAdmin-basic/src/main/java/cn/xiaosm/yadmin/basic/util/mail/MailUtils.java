@@ -47,6 +47,10 @@ public class MailUtils {
         updateMail();
     }
 
+    /**
+     * 公开的邮件发送方法
+     * @param mailVO
+     */
     public static void sendMail(MailVO mailVO) {
         if (StrUtil.isNotBlank(mailVO.getTemplate())) {
             String content = ResourceUtil.readUtf8Str("/template/" + mailVO.getTemplate());
@@ -57,6 +61,12 @@ public class MailUtils {
         MailUtils.sendMail(mailVO.getTo(), mailVO.getSubject(), mailVO.getContent(), mailVO.getIsHtml());
     }
 
+    /**
+     * 公开的邮件发送方法
+     * @param to
+     * @param subject
+     * @param content
+     */
     public static void sendMail(String to, String subject, String content) {
         MailUtils.sendMail(to, subject, content, false);
     }
@@ -86,6 +96,9 @@ public class MailUtils {
         }
     }
 
+    /**
+     * 依赖注入完成后进行 JavaMailSenderImpl 更新
+     */
     public static void updateMail() {
         mailConfig.updateMail();
     }

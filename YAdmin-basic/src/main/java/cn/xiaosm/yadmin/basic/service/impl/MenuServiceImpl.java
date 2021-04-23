@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
-    private static final Integer ROOT_ID = 1;
+    private static final Integer ROOT_ID = 1; // 根目录的ID
 
     @Autowired
     MenuMapper menuMapper;

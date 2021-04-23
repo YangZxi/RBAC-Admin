@@ -66,6 +66,9 @@ public class QQController implements AuthLoginHandler {
     TokenService tokenService;
     @Autowired
     private QQAuth qqAuth;
+    // 前端 postMessage 接收消息的地址（也相当于前端页面的地址）
+    private Integer REC_URL_PORT = 8999;
+    private String REC_URL = "http://localhost:" + REC_URL_PORT;
 
     /**
      * 跳转到快捷登录的平台网址
@@ -153,7 +156,7 @@ public class QQController implements AuthLoginHandler {
             body = new ResponseBody(ResponseStatus.OAUTH_UNBIND, "快捷登录失败，请联系管理员");
         } finally {
             String script = "<script>window.opener.postMessage('{}', '{}');window.close();</script>";
-            script = StrUtil.format(script, JSONUtil.toJsonStr(body), "http://localhost:8999");
+            script = StrUtil.format(script, JSONUtil.toJsonStr(body), REC_URL);
             return script;
         }
     }

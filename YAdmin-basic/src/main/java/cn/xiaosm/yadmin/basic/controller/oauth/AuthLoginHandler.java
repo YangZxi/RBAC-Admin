@@ -7,6 +7,7 @@ import cn.xiaosm.yadmin.basic.entity.enums.UserOpenType;
 import cn.xiaosm.yadmin.basic.service.UserService;
 import cn.xiaosm.yadmin.basic.util.ResponseUtils;
 import me.zhyd.oauth.model.AuthCallback;
+import me.zhyd.oauth.request.AuthRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,4 +55,5 @@ public interface AuthLoginHandler {
         }
         return ResponseUtils.buildError("参数不完整");
     };
+
 }

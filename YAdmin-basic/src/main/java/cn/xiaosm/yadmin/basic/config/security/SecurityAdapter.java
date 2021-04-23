@@ -137,7 +137,7 @@ public class SecurityAdapter extends WebSecurityConfigurerAdapter {
         String[] staticPath = new String[]{
             "/upload/**", "/**/*.html",
             "/**/*.css", "/**/*.js", "/**/*.map",
-            "/**/*.woff", "/**/*.ttf",
+            "/**/*.woff", "/**/*.woff2", "/**/*.ttf",
             "/**/*.png", "/**/*.jpg", "/**/*.ico",
             "/**/*.gif", "/**/*.svg"
         };

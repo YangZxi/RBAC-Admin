@@ -10,6 +10,7 @@
  */
 package cn.xiaosm.yadmin.basic.util.mail;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.extra.mail.MailAccount;
 import cn.hutool.extra.mail.MailUtil;
 import cn.xiaosm.yadmin.basic.entity.Prop;
@@ -24,10 +25,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import javax.mail.MessagingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * 〈一句话功能简述〉
@@ -41,9 +39,9 @@ import java.util.Properties;
 public class MailConfig extends MailProperties {
 
     @Autowired
-    PropService propService;
+    private PropService propService;
 
-    JavaMailSenderImpl sender = null;
+    private JavaMailSenderImpl sender = null;
 
     @Bean
     JavaMailSenderImpl createJavaMailSender() {
@@ -61,7 +59,14 @@ public class MailConfig extends MailProperties {
         sender.setUsername(map.get("email_username"));
         sender.setPassword(map.get("email_password"));
         sender.setHost(map.get("email_server_host"));
-        sender.setPort(Integer.valueOf(map.get("email_server_port")));
+        Integer port;
+        // 避免出现数据的值是控制或非数字
+        try {
+            port = Integer.valueOf(map.get("email_server_port"));
+        } catch (NumberFormatException e) {
+            port = 0;
+        }
+        sender.setPort(port);
         // sender.setProtocol("");
         sender.setDefaultEncoding("UTF-8");
         MailUtils.setFromAddress(sender.getUsername());
