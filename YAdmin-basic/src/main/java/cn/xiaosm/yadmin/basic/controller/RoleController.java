@@ -114,7 +114,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("/menu")
-    @PreAuthorize("(hasAnyAuthority('role:query') and hasAuthority('menu:query')) or hasRole('admin')")
+    @PreAuthorize("(hasAuthority('role:query') and hasAuthority('menu:query')) or hasRole('admin')")
     public ResponseBody queryMenuByRoleId(@RequestParam Integer roleId) {
         List<Integer> list = menuService.getByRoleId(roleId)
             // 取出 id

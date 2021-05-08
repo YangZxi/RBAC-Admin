@@ -12,6 +12,7 @@ package cn.xiaosm.yadmin.basic.scheduler;
 
 
 import cn.xiaosm.yadmin.basic.entity.Task;
+import cn.xiaosm.yadmin.basic.exception.CanShowException;
 import cn.xiaosm.yadmin.basic.util.SpringContextUtils;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -86,6 +87,7 @@ public class SchedulerService {
         } catch (SchedulerException e) {
             e.printStackTrace();
             logger.warn("ClassName: " + task.getClassName() + " is not found");
+            throw new CanShowException("任务启动失败", "ClassName: " + task.getClassName() + " is not found");
         }
         logger.info("任务“{}”创建出现问题", task.getName());
         return "任务" + task.getName() + "创建出现问题";

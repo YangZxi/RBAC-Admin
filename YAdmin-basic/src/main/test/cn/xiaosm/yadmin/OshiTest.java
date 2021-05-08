@@ -11,16 +11,17 @@ import oshi.hardware.GlobalMemory;
 
 import java.io.File;
 
+/**
+ * @author Young
+ * @create 2021/4/15
+ * @since 1.0.0
+ */
 @SpringBootTest
-class YadminCustomApplicationTests {
+public class OshiTest {
 
     private static final Double KB = 1024.;
     private static final Double MB = KB * 1024;
     private static final Double GB = MB * 1024;
-
-    @Test
-    void contextLoads() {
-    }
 
     @Test
     public void test1() {
@@ -48,4 +49,5 @@ class YadminCustomApplicationTests {
         info.setRunDateTime(SystemUtil.getRuntimeMXBean().getStartTime());
         System.out.printf(info.toString());
     }
+
 }

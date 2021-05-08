@@ -67,7 +67,7 @@ public class QQController implements AuthLoginHandler {
     @Autowired
     private QQAuth qqAuth;
     // 前端 postMessage 接收消息的地址（也相当于前端页面的地址）
-    private Integer REC_URL_PORT = 8999;
+    private Integer REC_URL_PORT = 8080;
     private String REC_URL = "http://localhost:" + REC_URL_PORT;
 
     /**

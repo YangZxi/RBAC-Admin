@@ -124,6 +124,7 @@ public class UserController {
     public ResponseBody queryUser(Pager<User> pager) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         WrapperUtils.bindSearch(wrapper, pager, "username", "nickname");
+        wrapper.orderByDesc("create_time");
         return ResponseUtils.buildSuccess("获取了用户列表", userService.page(pager, wrapper));
     }
 
