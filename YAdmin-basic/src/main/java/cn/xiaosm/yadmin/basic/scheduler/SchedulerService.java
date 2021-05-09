@@ -50,7 +50,7 @@ public class SchedulerService {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public String addJob(Task task) throws ClassNotFoundException {
         try {
-            Class jobClass = SpringContextUtils.createClass(task.getClassName());
+            Class jobClass = Class.forName(task.getClassName());
             Scheduler sched = schedulerFactory.getScheduler();
             TriggerKey triggerKey = TriggerKey.triggerKey(task.getId().toString(), task.getName());
             if (!Objects.isNull(sched.getTrigger(triggerKey))) {

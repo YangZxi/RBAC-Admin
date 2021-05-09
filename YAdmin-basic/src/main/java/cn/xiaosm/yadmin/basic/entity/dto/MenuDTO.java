@@ -32,7 +32,7 @@ public class MenuDTO extends Menu {
 
     private boolean hasChildren = true;
     @JsonIgnore
-    private Menu parent; // 父菜单
+    private Menu parent; // 父菜单 未使用
     private List<MenuDTO> children = new ArrayList<>(); // 子菜单
 
     public MenuDTO() {}

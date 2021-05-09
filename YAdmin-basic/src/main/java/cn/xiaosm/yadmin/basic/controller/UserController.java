@@ -23,7 +23,7 @@ import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.entity.vo.UserVO;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.service.UserService;
-import cn.xiaosm.yadmin.basic.util.CacheUtils;
+import cn.xiaosm.yadmin.basic.util.cache.CacheUtils;
 import cn.xiaosm.yadmin.basic.util.ResponseUtils;
 import cn.xiaosm.yadmin.basic.util.WrapperUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

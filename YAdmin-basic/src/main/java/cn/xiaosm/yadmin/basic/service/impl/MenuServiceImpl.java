@@ -20,7 +20,7 @@ import cn.xiaosm.yadmin.basic.entity.vo.Pager;
 import cn.xiaosm.yadmin.basic.exception.SQLOperateException;
 import cn.xiaosm.yadmin.basic.mapper.MenuMapper;
 import cn.xiaosm.yadmin.basic.service.MenuService;
-import cn.xiaosm.yadmin.basic.util.CacheUtils;
+import cn.xiaosm.yadmin.basic.util.cache.CacheUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -142,12 +142,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         if (recursive) {
             // 获取第一级子菜单
             List<Menu> reList = menuList.stream()
-                .filter(el -> el.getParentMenuId() == parentMenu)
+                .filter(el -> parentMenu.equals(el.getParentMenuId()))
                 .collect(Collectors.toList());
             return null;
         } else {
             return menuList.stream()
-                .filter(el -> el.getParentMenuId() == parentMenu)
+                .filter(el -> parentMenu.equals(el.getParentMenuId()))
                 .collect(Collectors.toList());
         }
     }
@@ -227,7 +227,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 return menuDTO;
             }).collect(Collectors.toList());
         List<MenuDTO> menuTree = menuList2.stream()
-            .filter(el -> includeParent ? el.getId() == parentId : el.getParentMenuId() == parentId)
+            .filter(el -> includeParent ? parentId.equals(el.getId()) : parentId.equals(el.getParentMenuId()))
             // 过滤非启用状态的菜单
             .filter(el-> el.getStatus() == StatusEnum.ENABLED)
             .collect(Collectors.toList());

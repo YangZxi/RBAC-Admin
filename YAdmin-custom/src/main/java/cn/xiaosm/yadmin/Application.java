@@ -1,11 +1,9 @@
 package cn.xiaosm.yadmin;
 
-import cn.xiaosm.yadmin.basic.util.mail.MailConfig;
 import cn.xiaosm.yadmin.basic.service.MenuService;
 import cn.xiaosm.yadmin.basic.service.TaskService;
-import cn.xiaosm.yadmin.basic.util.CacheUtils;
+import cn.xiaosm.yadmin.basic.util.cache.CacheUtils;
 import cn.xiaosm.yadmin.basic.util.SpringContextUtils;
-import cn.xiaosm.yadmin.basic.util.mail.MailUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -14,7 +14,7 @@ import cn.hutool.http.HttpStatus;
 import cn.xiaosm.yadmin.basic.config.security.service.TokenService;
 import cn.xiaosm.yadmin.basic.entity.LoginUser;
 import cn.xiaosm.yadmin.basic.exception.LoginException;
-import cn.xiaosm.yadmin.basic.util.CacheUtils;
+import cn.xiaosm.yadmin.basic.util.cache.CacheUtils;
 import cn.xiaosm.yadmin.basic.util.ResponseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

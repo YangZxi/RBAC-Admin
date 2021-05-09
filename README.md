@@ -59,6 +59,7 @@ YAdmin是一个基于**RBAC**的后台管理系统
 ### 项目截图
 ![登录页面](images/login.png)
 ![首页](./images/index.png)
+![个人信息](./images/info.png)
 ![用户管理](images/user.png)
 ![用户新增](images/user_add.png)
 ![角色管理](images/role.png)

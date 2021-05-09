@@ -5,7 +5,7 @@ import cn.xiaosm.yadmin.basic.entity.LoginUser;
 import cn.xiaosm.yadmin.basic.entity.User;
 import cn.xiaosm.yadmin.basic.exception.CanShowException;
 import cn.xiaosm.yadmin.basic.service.UserService;
-import cn.xiaosm.yadmin.basic.util.CacheUtils;
+import cn.xiaosm.yadmin.basic.util.cache.CacheUtils;
 import cn.xiaosm.yadmin.basic.util.ServletUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -50,7 +50,7 @@ public class TokenService {
     private final String JWT_CLAIM_UUID = "UUID";
     // 单位 分钟
     private final int MINUTE = 60 * 1000;
-    // 设置 Token 到期时间 分钟
+    // 设置 Token 到期时间 秒
     private int EXPIRES;
     // Token 验证器
     private JWTVerifier verifier = null;
@@ -88,7 +88,7 @@ public class TokenService {
         // 更新数据库中的 UUID
         userService.updateById(new User(loginUser.getId(), uuid));
         // 保存登录信息到内存
-        CacheUtils.saveObject(uuid, loginUser);
+        CacheUtils.saveObject(uuid, loginUser, EXPIRES);
         return token;
     }
 

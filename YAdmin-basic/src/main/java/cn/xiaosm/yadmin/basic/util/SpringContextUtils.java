@@ -22,8 +22,15 @@ public class SpringContextUtils implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    public static Class createClass(String className) throws ClassNotFoundException {
-        return Class.forName(className);
+    public static Object createClass(String className) {
+        Class clazz = null;
+        try {
+            clazz = Class.forName(className);
+            return getApplicationContext().getAutowireCapableBeanFactory().createBean(clazz);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return clazz;
     }
 
     /**
