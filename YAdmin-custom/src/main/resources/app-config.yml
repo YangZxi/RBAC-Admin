@@ -1,0 +1,18 @@
+web:
+  html:
+    name: YAdmin-易后台管理系统
+    title: 易后台管理系统
+    footer: Copyright @2020 YAdmin-易后台管理系统
+
+  security:
+    token:
+      header: Authorization
+      prefix: Bearer
+      secret-key: 1282381264
+      expires: 30
+
+oauth:
+  qq:
+    appid:
+    appkey:
+    callback: http://127.0.0.1:8999/oauth/callback/qq
